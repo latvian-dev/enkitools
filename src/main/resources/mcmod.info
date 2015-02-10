@@ -1,0 +1,22 @@
+[
+{
+  "modid": "EnkiMods",
+  "name": "EnkiMods",
+  "description": "Plugins for EnkiGaming servers",
+  "version": "1.0",
+  "url": "",
+  "updateUrl": "",
+  "authorList": [
+    "LatvianModder",
+    "Baphometis"
+  ],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [
+  ],
+  "parent":"",
+  "dependencies": [
+    "LatCoreMC"
+  ]
+}
+]
