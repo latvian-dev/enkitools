@@ -34,7 +34,6 @@ public class DefaultRanks
 			r.commands.add("+me");
 			r.setConfig(EnkiModsEventHandler.IGNORE_SPAWN, "false");
 			r.setConfig(PlayerClaims.MAX_CLAIM_POWER, "10");
-			r.setConfig(EnkiModsTickHandler.MAX_AFK, "5");
 			r.setConfig(CmdSethome.MAX_HOME_COUNT, "0");
 			ranks.put("Player", r);
 		}
@@ -46,7 +45,6 @@ public class DefaultRanks
 			r.parentRank = "Player";
 			r.commands.add("+irc");
 			r.setConfig(PlayerClaims.MAX_CLAIM_POWER, "15");
-			r.setConfig(EnkiModsTickHandler.MAX_AFK, "10");
 			ranks.put("Member", r);
 		}
 		
@@ -61,7 +59,6 @@ public class DefaultRanks
 			r.commands.add("+head");
 			r.commands.add("+spawn");
 			r.setConfig(PlayerClaims.MAX_CLAIM_POWER, "25");
-			r.setConfig(EnkiModsTickHandler.MAX_AFK, "20");
 			r.setConfig(CmdSethome.MAX_HOME_COUNT, "1");
 			ranks.put("Donator", r);
 		}
@@ -74,7 +71,6 @@ public class DefaultRanks
 			r.commands.add("+back");
 			r.commands.add("+top");
 			r.setConfig(PlayerClaims.MAX_CLAIM_POWER, "40");
-			r.setConfig(EnkiModsTickHandler.MAX_AFK, "20");
 			r.setConfig(CmdSethome.MAX_HOME_COUNT, "5");
 			ranks.put("VIP", r);
 		}
@@ -109,7 +105,6 @@ public class DefaultRanks
 			r.commands.add("+worldedit");
 			r.setConfig(EnkiModsEventHandler.IGNORE_SPAWN, "true");
 			r.setConfig(PlayerClaims.MAX_CLAIM_POWER, "5000");
-			r.setConfig(EnkiModsTickHandler.MAX_AFK, "60");
 			r.setConfig(CmdSethome.MAX_HOME_COUNT, "500");
 			ranks.put("Mod", r);
 		}

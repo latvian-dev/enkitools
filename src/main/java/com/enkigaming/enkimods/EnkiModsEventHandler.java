@@ -192,8 +192,9 @@ public class EnkiModsEventHandler
 		nameC.getChatStyle().setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText("/tell " + e.username)));
 		nameC.getChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/tell " + e.username + " "));
 		
+		e.component.appendSibling(new ChatComponentText("<"));
 		e.component.appendSibling(nameC);
-		e.component.appendSibling(new ChatComponentText(":"));
+		e.component.appendSibling(new ChatComponentText(">"));
 		
 		String[] msg = LatCore.split(e.message, " ");
 		

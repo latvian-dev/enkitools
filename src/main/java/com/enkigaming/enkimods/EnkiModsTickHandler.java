@@ -14,7 +14,6 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 
 import com.enkigaming.enkimods.PlayerClaims.Claim;
-import com.enkigaming.enkimods.rank.*;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -23,7 +22,6 @@ import cpw.mods.fml.relauncher.Side;
 public class EnkiModsTickHandler
 {
 	public static final EnkiModsTickHandler instance = new EnkiModsTickHandler();
-	public static final RankConfig MAX_AFK = new RankConfig("maxAFK", "5");
 	public static final String DATA_KEY = "EnkiTick";
 	
 	public boolean serverStarted = false;
@@ -93,14 +91,6 @@ public class EnkiModsTickHandler
 							tp.updatePos(pos);
 						}
 						
-						if(tp.isAFK(ep))
-						{
-							ep.getEntityData().removeTag(DATA_KEY);
-							LatCoreMC.printChat(MinecraftServer.getServer(), "Kicked " + LMPlayer.getPlayer(ep).getDisplayName() + " for being AFK for too long!", true);
-							ep.playerNetServerHandler.kickPlayerFromServer("You were AFK for too long!");
-							return;
-						}
-						
 						printChunkChangedMessage(ep);
 					}
 				}
@@ -112,8 +102,6 @@ public class EnkiModsTickHandler
 	{
 		public final EntityPlayerMP player;
 		public Vertex.DimPos.Rot last;
-		public long loggedInSeconds;
-		public long lastUpdatedSeconds;
 		public Notification lastChunkMessage = new Notification("", "", null);
 		
 		private TrackedPlayer(EntityPlayerMP ep)
@@ -126,8 +114,6 @@ public class EnkiModsTickHandler
 		{
 			NBTTagCompound tag = player.getEntityData().getCompoundTag(DATA_KEY);
 			last.readFromNBT(tag.getCompoundTag("Pos"));
-			loggedInSeconds = tag.getLong("Logged");
-			lastUpdatedSeconds = tag.getLong("Update");
 			lastChunkMessage = Notification.readFromNBT(tag.getCompoundTag("Msg"));
 		}
 		
@@ -139,9 +125,6 @@ public class EnkiModsTickHandler
 			last.writeToNBT(tagLast);
 			tag.setTag("Pos", tagLast);
 			
-			tag.setLong("Logged", loggedInSeconds);
-			tag.setLong("Update", lastUpdatedSeconds);
-			
 			NBTTagCompound tagMsg = new NBTTagCompound();
 			lastChunkMessage.writeToNBT(tagMsg);
 			tag.setTag("Msg", tagMsg);
@@ -149,39 +132,17 @@ public class EnkiModsTickHandler
 			player.getEntityData().setTag(DATA_KEY, tag);
 		}
 		
-		public boolean isAFK(EntityPlayer ep)
-		{
-			if(!EnkiModsConfig.General.enableKickAFK) return false;
-			if((instance.currentSeconds - loggedInSeconds) < 60L) return false;
-			return (instance.currentSeconds - lastUpdatedSeconds) > getKickSeconds(ep);
-		}
-		
-		public long getKickSeconds(EntityPlayer ep)
-		{ return Rank.getConfig(ep, MAX_AFK).getInt() * 60L; }
-		
 		public boolean hasMoved(Vertex.DimPos.Rot pos)
 		{ return !last.equals(pos); }
 		
 		public void updatePos(Vertex.DimPos.Rot pos)
-		{
-			last = pos;
-			lastUpdatedSeconds = System.currentTimeMillis() / 1000L;
-			save();
-		}
+		{ last = pos; save(); }
 		
 		public static TrackedPlayer get(EntityPlayerMP ep)
 		{
 			TrackedPlayer tp = new TrackedPlayer(ep);
-			if(ep.getEntityData().hasKey(DATA_KEY))
-			{
-				tp.load();
-			}
-			else
-			{
-				tp.loggedInSeconds = System.currentTimeMillis() / 1000L;
-				tp.updatePos(new Vertex.DimPos.Rot(ep));
-			}
-			
+			if(ep.getEntityData().hasKey(DATA_KEY)) tp.load();
+			else tp.updatePos(new Vertex.DimPos.Rot(ep));
 			return tp;
 		}
 	}

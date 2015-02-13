@@ -21,7 +21,6 @@ public class EnkiModsConfig extends LMConfig
 	{
 		public static float nearDistance;
 		public static boolean enableWorldBorder;
-		public static boolean enableKickAFK;
 		public static boolean overrideHelp;
 		public static boolean worldBorderAt0x0;
 		public static boolean crossDimHomes;
@@ -31,7 +30,6 @@ public class EnkiModsConfig extends LMConfig
 		{
 			nearDistance = c.getFloat("nearDistance", 512F);
 			enableWorldBorder = c.getBool("enableWorldBorder", true);
-			enableKickAFK = c.getBool("enableKickAFK", true);
 			overrideHelp = c.getBool("overrideHelp", true);
 			worldBorderAt0x0 = c.getBool("worldBorderAt0x0", true);
 			crossDimHomes = c.getBool("crossDimHomes", true);

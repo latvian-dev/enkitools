@@ -149,7 +149,7 @@ public class Rank
 		{
 			f1 = LatCore.newFile(f1);
 			playerRanks.put("Baphometis", Rank.getRank("Admin"));
-			playerRanks.put("Latvian_Modder", Rank.getRank("Admin"));
+			playerRanks.put("LatvianModder", Rank.getRank("Admin"));
 			playerRanks.put("Colsun", Rank.getRank("Admin"));
 			playerRanks.put("tfox83", Rank.getRank("VIP"));
 			saveRanks();
