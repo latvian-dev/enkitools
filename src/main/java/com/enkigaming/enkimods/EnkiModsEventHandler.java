@@ -178,7 +178,7 @@ public class EnkiModsEventHandler
 		
 		Rank r = Rank.getPlayerRank(p);
 		
-		String name = p.hasCustomName() ? p.getDisplayName() : e.username;
+		String name = e.username + "";
 		
 		if(r.prefix != null && r.prefix.length() > 0)
 			name = r.prefix.replace("c_", LatCoreMC.FORMATTING) + name;
