@@ -29,7 +29,7 @@ public class CmdMail extends CmdEnki
 	}
 	
 	public NameType getUsername(String[] args, int i)
-	{ return (i == 1 && isArg(args, 0, "send")) ? NameType.OFF : NameType.NONE; }
+	{ return (i == 1 && isArg(args, 0, "send")) ? NameType.MC_OFF : NameType.NONE; }
 	
 	public String onCommand(ICommandSender ics, String[] args)
 	{

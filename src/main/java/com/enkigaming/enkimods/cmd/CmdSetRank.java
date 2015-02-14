@@ -15,7 +15,7 @@ public class CmdSetRank extends CmdEnki
 	{ LatCoreMC.printChat(ics, "/setrank <player> <rank>"); }
 	
 	public NameType getUsername(String[] args, int i)
-	{ return (i == 0) ? NameType.ON : NameType.NONE; }
+	{ return (i == 0) ? NameType.MC_ON : NameType.NONE; }
 	
 	public String[] getTabStrings(ICommandSender ics, String args[], int i)
 	{

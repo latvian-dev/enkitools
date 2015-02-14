@@ -26,7 +26,7 @@ public class CmdAdmin extends CmdEnki
 	
 	public NameType getUsername(String[] args, int i)
 	{
-		if(i == 1 && isArg(args, 0, "invsee", "spawndist", "dist")) return NameType.ON;
+		if(i == 1 && isArg(args, 0, "invsee", "spawndist", "dist")) return NameType.MC_ON;
 		return NameType.NONE;
 	}
 	

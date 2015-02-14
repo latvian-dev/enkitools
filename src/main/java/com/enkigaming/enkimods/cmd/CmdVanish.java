@@ -4,6 +4,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.*;
 
+
 public class CmdVanish extends CmdEnki
 {
 	public CmdVanish()
