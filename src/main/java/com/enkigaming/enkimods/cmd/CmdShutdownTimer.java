@@ -1,6 +1,6 @@
 package com.enkigaming.enkimods.cmd;
 
-import latmod.core.LatCore;
+import latmod.core.util.LatCore;
 import net.minecraft.command.ICommandSender;
 
 import com.enkigaming.enkimods.EnkiModsTickHandler;

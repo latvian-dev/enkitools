@@ -42,7 +42,7 @@ public class CmdSetRank extends CmdEnki
 					LatCoreMC.printChat(ep, "Your rank is set to " + r.rankID);
 			}
 			
-			return FINE + p.getDisplayName() + " now is " + r.rankID;
+			return FINE + p.username + " now is " + r.rankID;
 		}
 		else printHelp(ics);
 		return null;

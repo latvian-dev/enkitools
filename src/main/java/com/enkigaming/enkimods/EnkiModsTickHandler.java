@@ -5,6 +5,7 @@ import static net.minecraft.util.EnumChatFormatting.*;
 import java.util.*;
 
 import latmod.core.*;
+import latmod.core.util.*;
 import net.minecraft.entity.player.*;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -215,9 +216,9 @@ public class EnkiModsTickHandler
 		else
 		{
 			if(claim.playerClaims.owner.isFriend(LMPlayer.getPlayer(ep)))
-				return new Notification(GREEN + claim.playerClaims.getRawDesc(), GRAY + claim.playerClaims.owner.getDisplayName(), new ItemStack(Items.skull, 1, 3), t);
+				return new Notification(GREEN + claim.playerClaims.getRawDesc(), GRAY + claim.playerClaims.owner.username, new ItemStack(Items.skull, 1, 3), t);
 			else
-				return new Notification(BLUE + claim.playerClaims.getRawDesc(), GRAY + claim.playerClaims.owner.getDisplayName(), new ItemStack(Items.skull, 1, 1), t);
+				return new Notification(BLUE + claim.playerClaims.getRawDesc(), GRAY + claim.playerClaims.owner.username, new ItemStack(Items.skull, 1, 1), t);
 		}
 	}
 	

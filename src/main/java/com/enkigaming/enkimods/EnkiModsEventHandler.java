@@ -2,6 +2,7 @@ package com.enkigaming.enkimods;
 
 import latmod.core.*;
 import latmod.core.event.*;
+import latmod.core.util.*;
 import net.minecraft.block.Block;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityChicken;
@@ -9,12 +10,13 @@ import net.minecraft.entity.player.*;
 import net.minecraft.event.*;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.*;
 import net.minecraft.util.*;
 import net.minecraftforge.event.*;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
 
+import com.enkigaming.enkimods.Mailbox.Mail;
 import com.enkigaming.enkimods.PlayerClaims.Claim;
 import com.enkigaming.enkimods.cmd.CmdMotd;
 import com.enkigaming.enkimods.rank.*;
@@ -48,7 +50,7 @@ public class EnkiModsEventHandler
 	}
 	
 	@SubscribeEvent
-	public void loadLMData(LoadCustomLMDataEvent e)
+	public void loadLMData(LoadLMDataEvent e)
 	{
 		if(e.phase.isPre())
 		{
@@ -58,26 +60,111 @@ public class EnkiModsEventHandler
 		
 		if(e.phase.isPost())
 		{
-			Mailbox.readFromNBT(e.tag);
+			Mailbox.mailMap.clear();
+			
+			NBTTagCompound tag = NBTHelper.readMap(e.getFile("EnkiMods.dat"));
+			
+			if(tag != null)
+			{
+				NBTTagCompound players = tag.getCompoundTag("Players");
+				
+				for(int i = 0; i < LMPlayer.map.size(); i++)
+				{
+					LMPlayer p = LMPlayer.map.values.get(i);
+					NBTTagCompound tag1 = players.getCompoundTag("" + p.playerID);
+					
+					if(!tag1.hasNoTags())
+					{
+						PlayerClaims pc = PlayerClaims.getClaims(p);
+						pc.readFromNBT(tag1.getCompoundTag("Claims"));
+					}
+				}
+				
+				NBTTagList mail = (NBTTagList)tag.getTag("Mail");
+				
+				if(mail != null && mail.tagCount() > 0)
+				{
+					for(int i = 0; i < mail.tagCount(); i++)
+					{
+						NBTTagCompound tag1 = mail.getCompoundTagAt(i);
+						
+						int id = tag1.getInteger("ID");
+						Mail m = new Mail(id);
+						m.readFromNBT(tag1);
+						Mailbox.mailMap.put(id, m);
+					}
+				}
+			}
 		}
 	}
 	
 	@SubscribeEvent
-	public void saveLMData(SaveCustomLMDataEvent e)
+	public void loadCommonLMData(LoadLMDataEvent.CommonData e)
 	{
-		Mailbox.writeToNBT(e.tag);
+		Mailbox.nextID = e.tag.getInteger("EnkiMailNextID");
+	}
+	
+	@SubscribeEvent
+	public void saveLMData(SaveLMDataEvent e)
+	{
+		NBTTagCompound tag = new NBTTagCompound();
+		
+		NBTTagCompound players = new NBTTagCompound();
+		
+		for(int i = 0; i < LMPlayer.map.size(); i++)
+		{
+			LMPlayer p = LMPlayer.map.values.get(i);
+			NBTTagCompound tag1 = new NBTTagCompound();
+			
+			PlayerClaims pc = PlayerClaims.getClaims(p);
+			
+			if(pc != null && pc.shouldSave())
+			{
+				NBTTagCompound tag2 = new NBTTagCompound();
+				pc.writeToNBT(tag2);
+				tag1.setTag("Claims", tag2);
+			}
+			
+			players.setTag("" + p.playerID, tag1);
+		}
+		
+		tag.setTag("Players", players);
+		
+		NBTTagList mail = new NBTTagList();
+		
+		for(int i = 0; i < Mailbox.mailMap.size(); i++)
+		{
+			Mail m = Mailbox.mailMap.values.get(i);
+			
+			NBTTagCompound tag1 = new NBTTagCompound();
+			
+			tag1.setInteger("ID", m.mailID);
+			m.writeToNBT(tag1);
+			mail.appendTag(tag1);
+		}
+		
+		tag.setTag("Mail", mail);
+		
+		NBTHelper.writeMap(e.getFile("EnkiMods.dat"), tag);
+	}
+	
+	@SubscribeEvent
+	public void saveCommonLMData(SaveLMDataEvent.CommonData e)
+	{
+		e.tag.setInteger("EnkiMailNextID", Mailbox.nextID);
 	}
 	
 	@SubscribeEvent
 	public void loadPlayerData(LMPlayerEvent.DataLoaded e)
 	{
-		PlayerClaims.loadPlayerClaims(e.player);
-	}
-	
-	@SubscribeEvent
-	public void savePlayerData(LMPlayerEvent.DataSaved e)
-	{
-		PlayerClaims.savePlayerClaims(e.player);
+		if(e.player.customData.hasKey("EnkiClaims"))
+		{
+			NBTTagCompound tag = e.player.customData.getCompoundTag("EnkiClaims");
+			PlayerClaims pc = new PlayerClaims(e.player);
+			pc.readFromNBT(tag);
+			PlayerClaims.claimsMap.put(pc.owner.playerID, pc);
+			e.player.customData.removeTag("EnkiClaims");
+		}
 	}
 	
 	public void printIncomingMail(EntityPlayerMP ep, int m)
@@ -260,4 +347,19 @@ public class EnkiModsEventHandler
 				players.get(i).refreshDisplayName();
 		}
 	}
+	
+	/*
+	@SubscribeEvent
+	public void customInfo(LMPlayerEvent.CustomInfo e)
+	{
+		Rank r = Rank.getPlayerRank(e.player);
+		
+		if(r != Rank.getDefaultRank())
+			e.player.clientInfo.add("Rank: " + r.prefix.replace("c_", LatCoreMC.FORMATTING) + r.rankID);
+		
+		PlayerClaims pc = PlayerClaims.getClaims(e.player);
+		if(pc.claims.size() > 0)
+			e.player.clientInfo.add("Claimed chunks: " + pc.claims.size() + " / " + pc.getMaxPower());
+	}
+	*/
 }

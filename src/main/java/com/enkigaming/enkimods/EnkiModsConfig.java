@@ -3,6 +3,7 @@ package com.enkigaming.enkimods;
 import java.io.File;
 
 import latmod.core.*;
+import latmod.core.util.*;
 import net.minecraft.item.*;
 
 public class EnkiModsConfig extends LMConfig

@@ -1,7 +1,8 @@
 package com.enkigaming.enkimods.cmd;
 
-import latmod.core.*;
+import latmod.core.LatCoreMC;
 import latmod.core.cmd.CommandLM;
+import latmod.core.util.*;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChunkCoordinates;

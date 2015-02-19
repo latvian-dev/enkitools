@@ -1,6 +1,5 @@
 package com.enkigaming.enkimods;
 
-import latmod.core.LMPlayer;
 import net.minecraft.entity.player.*;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -75,7 +74,7 @@ public class InvSeeInventory implements IInventory
 	}
 	
 	public String getInventoryName()
-	{ return LMPlayer.getPlayer(player).getDisplayName();  }
+	{ return player.getCommandSenderName();  }
 	
 	public boolean hasCustomInventoryName()
 	{ return true; }

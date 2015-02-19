@@ -22,7 +22,7 @@ public class CmdGetRank extends CmdEnki
 		if(ep == null) throw new PlayerNotFoundException();
 		
 		Rank r = Rank.getPlayerRank(ep);
-		return FINE + ep.getDisplayName() + " is " + r.rankID;
+		return FINE + ep.username + " is " + r.rankID;
 	}
 	
 	public NameType getUsername(String[] args, int i)

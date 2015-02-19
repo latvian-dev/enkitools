@@ -1,6 +1,6 @@
 package com.enkigaming.enkimods.cmd;
 
-import latmod.core.MathHelperLM;
+import latmod.core.util.MathHelperLM;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 

@@ -1,6 +1,6 @@
 package com.enkigaming.enkimods.rank;
 
-import latmod.core.FastMap;
+import latmod.core.util.FastMap;
 
 public class RankConfig
 {

@@ -2,7 +2,7 @@ package com.enkigaming.enkimods.cmd;
 
 import java.util.*;
 
-import latmod.core.*;
+import latmod.core.util.*;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 

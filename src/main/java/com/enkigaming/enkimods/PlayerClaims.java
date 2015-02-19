@@ -3,6 +3,7 @@ package com.enkigaming.enkimods;
 import java.util.UUID;
 
 import latmod.core.*;
+import latmod.core.util.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.*;
 import net.minecraft.util.EnumChatFormatting;
@@ -75,10 +76,10 @@ public class PlayerClaims
 		if(ownerDesc)
 		{
 			String s = desc.length() > 0 ? ("\"" + desc + "\" " + EnumChatFormatting.ITALIC) : "Claimed by ";
-			return s + owner.getDisplayName();
+			return s + owner.username;
 		}
 		
-		return EnumChatFormatting.ITALIC + (desc.length() > 0 ? ("\"" + desc + "\"") : "Claimed by " + owner.getDisplayName());
+		return EnumChatFormatting.ITALIC + (desc.length() > 0 ? ("\"" + desc + "\"") : "Claimed by " + owner.username);
 	}
 	
 	public void setDesc(String s)
@@ -180,19 +181,19 @@ public class PlayerClaims
 	
 	// Static methods //
 	
-	public static final FastMap<UUID, PlayerClaims> claimsMap = new FastMap<UUID, PlayerClaims>();
+	public static final FastMap<Integer, PlayerClaims> claimsMap = new FastMap<Integer, PlayerClaims>();
 	
 	public static PlayerClaims getClaims(Object o)
 	{
 		LMPlayer p = LMPlayer.getPlayer(o);
 		if(p == null) return null;
 		
-		PlayerClaims pc = claimsMap.get(p.uuid);
+		PlayerClaims pc = claimsMap.get(p.playerID);
 		
 		if(pc == null)
 		{
 			pc = new PlayerClaims(p);
-			claimsMap.put(pc.owner.uuid, pc);
+			claimsMap.put(pc.owner.playerID, pc);
 		}
 		
 		return pc;
@@ -225,54 +226,5 @@ public class PlayerClaims
 		if(c1 != null && c2 == null) return false;
 		if(c1 == null && c2 != null) return false;
 		return c1.object1.owner.equals(c2.object1.owner);
-	}
-	
-	public static void loadPlayerClaims(LMPlayer p)
-	{
-		if(p.customData.hasKey("EnkiClaims"))
-		{
-			if(p.customData.func_150299_b("EnkiClaims") == NBTHelper.LIST)
-			{
-				NBTTagList list = p.customData.getTagList("EnkiClaims", NBTHelper.MAP);
-				
-				for(int i = 0; i < list.tagCount(); i++)
-				{
-					NBTTagCompound tag = list.getCompoundTagAt(i);
-					
-					long mid = tag.getLong("MID");
-					long lid = tag.getLong("LID");
-					
-					if(mid == p.uuid.getMostSignificantBits() && lid == p.uuid.getLeastSignificantBits())
-					{
-						PlayerClaims pc = new PlayerClaims(p);
-						pc.readFromNBT(tag);
-						claimsMap.put(pc.owner.uuid, pc);
-						LatCoreMC.logger.info("Found old EnkiClaims: " + pc);
-						break;
-					}
-				}
-				
-				p.customData.removeTag("EnkiClaims");
-			}
-			else
-			{
-				NBTTagCompound tag = p.customData.getCompoundTag("EnkiClaims");
-				PlayerClaims pc = new PlayerClaims(p);
-				pc.readFromNBT(tag);
-				claimsMap.put(pc.owner.uuid, pc);
-			}
-		}
-	}
-	
-	public static void savePlayerClaims(LMPlayer p)
-	{
-		PlayerClaims pc = claimsMap.get(p.uuid);
-		
-		if(pc != null && pc.shouldSave())
-		{
-			NBTTagCompound tag = new NBTTagCompound();
-			pc.writeToNBT(tag);
-			p.customData.setTag("EnkiClaims", tag);
-		}
 	}
 }

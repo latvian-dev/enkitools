@@ -2,15 +2,14 @@ package com.enkigaming.enkimods;
 
 import java.util.UUID;
 
-import latmod.core.*;
-import net.minecraft.nbt.*;
+import latmod.core.LMPlayer;
+import latmod.core.util.*;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class Mailbox
 {
-	public static final String TAG = "EnkiMail";
-	
 	public static final FastMap<Integer, Mail> mailMap = new FastMap<Integer, Mail>();
-	private static int nextID = 0;
+	public static int nextID = 0;
 	
 	public static class Mail implements Comparable<Mail>
 	{
@@ -31,15 +30,15 @@ public class Mailbox
 		
 		public void readFromNBT(NBTTagCompound tag)
 		{
-			from = LMPlayer.getPlayer(tag.getString("From"));
-			to = LMPlayer.getPlayer(tag.getString("To"));
+			from = LMPlayer.getPlayer(tag.getInteger("From"));
+			to = LMPlayer.getPlayer(tag.getInteger("To"));
 			message = tag.getString("Msg");
 		}
 		
 		public void writeToNBT(NBTTagCompound tag)
 		{
-			tag.setString("From", from.username);
-			tag.setString("To", to.username);
+			tag.setInteger("From", from.playerID);
+			tag.setInteger("To", to.playerID);
 			tag.setString("Msg", message);
 		}
 		
@@ -90,47 +89,5 @@ public class Mailbox
 	{
 		boolean b = mailMap.keys.contains(id);
 		if(b) mailMap.remove(id); return b;
-	}
-	
-	public static void readFromNBT(NBTTagCompound tag)
-	{
-		nextID = tag.getInteger(TAG + "NextID");
-		
-		mailMap.clear();
-		
-		NBTTagList list = (NBTTagList)tag.getTag(TAG);
-		
-		if(list != null && list.tagCount() > 0)
-		{
-			for(int i = 0; i < list.tagCount(); i++)
-			{
-				NBTTagCompound tag1 = list.getCompoundTagAt(i);
-				
-				int id = tag1.getInteger("ID");
-				Mail m = new Mail(id);
-				m.readFromNBT(tag1);
-				mailMap.put(id, m);
-			}
-		}
-	}
-	
-	public static void writeToNBT(NBTTagCompound tag)
-	{
-		tag.setInteger(TAG + "NextID", nextID);
-		
-		NBTTagList list = new NBTTagList();
-		
-		for(int i = 0; i < mailMap.size(); i++)
-		{
-			Mail m = mailMap.values.get(i);
-			
-			NBTTagCompound tag1 = new NBTTagCompound();
-			
-			tag1.setInteger("ID", m.mailID);
-			m.writeToNBT(tag1);
-			list.appendTag(tag1);
-		}
-		
-		tag.setTag(TAG, list);
 	}
 }

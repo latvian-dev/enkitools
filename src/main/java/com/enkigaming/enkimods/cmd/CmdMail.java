@@ -1,6 +1,7 @@
 package com.enkigaming.enkimods.cmd;
 
 import latmod.core.*;
+import latmod.core.util.*;
 import net.minecraft.command.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.event.*;
@@ -52,7 +53,7 @@ public class CmdMail extends CmdEnki
 					
 					Mail m = Mailbox.sendMail(from, to, message);
 					
-					return FINE + "Mail #" + m.mailID + " sent to " + to.getDisplayName() + "!";
+					return FINE + "Mail #" + m.mailID + " sent to " + to.username + "!";
 				}
 				else printHelp(ics);
 			}
@@ -73,7 +74,7 @@ public class CmdMail extends CmdEnki
 					{
 						Mail m = mail.get(i);
 						
-						IChatComponent line = new ChatComponentText("[ #" + m.mailID + " ] From " + LMPlayer.getPlayer(m.from).getDisplayName());
+						IChatComponent line = new ChatComponentText("[ #" + m.mailID + " ] From " + LMPlayer.getPlayer(m.from).username);
 						line.getChatStyle().setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText("Open Message #" + m.mailID)));
 						line.getChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/mail read " + m.mailID));
 						ep.addChatMessage(line);
@@ -92,7 +93,7 @@ public class CmdMail extends CmdEnki
 				{
 					LMPlayer fromPlayer = LMPlayer.getPlayer(m.from);
 					
-					LatCoreMC.printChat(ics, "#" + m.mailID + " from " + fromPlayer.getDisplayName() + ":");
+					LatCoreMC.printChat(ics, "#" + m.mailID + " from " + fromPlayer.username + ":");
 					LatCoreMC.printChat(ics, "");
 					LatCoreMC.printChat(ics, m.message);
 					LatCoreMC.printChat(ics, "");
@@ -103,8 +104,8 @@ public class CmdMail extends CmdEnki
 					buttonDelete.getChatStyle().setColor(EnumChatFormatting.GOLD);
 					
 					IChatComponent buttonReply = new ChatComponentText("[Reply]");
-					buttonReply.getChatStyle().setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText("Replay " + fromPlayer.getDisplayName())));
-					buttonReply.getChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, LatCoreMC.removeFormatting("/mail send " + fromPlayer.getDisplayName() + " ")));
+					buttonReply.getChatStyle().setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText("Replay " + fromPlayer.username)));
+					buttonReply.getChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, LatCoreMC.removeFormatting("/mail send " + fromPlayer.username + " ")));
 					buttonReply.getChatStyle().setColor(EnumChatFormatting.GOLD);
 					
 					ics.addChatMessage(new ChatComponentText("[ - ").appendSibling(buttonDelete).appendSibling(new ChatComponentText(" - ")).appendSibling(buttonReply).appendSibling(new ChatComponentText(" - ]")));

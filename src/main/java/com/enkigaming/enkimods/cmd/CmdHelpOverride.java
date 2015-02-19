@@ -3,6 +3,7 @@ package com.enkigaming.enkimods.cmd;
 import java.util.List;
 
 import latmod.core.*;
+import latmod.core.util.FastList;
 import net.minecraft.command.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
