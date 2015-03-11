@@ -25,7 +25,7 @@ public class EnkiMods
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent e)
 	{
-		mod = new LMMod(MODID, new EnkiModsConfig(), null);
+		mod = new LMMod(e, new EnkiModsConfig(), null);
 		
 		LatCoreMC.addEventHandler(EnkiModsEventHandler.instance, true, false, true);
 		LatCoreMC.addEventHandler(EnkiModsTickHandler.instance, false, true, false);

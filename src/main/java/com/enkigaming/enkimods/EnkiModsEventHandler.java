@@ -1,5 +1,8 @@
 package com.enkigaming.enkimods;
 
+import java.io.File;
+import java.util.UUID;
+
 import latmod.core.*;
 import latmod.core.event.*;
 import latmod.core.util.*;
@@ -27,6 +30,7 @@ public class EnkiModsEventHandler
 {
 	public static final EnkiModsEventHandler instance = new EnkiModsEventHandler();
 	public static final RankConfig IGNORE_SPAWN = new RankConfig("ignoreSpawnProtection", "false");
+	public static final FastMap<UUID, String> customNames = new FastMap<UUID, String>();
 	
 	@SubscribeEvent
 	public void playerLoggedIn(LMPlayerEvent.LoggedIn e)
@@ -56,6 +60,20 @@ public class EnkiModsEventHandler
 		{
 			Rank.reload();
 			PlayerClaims.claimsMap.clear();
+			
+			customNames.clear();
+			
+			try
+			{
+				FastList<String> l = LatCore.loadFile(new File(LatCoreMC.latmodFolder, "EnkiMods/CustomNames.txt"));
+				
+				for(int i = 0; i < l.size(); i++)
+				{
+					String[] s = LatCore.split(l.get(i), ": ", 2);
+					customNames.put(UUID.fromString(s[0]), s[1]);
+				}
+			}
+			catch(Exception ex) { }
 		}
 		
 		if(e.phase.isPost())
@@ -265,7 +283,8 @@ public class EnkiModsEventHandler
 		
 		Rank r = Rank.getPlayerRank(p);
 		
-		String name = e.username + "";
+		String name = EnkiModsEventHandler.customNames.get(e.player.getUniqueID());
+		if(name == null) name = e.username + "";
 		
 		if(r.prefix != null && r.prefix.length() > 0)
 			name = r.prefix.replace("c_", LatCoreMC.FORMATTING) + name;
@@ -276,8 +295,8 @@ public class EnkiModsEventHandler
 		
 		IChatComponent nameC = new ChatComponentText(name);
 		
-		nameC.getChatStyle().setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText("/tell " + e.username)));
-		nameC.getChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/tell " + e.username + " "));
+		nameC.getChatStyle().setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText("/tell " + name)));
+		nameC.getChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/tell " + name + " "));
 		
 		e.component.appendSibling(new ChatComponentText("<"));
 		e.component.appendSibling(nameC);

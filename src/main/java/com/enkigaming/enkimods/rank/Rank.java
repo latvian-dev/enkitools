@@ -93,7 +93,7 @@ public class Rank
 	
 	public static void reload()
 	{
-		File f = new File(LatCoreMC.latmodFolder, "Ranks.txt");
+		File f = new File(LatCoreMC.latmodFolder, "EnkiMods/Ranks.txt");
 		
 		RanksFile ranksFile;
 		
@@ -104,6 +104,9 @@ public class Rank
 			ranksFile = new RanksFile();
 			ranksFile.ranks = new HashMap<String, Rank>();
 			ranksFile.defaultRank = DefaultRanks.loadDefaultRanks(ranksFile.ranks);
+			
+			ranksFile.ranks = MapSorter.sortMap(ranksFile.ranks);
+			
 			LatCore.toJsonFile(f, ranksFile);
 		}
 		else ranksFile = LatCore.fromJsonFromFile(f, RanksFile.class);
@@ -144,7 +147,7 @@ public class Rank
 		
 		playerRanks.clear();
 		
-		File f1 = new File(LatCoreMC.latmodFolder, "Players.txt");
+		File f1 = new File(LatCoreMC.latmodFolder, "EnkiMods/Players.txt");
 		
 		if(!f1.exists())
 		{
@@ -184,12 +187,12 @@ public class Rank
 	{
 		FastList<String> al = new FastList<String>();
 		
-		for(int i = 0; i < playerRanks.size(); i++)
+		if(LatCoreMC.isDevEnv) for(int i = 0; i < playerRanks.size(); i++)
 			al.add(playerRanks.keys.get(i) + ": " + playerRanks.values.get(i));
 		
 		al.sort(null);
 		
-		try { LatCore.saveFile(new File(LatCoreMC.latmodFolder, "Players.txt"), al); }
+		try { LatCore.saveFile(new File(LatCoreMC.latmodFolder, "EnkiMods/Players.txt"), al); }
 		catch(Exception e) { e.printStackTrace(); }
 	}
 	

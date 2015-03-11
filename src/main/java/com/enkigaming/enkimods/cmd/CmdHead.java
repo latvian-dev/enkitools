@@ -4,7 +4,7 @@ import latmod.core.InvUtils;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.*;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.*;
 
 public class CmdHead extends CmdEnki
 {
@@ -34,10 +34,11 @@ public class CmdHead extends CmdEnki
 			}
 			else if(is.getItem() instanceof ItemSkull && is.getItemDamage() == 3)
 			{
-				if(is.stackTagCompound == null)
-					is.stackTagCompound = new NBTTagCompound();
+				if(is.stackTagCompound == null) is.stackTagCompound = new NBTTagCompound();
 				
-				is.stackTagCompound.setString("SkullOwner", player.getCommandSenderName());
+				NBTTagCompound nbt = new NBTTagCompound();
+				NBTUtil.func_152460_a(nbt, player.getGameProfile());
+				is.stackTagCompound.setTag("SkullOwner", nbt);
 				
 				player.inventory.markDirty();
 			}

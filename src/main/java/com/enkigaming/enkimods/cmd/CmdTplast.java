@@ -13,7 +13,7 @@ public class CmdTplast extends CmdEnki
 	{
 		LMPlayer p = getLMPlayer(args[0]);
 		
-		if(p.isOnline()) LatCoreMC.executeCommand(ics, "tp", args[0]);
+		if(p.isOnline()) LatCoreMC.executeCommand(ics, "tp " + args[0]);
 		else
 		{
 			NBTTagCompound tag = (NBTTagCompound)p.customData.getTag("LastSavedPos");
@@ -28,7 +28,7 @@ public class CmdTplast extends CmdEnki
 				if(dim != p.getPlayerMP().dimension)
 					return "Can't teleport to another dimension!";
 				
-				LatCoreMC.executeCommand(ics, "tp", new String[] { "" + x, "" + y, "" + z });
+				LatCoreMC.executeCommand(ics, "tp " + x + " " + y + " " + z);
 			}
 		}
 		

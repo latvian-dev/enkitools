@@ -1,6 +1,6 @@
 package com.enkigaming.enkimods.cmd;
 
-import latmod.core.LatCoreMC;
+import latmod.core.*;
 import latmod.core.cmd.CommandLM;
 import latmod.core.util.*;
 import net.minecraft.command.ICommandSender;
@@ -17,7 +17,7 @@ public class CmdAdmin extends CmdEnki
 	{ super("admin"); }
 	
 	public String[] getSubcommands(ICommandSender ics)
-	{ return new String[] { "invsee", "spawndist", "dist", "shutdown" }; }
+	{ return new String[] { "invsee", "spawndist", "dist", "shutdown", "unclaim", "nick" }; }
 	
 	public String[] getTabStrings(ICommandSender ics, String[] args, int i)
 	{
@@ -38,6 +38,7 @@ public class CmdAdmin extends CmdEnki
 		printHelpLine(ics, "dist <player>");
 		printHelpLine(ics, "shutdown [seconds | reset]");
 		printHelpLine(ics, "unclaim");
+		printHelpLine(ics, "nick <player> <nick|none>");
 	}
 	
 	public String onCommand(ICommandSender ics, String[] args)
@@ -96,16 +97,33 @@ public class CmdAdmin extends CmdEnki
 				
 				ClaimResult r = pc.changeChunk(ep, cc, false, false);
 				
-				if(r == ClaimResult.SUCCESS)
-					;//LatCoreMC.printChat(ep, "Unclaimed " + chStr(1));
-				else if(r == ClaimResult.SPAWN)
-					LatCoreMC.printChat(ics, "You can't unclaim land in spawn!");
-				else
-					LatCoreMC.printChat(ep, "Chunk is not claimed!");
-				
 				EnkiModsTickHandler.instance.printChunkChangedMessage(ep);
+				
+				if(r == ClaimResult.SUCCESS)
+					return FINE + "Unclaimed " + CmdClaim.chStr(1);
+				else if(r == ClaimResult.SPAWN)
+					return FINE + "You can't unclaim land in spawn!";
+				else
+					return FINE + "Chunk is not claimed!";
+			}
+			else if(args[0].equals("nick"))
+			{
+				checkArgs(args, 3);
+				LMPlayer p = getLMPlayer(args[1]);
+				String n = (args[2].equals("none") || args[2].equalsIgnoreCase(p.username)) ? null : args[2];
+				
+				if(n != null) for(int i = 0; i < LMPlayer.map.size(); i++)
+				{
+					if(LMPlayer.map.values.get(i).username.equalsIgnoreCase(n))
+						return "Can't set custom nick to another username!";
+				}
+				
+				EnkiModsEventHandler.customNames.put(p.uuid, n);
+				if(n == null) return FINE + "Custom nick removed";
+				else return FINE + "Custom nick set to " + n;
 			}
 		}
+		
 		return null;
 	}
 }

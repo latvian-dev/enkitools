@@ -215,7 +215,7 @@ public class CmdClaim extends CmdEnki
 		return null;
 	}
 	
-	private String chStr(int i)
+	public static String chStr(int i)
 	{ return i + MathHelperLM.getPluralWord(i, " Chunks", " Chunk"); }
 	
 	private static class ClaimDistComp implements Comparator<Claim>
