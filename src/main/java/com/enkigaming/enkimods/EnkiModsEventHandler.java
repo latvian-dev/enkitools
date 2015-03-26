@@ -36,22 +36,19 @@ public class EnkiModsEventHandler
 	@SubscribeEvent
 	public void playerLoggedIn(LMPlayerEvent.LoggedIn e)
 	{
-		if(e.side.isClient()) return;
-		EntityPlayerMP ep = (EntityPlayerMP) e.entityPlayer;
-		
 		Rank.getPlayerRank(e.player);
 		
-		CmdMotd.printMotd(ep);
+		CmdMotd.printMotd(e.playerMP);
 		int c = Mailbox.getMailFor(e.player.uuid).size();
-		if(c > 0) printIncomingMail(ep, c);
+		if(c > 0) printIncomingMail(e.playerMP, c);
 		
 		if(e.firstTime)
 		{
 			for(int i = 0; i < EnkiModsConfig.Login.startingInv.size(); i++)
-				InvUtils.giveItem(ep, EnkiModsConfig.Login.startingInv.get(i));
+				InvUtils.giveItem(e.playerMP, EnkiModsConfig.Login.startingInv.get(i));
 		}
 		
-		EnkiModsTickHandler.TrackedPlayer.get(ep);
+		EnkiModsTickHandler.TrackedPlayer.get(e.playerMP);
 	}
 	
 	@SubscribeEvent
@@ -192,10 +189,8 @@ public class EnkiModsEventHandler
 	@SubscribeEvent
 	public void playerLoggedOut(LMPlayerEvent.LoggedOut e)
 	{
-		if(e.side.isClient()) return;
-		
 		NBTTagCompound tag = new NBTTagCompound();
-		new Vertex.DimPos(e.entityPlayer).writeToNBT(tag);
+		new Vertex.DimPos(e.playerMP).writeToNBT(tag);
 		e.player.customData.setTag("LastSavedPos", tag);
 	}
 	
