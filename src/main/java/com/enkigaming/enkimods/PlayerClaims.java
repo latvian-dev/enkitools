@@ -14,8 +14,6 @@ import com.enkigaming.enkimods.rank.*;
 
 public class PlayerClaims
 {
-	public static final RankConfig MAX_CLAIM_POWER = new RankConfig("maxClaimPower", "10");
-	
 	public final LMPlayer owner;
 	public final FastList<Claim> claims;
 	private String desc = "";
@@ -29,7 +27,7 @@ public class PlayerClaims
 	}
 	
 	public int getMaxPower()
-	{ return Rank.getConfig(owner, MAX_CLAIM_POWER).getInt(); }
+	{ return Rank.getConfig(owner, RankConfig.MAX_CLAIM_POWER).getInt(); }
 	
 	public void readFromNBT(NBTTagCompound tag)
 	{

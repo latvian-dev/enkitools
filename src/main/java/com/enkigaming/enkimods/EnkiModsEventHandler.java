@@ -7,6 +7,7 @@ import latmod.core.*;
 import latmod.core.event.*;
 import latmod.core.util.*;
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.player.*;
@@ -15,6 +16,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
 import net.minecraft.util.*;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.*;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
@@ -29,7 +31,6 @@ import cpw.mods.fml.common.eventhandler.*;
 public class EnkiModsEventHandler
 {
 	public static final EnkiModsEventHandler instance = new EnkiModsEventHandler();
-	public static final RankConfig IGNORE_SPAWN = new RankConfig("ignoreSpawnProtection", "false");
 	public static final FastMap<UUID, String> customNames = new FastMap<UUID, String>();
 	
 	@SubscribeEvent
@@ -216,22 +217,16 @@ public class EnkiModsEventHandler
 		if(e.world.isRemote) return;
 		
 		if(e.action == PlayerInteractEvent.Action.RIGHT_CLICK_AIR) return;
-		if(!canInteract(e))
-		{
-			if(!e.entityPlayer.capabilities.isCreativeMode)
-				e.setCanceled(true);
-		}
+		if(!canInteract(e)) e.setCanceled(true);
 	}
 	
 	private boolean canInteract(net.minecraftforge.event.entity.player.PlayerInteractEvent e)
 	{
 		if(e.entityPlayer.capabilities.isCreativeMode) return true;
 		
-		if(e.world.provider.dimensionId == 0 && EnkiMods.isSpawnChunkD(e.world, e.x, e.z))
+		if(e.world.provider.dimensionId == 0 && EnkiModsConfig.WorldCategory.spawnDistance > 0F && EnkiMods.isSpawnChunkD(e.world, e.x, e.z))
 		{
-			boolean ignoreSpawn = Rank.getConfig(e.entityPlayer, IGNORE_SPAWN).getBool();
-			
-			if(ignoreSpawn) return true;
+			if(Rank.getConfig(e.entityPlayer, RankConfig.IGNORE_SPAWN).getBool()) return true;
 			
 			if(e.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK && EnkiModsConfig.WorldCategory.spawnBreakWhitelist.contains(getName(e)))
 				return true;
@@ -266,13 +261,18 @@ public class EnkiModsEventHandler
 	@SubscribeEvent
 	public void onPlayerAttacked(net.minecraftforge.event.entity.living.LivingAttackEvent e)
 	{
-		if(e.entity instanceof EntityPlayer
-		&& e.source instanceof EntityDamageSource
-		&& ((EntityDamageSource)e.source).getEntity() instanceof EntityPlayer
-		&& EnkiMods.isSpawnChunkD(e.entity.worldObj, e.entity.posX, e.entity.posZ)
-		&& !((EntityPlayer)((EntityDamageSource)e.source).getEntity()).capabilities.isCreativeMode
-		&& !Rank.getConfig(((EntityDamageSource)e.source).getEntity(), IGNORE_SPAWN).getBool())
-			e.setCanceled(true);
+		if(e.entity instanceof EntityPlayer && e.source instanceof EntityDamageSource)
+		{
+			Entity e1 = ((EntityDamageSource)e.source).getEntity();
+			
+			if(e1 instanceof EntityPlayerMP && !(e1 instanceof FakePlayer))
+			{
+				EntityPlayerMP ep = (EntityPlayerMP)e1;
+				
+				if(EnkiMods.isSpawnChunkD(e.entity.worldObj, e.entity.posX, e.entity.posZ) && !ep.capabilities.isCreativeMode && !Rank.getConfig(ep, RankConfig.IGNORE_SPAWN).getBool())
+					e.setCanceled(true);
+			}
+		}
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST)

@@ -102,18 +102,20 @@ public class EnkiModsTickHandler
 	public static class TrackedPlayer
 	{
 		public final EntityPlayerMP player;
+		public final LMPlayer playerLM;
 		public Vertex.DimPos.Rot last;
 		public Notification lastChunkMessage = new Notification("", "", null);
 		
 		private TrackedPlayer(EntityPlayerMP ep)
 		{
 			player = ep;
+			playerLM = LMPlayer.getPlayer(ep);
 			last = new Vertex.DimPos.Rot(ep);
 		}
 		
 		public void load()
 		{
-			NBTTagCompound tag = player.getEntityData().getCompoundTag(DATA_KEY);
+			NBTTagCompound tag = playerLM.tempData.getCompoundTag(DATA_KEY);
 			last.readFromNBT(tag.getCompoundTag("Pos"));
 			lastChunkMessage = Notification.readFromNBT(tag.getCompoundTag("Msg"));
 		}
@@ -130,7 +132,7 @@ public class EnkiModsTickHandler
 			lastChunkMessage.writeToNBT(tagMsg);
 			tag.setTag("Msg", tagMsg);
 			
-			player.getEntityData().setTag(DATA_KEY, tag);
+			playerLM.tempData.setTag(DATA_KEY, tag);
 		}
 		
 		public boolean hasMoved(Vertex.DimPos.Rot pos)
@@ -142,7 +144,7 @@ public class EnkiModsTickHandler
 		public static TrackedPlayer get(EntityPlayerMP ep)
 		{
 			TrackedPlayer tp = new TrackedPlayer(ep);
-			if(ep.getEntityData().hasKey(DATA_KEY)) tp.load();
+			if(tp.playerLM.tempData.hasKey(DATA_KEY)) tp.load();
 			else tp.updatePos(new Vertex.DimPos.Rot(ep));
 			return tp;
 		}

@@ -2,9 +2,6 @@ package com.enkigaming.enkimods.rank;
 
 import java.util.Map;
 
-import com.enkigaming.enkimods.*;
-import com.enkigaming.enkimods.cmd.CmdSethome;
-
 public class DefaultRanks
 {
 	public static String loadDefaultRanks(Map<String, Rank> ranks)
@@ -28,13 +25,14 @@ public class DefaultRanks
 			r.commands.add("+f");
 			r.commands.add("+getrank");
 			r.commands.add("+latcore");
+			r.commands.add("+friendsLM");
 			r.commands.add("+realnick");
 			r.commands.add("+cofh");
 			r.commands.add("+near");
 			r.commands.add("+me");
-			r.setConfig(EnkiModsEventHandler.IGNORE_SPAWN, "false");
-			r.setConfig(PlayerClaims.MAX_CLAIM_POWER, "10");
-			r.setConfig(CmdSethome.MAX_HOME_COUNT, "0");
+			r.setConfig(RankConfig.IGNORE_SPAWN, "false");
+			r.setConfig(RankConfig.MAX_CLAIM_POWER, "10");
+			r.setConfig(RankConfig.MAX_HOME_COUNT, "0");
 			ranks.put("Player", r);
 		}
 		
@@ -44,7 +42,7 @@ public class DefaultRanks
 			r.prefix = col + "e";
 			r.parentRank = "Player";
 			r.commands.add("+irc");
-			r.setConfig(PlayerClaims.MAX_CLAIM_POWER, "15");
+			r.setConfig(RankConfig.MAX_CLAIM_POWER, "15");
 			ranks.put("Member", r);
 		}
 		
@@ -58,8 +56,8 @@ public class DefaultRanks
 			r.commands.add("+delhome");
 			r.commands.add("+head");
 			r.commands.add("+spawn");
-			r.setConfig(PlayerClaims.MAX_CLAIM_POWER, "25");
-			r.setConfig(CmdSethome.MAX_HOME_COUNT, "1");
+			r.setConfig(RankConfig.MAX_CLAIM_POWER, "25");
+			r.setConfig(RankConfig.MAX_HOME_COUNT, "1");
 			ranks.put("Donator", r);
 		}
 		
@@ -70,8 +68,8 @@ public class DefaultRanks
 			r.parentRank = "Donator";
 			r.commands.add("+back");
 			r.commands.add("+top");
-			r.setConfig(PlayerClaims.MAX_CLAIM_POWER, "40");
-			r.setConfig(CmdSethome.MAX_HOME_COUNT, "5");
+			r.setConfig(RankConfig.MAX_CLAIM_POWER, "40");
+			r.setConfig(RankConfig.MAX_HOME_COUNT, "5");
 			ranks.put("VIP", r);
 		}
 		
@@ -103,9 +101,9 @@ public class DefaultRanks
 			r.commands.add("+latcoreadmin");
 			r.commands.add("+tplast");
 			r.commands.add("+worldedit");
-			r.setConfig(EnkiModsEventHandler.IGNORE_SPAWN, "true");
-			r.setConfig(PlayerClaims.MAX_CLAIM_POWER, "5000");
-			r.setConfig(CmdSethome.MAX_HOME_COUNT, "500");
+			r.setConfig(RankConfig.IGNORE_SPAWN, "true");
+			r.setConfig(RankConfig.MAX_CLAIM_POWER, "5000");
+			r.setConfig(RankConfig.MAX_HOME_COUNT, "500");
 			ranks.put("Mod", r);
 		}
 		

@@ -1,6 +1,6 @@
 package com.enkigaming.enkimods.cmd;
 
-import latmod.core.LMPlayer;
+import latmod.core.*;
 import net.minecraft.command.*;
 
 import com.enkigaming.enkimods.rank.Rank;
@@ -15,14 +15,26 @@ public class CmdGetRank extends CmdEnki
 		LMPlayer ep = null;
 		
 		if(args.length == 1)
-			ep = LMPlayer.getPlayer(args[0]);
+		{
+			if(args[0].equals("list"))
+			{
+				for(int i = 0; i < LMPlayer.map.size(); i++)
+				{
+					ep = LMPlayer.map.values.get(i);
+					Rank r = Rank.getPlayerRank(ep);
+					
+					if(r != Rank.getDefaultRank())
+						LatCoreMC.printChat(ics, ep.username + ": " + r.rankID);
+				}
+				
+				return null;
+			}
+			else ep = getLMPlayer(args[0]);
+		}
 		else
-			ep = LMPlayer.getPlayer(ics);
+			ep = getLMPlayer(ics);
 		
-		if(ep == null) throw new PlayerNotFoundException();
-		
-		Rank r = Rank.getPlayerRank(ep);
-		return FINE + ep.username + " is " + r.rankID;
+		return FINE + ep.username + " is " + Rank.getPlayerRank(ep).rankID;
 	}
 	
 	public NameType getUsername(String[] args, int i)

@@ -10,8 +10,6 @@ import com.enkigaming.enkimods.rank.*;
 
 public class CmdSethome extends CmdEnki
 {
-	public static final RankConfig MAX_HOME_COUNT = new RankConfig("maxHomeCount", "0");
-	
 	public CmdSethome()
 	{ super("sethome"); }
 	
@@ -26,7 +24,7 @@ public class CmdSethome extends CmdEnki
 		
 		NBTTagCompound map = p.customData.getCompoundTag("EnkiHomes");
 		
-		int maxHomes = Rank.getConfig(ep, MAX_HOME_COUNT).getInt();
+		int maxHomes = Rank.getConfig(ep, RankConfig.MAX_HOME_COUNT).getInt();
 		if(maxHomes <= 0 || map.func_150296_c().size() > maxHomes)
 			return "You can't set any more home locations!";
 		

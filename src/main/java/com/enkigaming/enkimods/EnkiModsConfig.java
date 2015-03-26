@@ -1,7 +1,5 @@
 package com.enkigaming.enkimods;
 
-import java.io.File;
-
 import latmod.core.*;
 import latmod.core.util.*;
 import net.minecraft.item.*;
@@ -9,7 +7,7 @@ import net.minecraft.item.*;
 public class EnkiModsConfig extends LMConfig
 {
 	public EnkiModsConfig()
-	{ super(new File(LatCoreMC.latmodFolder, "EnkiMods.cfg")); }
+	{ super(EnkiFiles.config); }
 	
 	public void load()
 	{
@@ -21,18 +19,14 @@ public class EnkiModsConfig extends LMConfig
 	public static class General
 	{
 		public static float nearDistance;
-		public static boolean enableWorldBorder;
 		public static boolean overrideHelp;
-		public static boolean worldBorderAt0x0;
 		public static boolean crossDimHomes;
 		public static TwoObjects<Integer, Integer> restartClock;
 		
 		public static void load(Category c)
 		{
 			nearDistance = c.getFloat("nearDistance", 512F);
-			enableWorldBorder = c.getBool("enableWorldBorder", true);
-			overrideHelp = c.getBool("overrideHelp", true);
-			worldBorderAt0x0 = c.getBool("worldBorderAt0x0", true);
+			overrideHelp = c.getBool("overrideHelp", false);
 			crossDimHomes = c.getBool("crossDimHomes", true);
 			
 			try
@@ -100,14 +94,17 @@ public class EnkiModsConfig extends LMConfig
 	
 	public static class WorldCategory
 	{
+		public static boolean enableWorldBorder;
+		public static boolean worldBorderAt0x0;
 		public static float spawnDistance;
-		public static boolean allowCreativeEdit;
 		private static FastMap<Integer, Integer> worldBorder;
 		public static FastList<String> spawnBreakWhitelist;
 		public static FastList<String> spawnInteractWhitelist;
 		
 		public static void load(Category c)
 		{
+			enableWorldBorder = c.getBool("enableWorldBorder", true);
+			worldBorderAt0x0 = c.getBool("worldBorderAt0x0", true);
 			spawnDistance = c.getFloat("spawnDistance", 300F);
 			FastList<String> worldBorderS = c.getStringArray("worldBorders", new String[]
 			{
@@ -137,8 +134,6 @@ public class EnkiModsConfig extends LMConfig
 				"minecraft:furnace",
 				"minecraft:crafting_table"
 			});
-			
-			allowCreativeEdit = c.getBool("allowCreativeEdit", true);
 		}
 		
 		public static int getWorldBorder(int dim)

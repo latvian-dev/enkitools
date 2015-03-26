@@ -25,6 +25,8 @@ public class EnkiMods
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent e)
 	{
+		EnkiFiles.init();
+		
 		mod = new LMMod(e, new EnkiModsConfig(), null);
 		
 		LatCoreMC.addEventHandler(EnkiModsEventHandler.instance, true, false, true);
@@ -80,7 +82,7 @@ public class EnkiMods
 	
 	public static boolean isSpawnChunk(World w, int cx, int cz)
 	{
-		if(w.provider.dimensionId != 0) return false;
+		if(w.provider.dimensionId != 0 || EnkiModsConfig.WorldCategory.spawnDistance <= 0F) return false;
 		double x = cx * 16D + 8.5D;
 		double z = cz * 16D + 8.5D;
 		double dist = EnkiModsConfig.WorldCategory.spawnDistance;
@@ -95,20 +97,16 @@ public class EnkiMods
 	
 	public static boolean isOutsideWorldBorder(World w, double x, double z)
 	{
-		if(!EnkiModsConfig.General.enableWorldBorder) return false;
+		if(!EnkiModsConfig.WorldCategory.enableWorldBorder) return false;
 		
 		int dist = EnkiModsConfig.WorldCategory.getWorldBorder(w.provider.dimensionId);
 		
 		if(dist <= 0) return false;
 		
-		if(EnkiModsConfig.General.worldBorderAt0x0)
-		{
-			if(x < - dist || x > dist) return true;
-			return (z < - dist || z > + dist);
-		}
+		if(EnkiModsConfig.WorldCategory.worldBorderAt0x0)
+			return (x < - dist || x > dist) || (z < - dist || z > + dist);
 		
 		Vertex c = LatCoreMC.getSpawnPoint(w);
-		if(x < c.x - dist || x > c.x + dist) return true;
-		return (z < c.z - dist || z > c.z + dist);
+		return (x < c.x - dist || x > c.x + dist) || (z < c.z - dist || z > c.z + dist);
 	}
 }

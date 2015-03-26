@@ -1,12 +1,11 @@
 package com.enkigaming.enkimods.rank;
 
-import java.io.File;
 import java.util.*;
 
-import latmod.core.*;
+import latmod.core.LMPlayer;
 import latmod.core.util.*;
 
-import com.enkigaming.enkimods.EnkiMods;
+import com.enkigaming.enkimods.*;
 import com.google.gson.annotations.Expose;
 
 public class Rank
@@ -93,45 +92,33 @@ public class Rank
 	
 	public static void reload()
 	{
-		File f = new File(LatCoreMC.latmodFolder, "EnkiMods/Ranks.txt");
-		
 		RanksFile ranksFile;
 		
-		if(!f.exists())
+		if(!EnkiFiles.ranks.exists())
 		{
-			f = LatCore.newFile(f);
+			EnkiFiles.ranks = LatCore.newFile(EnkiFiles.ranks);
 			
 			ranksFile = new RanksFile();
 			ranksFile.ranks = new HashMap<String, Rank>();
 			ranksFile.defaultRank = DefaultRanks.loadDefaultRanks(ranksFile.ranks);
 			
-			ranksFile.ranks = MapSorter.sortMap(ranksFile.ranks);
-			
-			LatCore.toJsonFile(f, ranksFile);
+			LatCore.toJsonFile(EnkiFiles.ranks, ranksFile);
 		}
-		else ranksFile = LatCore.fromJsonFromFile(f, RanksFile.class);
+		else ranksFile = LatCore.fromJsonFromFile(EnkiFiles.ranks, RanksFile.class);
 		
 		ranks.clear();
 		
-		Iterator<String> itrK = ranksFile.ranks.keySet().iterator();
-		Iterator<Rank> itrV = ranksFile.ranks.values().iterator();
-		
-		while(itrK.hasNext() && itrV.hasNext())
+		for(String k : ranksFile.ranks.keySet())
 		{
-			String k = itrK.next();
-			Rank v = itrV.next();
+			Rank v = ranksFile.ranks.get(k);
 			v.rankID = k;
 			v.configMap.clear();
 			
 			if(v.config != null && v.config.size() > 0)
 			{
-				Iterator<String> itrCfgK = v.config.keySet().iterator();
-				Iterator<String> itrCfgV = v.config.values().iterator();
-				
-				while(itrCfgK.hasNext() && itrCfgV.hasNext())
+				for(String cfgK : v.config.keySet())
 				{
-					String cfgK = itrCfgK.next();
-					String cfgV = itrCfgV.next();
+					String cfgV = v.config.get(cfgK);
 					
 					RankConfig c = RankConfig.registry.get(cfgK);
 					if(c != null) v.configMap.put(c, new RankConfig.Inst(c, cfgV));
@@ -147,22 +134,21 @@ public class Rank
 		
 		playerRanks.clear();
 		
-		File f1 = new File(LatCoreMC.latmodFolder, "EnkiMods/Players.txt");
-		
-		if(!f1.exists())
+		if(!EnkiFiles.players.exists())
 		{
-			f1 = LatCore.newFile(f1);
-			playerRanks.put("Baphometis", Rank.getRank("Admin"));
-			playerRanks.put("LatvianModder", Rank.getRank("Admin"));
-			playerRanks.put("Colsun", Rank.getRank("Admin"));
-			playerRanks.put("tfox83", Rank.getRank("VIP"));
+			EnkiFiles.players = LatCore.newFile(EnkiFiles.players);
+			setRawRank("LatvianModder", "Admin");
+			setRawRank("Baphometis", "Admin");
+			setRawRank("Colsun", "Admin");
+			setRawRank("HaniiPuppy", "Admin");
+			setRawRank("tfox83", "VIP");
 			saveRanks();
 		}
 		else
 		{
 			try
 			{
-				FastList<String> al = LatCore.loadFile(f1);
+				FastList<String> al = LatCore.loadFile(EnkiFiles.players);
 				
 				if(al != null && al.size() > 0)
 				{
@@ -171,13 +157,19 @@ public class Rank
 						String[] s = al.get(i).split(": ");
 						
 						if(s != null && s.length == 2)
-							playerRanks.put(s[0], Rank.getRank(s[1]));
+							setRawRank(s[0], s[1]);
 					}
 				}
 			}
 			catch(Exception e)
 			{ e.printStackTrace(); }
 		}
+	}
+	
+	private static void setRawRank(String s, String s1)
+	{
+		Rank r = Rank.getRank(s1);
+		if(r != null) playerRanks.put(s, r);
 	}
 	
 	public static void setPlayerRank(String s, Rank r)
@@ -187,12 +179,12 @@ public class Rank
 	{
 		FastList<String> al = new FastList<String>();
 		
-		if(LatCoreMC.isDevEnv) for(int i = 0; i < playerRanks.size(); i++)
+		for(int i = 0; i < playerRanks.size(); i++)
 			al.add(playerRanks.keys.get(i) + ": " + playerRanks.values.get(i));
 		
 		al.sort(null);
 		
-		try { LatCore.saveFile(new File(LatCoreMC.latmodFolder, "EnkiMods/Players.txt"), al); }
+		try { LatCore.saveFile(EnkiFiles.players, al); }
 		catch(Exception e) { e.printStackTrace(); }
 	}
 	
