@@ -18,17 +18,15 @@ public class EnkiModsConfig extends LMConfig
 	
 	public static class General
 	{
+		public static TwoObjects<Integer, Integer> restartClock;
+		
 		public static float nearDistance;
 		public static boolean overrideHelp;
 		public static boolean crossDimHomes;
-		public static TwoObjects<Integer, Integer> restartClock;
+		public static boolean overrideCommands;
 		
 		public static void load(Category c)
 		{
-			nearDistance = c.getFloat("nearDistance", 512F);
-			overrideHelp = c.getBool("overrideHelp", false);
-			crossDimHomes = c.getBool("crossDimHomes", true);
-			
 			try
 			{
 				String s[] = LatCore.split(c.getString("autoShutdownTimer", "00:00"), ":");
@@ -36,6 +34,11 @@ public class EnkiModsConfig extends LMConfig
 			}
 			catch(Exception e)
 			{ e.printStackTrace(); restartClock = new TwoObjects<Integer, Integer>(0, 0); }
+			
+			nearDistance = c.getFloat("nearDistance", 512F);
+			overrideHelp = c.getBool("overrideHelp", false);
+			crossDimHomes = c.getBool("crossDimHomes", true);
+			overrideCommands = c.getBool("overrideCommands", true);
 		}
 	}
 	

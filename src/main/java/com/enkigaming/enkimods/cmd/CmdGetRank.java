@@ -1,7 +1,7 @@
 package com.enkigaming.enkimods.cmd;
 
 import latmod.core.*;
-import net.minecraft.command.*;
+import net.minecraft.command.ICommandSender;
 
 import com.enkigaming.enkimods.rank.Rank;
 

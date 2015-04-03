@@ -1,8 +1,6 @@
 package com.enkigaming.enkimods;
 
 import latmod.core.*;
-import latmod.core.cmd.CommandLevel;
-import latmod.core.mod.cmd.*;
 import latmod.core.util.*;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
@@ -38,11 +36,6 @@ public class EnkiMods
 	{
 		EnkiModsConfig.Login.loadStartingInv();
 		//EnkiWorldEdit.postInit();
-		
-		CmdLatCoreAdmin.commandLevel = CommandLevel.ALL;
-		CmdTpOverride.commandLevel = CommandLevel.ALL;
-		CmdGamemodeOverride.commandLevel = CommandLevel.ALL;
-		CmdGameruleOverride.commandLevel = CommandLevel.ALL;
 	}
 	
 	@Mod.EventHandler
@@ -70,6 +63,14 @@ public class EnkiMods
 		
 		if(EnkiModsConfig.General.overrideHelp)
 			e.registerServerCommand(new CmdHelpOverride());
+		
+		if(EnkiModsConfig.General.overrideCommands)
+		{
+			e.registerServerCommand(new CmdTpOverride());
+			e.registerServerCommand(new CmdListOverride());
+			e.registerServerCommand(new CmdGamemodeOverride());
+			e.registerServerCommand(new CmdGameruleOverride());
+		}
 	}
 	
 	@Mod.EventHandler
