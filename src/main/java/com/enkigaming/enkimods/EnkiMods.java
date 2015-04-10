@@ -23,7 +23,7 @@ public class EnkiMods
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent e)
 	{
-		EnkiFiles.init();
+		EnkiData.init();
 		
 		mod = new LMMod(e, new EnkiModsConfig(), null);
 		

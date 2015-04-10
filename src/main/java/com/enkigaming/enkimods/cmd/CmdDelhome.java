@@ -20,7 +20,7 @@ public class CmdDelhome extends CmdEnki
 		{
 			EntityPlayerMP ep = getCommandSenderAsPlayer(ics);
 			LMPlayer p = LMPlayer.getPlayer(ep);
-			NBTTagCompound map = p.customData.getCompoundTag("EnkiHomes");
+			NBTTagCompound map = p.serverData.getCompoundTag("EnkiHomes");
 			FastList<String> keys = NBTHelper.getMapKeys(map);
 			keys.remove("Default"); keys.sort(null);
 			return keys.isEmpty() ? null : keys.toArray(new String[0]);
@@ -34,11 +34,11 @@ public class CmdDelhome extends CmdEnki
 		EntityPlayer ep = getCommandSenderAsPlayer(ics);
 		LMPlayer p = LMPlayer.getPlayer(ep);
 		
-		NBTTagCompound map = p.customData.getCompoundTag("EnkiHomes");
+		NBTTagCompound map = p.serverData.getCompoundTag("EnkiHomes");
 		
 		String name = args.length == 1 ? args[0] : "Default";
 		map.removeTag(name);
-		p.customData.setTag("EnkiHomes", map);
+		p.serverData.setTag("EnkiHomes", map);
 		
 		if(name.equals("Default"))
 			return FINE + "Home deleted!";

@@ -94,17 +94,17 @@ public class Rank
 	{
 		RanksFile ranksFile;
 		
-		if(!EnkiFiles.ranks.exists())
+		if(!EnkiData.ranks.exists())
 		{
-			EnkiFiles.ranks = LatCore.newFile(EnkiFiles.ranks);
+			EnkiData.ranks = LatCore.newFile(EnkiData.ranks);
 			
 			ranksFile = new RanksFile();
 			ranksFile.ranks = new HashMap<String, Rank>();
 			ranksFile.defaultRank = DefaultRanks.loadDefaultRanks(ranksFile.ranks);
 			
-			LatCore.toJsonFile(EnkiFiles.ranks, ranksFile);
+			LatCore.toJsonFile(EnkiData.ranks, ranksFile);
 		}
-		else ranksFile = LatCore.fromJsonFromFile(EnkiFiles.ranks, RanksFile.class);
+		else ranksFile = LatCore.fromJsonFromFile(EnkiData.ranks, RanksFile.class);
 		
 		ranks.clear();
 		
@@ -134,9 +134,9 @@ public class Rank
 		
 		playerRanks.clear();
 		
-		if(!EnkiFiles.players.exists())
+		if(!EnkiData.players.exists())
 		{
-			EnkiFiles.players = LatCore.newFile(EnkiFiles.players);
+			EnkiData.players = LatCore.newFile(EnkiData.players);
 			setRawRank("LatvianModder", "Admin");
 			setRawRank("Baphometis", "Admin");
 			setRawRank("Colsun", "Admin");
@@ -148,7 +148,7 @@ public class Rank
 		{
 			try
 			{
-				FastList<String> al = LatCore.loadFile(EnkiFiles.players);
+				FastList<String> al = LatCore.loadFile(EnkiData.players);
 				
 				if(al != null && al.size() > 0)
 				{
@@ -184,7 +184,7 @@ public class Rank
 		
 		al.sort(null);
 		
-		try { LatCore.saveFile(EnkiFiles.players, al); }
+		try { LatCore.saveFile(EnkiData.players, al); }
 		catch(Exception e) { e.printStackTrace(); }
 	}
 	

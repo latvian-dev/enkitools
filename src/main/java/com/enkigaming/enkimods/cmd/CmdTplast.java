@@ -1,6 +1,9 @@
 package com.enkigaming.enkimods.cmd;
 
+import com.enkigaming.enkimods.EnkiData;
+
 import latmod.core.*;
+import latmod.core.util.Vertex.DimPos;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -16,19 +19,15 @@ public class CmdTplast extends CmdEnki
 		if(p.isOnline()) LatCoreMC.executeCommand(ics, "tp " + args[0]);
 		else
 		{
-			NBTTagCompound tag = (NBTTagCompound)p.customData.getTag("LastSavedPos");
+			NBTTagCompound tag = (NBTTagCompound)p.serverData.getTag(EnkiData.TAG_LAST_POS);
 			
 			if(tag != null)
 			{
-				double x = tag.getDouble("X");
-				double y = tag.getDouble("Y");
-				double z = tag.getDouble("Z");
-				int dim = tag.getInteger("Dim");
+				DimPos dp = new DimPos();
+				dp.readFromNBT(tag);
 				
-				if(dim != p.getPlayerMP().dimension)
-					return "Can't teleport to another dimension!";
-				
-				LatCoreMC.executeCommand(ics, "tp " + x + " " + y + " " + z);
+				if(dp.dim != p.getPlayerMP().dimension) return "Can't teleport to another dimension!";
+				LatCoreMC.executeCommand(ics, "tp " + dp.intX() + " " + dp.intY() + " " + dp.intZ());
 			}
 		}
 		

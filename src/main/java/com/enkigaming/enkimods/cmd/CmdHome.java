@@ -21,7 +21,7 @@ public class CmdHome extends CmdEnki
 		if(i == 0)
 		{
 			LMPlayer p = LMPlayer.getPlayer(ics);
-			NBTTagCompound map = p.customData.getCompoundTag("EnkiHomes");
+			NBTTagCompound map = p.serverData.getCompoundTag("EnkiHomes");
 			FastList<String> keys = NBTHelper.getMapKeys(map);
 			keys.remove("Default"); keys.sort(null);
 			return keys.isEmpty() ? null : keys.toArray(new String[0]);
@@ -34,7 +34,7 @@ public class CmdHome extends CmdEnki
 	{
 		EntityPlayerMP ep = getCommandSenderAsPlayer(ics);
 		LMPlayer p = LMPlayer.getPlayer(ep);
-		NBTTagCompound map = p.customData.getCompoundTag("EnkiHomes");
+		NBTTagCompound map = p.serverData.getCompoundTag("EnkiHomes");
 		
 		String name = args.length == 1 ? args[0] : "Default";
 		int[] pos = map.getIntArray(name);

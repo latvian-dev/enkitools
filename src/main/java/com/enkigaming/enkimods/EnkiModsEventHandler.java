@@ -96,7 +96,7 @@ public class EnkiModsEventHandler
 					}
 				}
 				
-				NBTTagList mail = (NBTTagList)tag.getTag("Mail");
+				NBTTagList mail = (NBTTagList)tag.getTag(EnkiData.TAG_MAIL);
 				
 				if(mail != null && mail.tagCount() > 0)
 				{
@@ -159,7 +159,7 @@ public class EnkiModsEventHandler
 			mail.appendTag(tag1);
 		}
 		
-		tag.setTag("Mail", mail);
+		tag.setTag(EnkiData.TAG_MAIL, mail);
 		
 		NBTHelper.writeMap(e.getFile("EnkiMods.dat"), tag);
 	}
@@ -170,19 +170,6 @@ public class EnkiModsEventHandler
 		e.tag.setInteger("EnkiMailNextID", Mailbox.nextID);
 	}
 	
-	@SubscribeEvent
-	public void loadPlayerData(LMPlayerEvent.DataLoaded e)
-	{
-		if(e.player.customData.hasKey("EnkiClaims"))
-		{
-			NBTTagCompound tag = e.player.customData.getCompoundTag("EnkiClaims");
-			PlayerClaims pc = new PlayerClaims(e.player);
-			pc.readFromNBT(tag);
-			PlayerClaims.claimsMap.put(pc.owner.playerID, pc);
-			e.player.customData.removeTag("EnkiClaims");
-		}
-	}
-	
 	public void printIncomingMail(EntityPlayerMP ep, int m)
 	{ LatCoreMC.notifyPlayer(ep, new Notification(m + " New message" + MathHelperLM.getPluralWord(m, "!", "s!"), EnumChatFormatting.GRAY + "" + EnumChatFormatting.ITALIC + "EnkiMail", new ItemStack(Items.writable_book), 10000L)); }
 	
@@ -191,7 +178,7 @@ public class EnkiModsEventHandler
 	{
 		NBTTagCompound tag = new NBTTagCompound();
 		new Vertex.DimPos(e.playerMP).writeToNBT(tag);
-		e.player.customData.setTag("LastSavedPos", tag);
+		e.player.serverData.setTag(EnkiData.TAG_LAST_POS, tag);
 	}
 	
 	@SubscribeEvent
@@ -202,7 +189,7 @@ public class EnkiModsEventHandler
 			LMPlayer p = LMPlayer.getPlayer(e.entity);
 			NBTTagCompound tag = new NBTTagCompound();
 			new Vertex.DimPos(e.entity).writeToNBT(tag);
-			p.customData.setTag("LastDeath", tag);
+			p.serverData.setTag(EnkiData.TAG_LAST_POS, tag);
 		}
 	}
 	

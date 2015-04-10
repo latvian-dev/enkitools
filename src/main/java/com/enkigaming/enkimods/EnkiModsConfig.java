@@ -7,7 +7,7 @@ import net.minecraft.item.*;
 public class EnkiModsConfig extends LMConfig
 {
 	public EnkiModsConfig()
-	{ super(EnkiFiles.config); }
+	{ super(EnkiData.config); }
 	
 	public void load()
 	{
@@ -83,7 +83,7 @@ public class EnkiModsConfig extends LMConfig
 				
 				if(s1 != null && s1.length == 3)
 				{
-					Item m = LatCoreMC.getItemFromRegName(s1[0]);
+					Item m = InvUtils.getItemFromRegName(s1[0]);
 					if(m != null)
 					{
 						int count = Integer.parseInt(s1[1]);

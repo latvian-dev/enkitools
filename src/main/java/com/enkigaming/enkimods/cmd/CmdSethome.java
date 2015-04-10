@@ -22,7 +22,7 @@ public class CmdSethome extends CmdEnki
 		ChunkCoordinates c = ep.getPlayerCoordinates();
 		LMPlayer p = LMPlayer.getPlayer(ep);
 		
-		NBTTagCompound map = p.customData.getCompoundTag("EnkiHomes");
+		NBTTagCompound map = p.serverData.getCompoundTag("EnkiHomes");
 		
 		int maxHomes = Rank.getConfig(ep, RankConfig.MAX_HOME_COUNT).getInt();
 		if(maxHomes <= 0 || map.func_150296_c().size() > maxHomes)
@@ -30,7 +30,7 @@ public class CmdSethome extends CmdEnki
 		
 		String name = args.length == 1 ? args[0] : "Default";
 		map.setIntArray(name, new int[] { c.posX, c.posY, c.posZ, ep.worldObj.provider.dimensionId });
-		p.customData.setTag("EnkiHomes", map);
+		p.serverData.setTag("EnkiHomes", map);
 		
 		if(name.equals("Default"))
 			return FINE + "Home set!";
