@@ -1,10 +1,9 @@
 package com.enkigaming.enkimods.cmd;
 
 import latmod.core.*;
-import latmod.core.util.FastList;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.*;
-import net.minecraft.nbt.NBTTagCompound;
+
+import com.enkigaming.enkimods.EnkiData;
 
 public class CmdDelhome extends CmdEnki
 {
@@ -18,12 +17,9 @@ public class CmdDelhome extends CmdEnki
 	{
 		if(i == 0)
 		{
-			EntityPlayerMP ep = getCommandSenderAsPlayer(ics);
-			LMPlayer p = LMPlayer.getPlayer(ep);
-			NBTTagCompound map = p.serverData.getCompoundTag("EnkiHomes");
-			FastList<String> keys = NBTHelper.getMapKeys(map);
-			keys.remove("Default"); keys.sort(null);
-			return keys.isEmpty() ? null : keys.toArray(new String[0]);
+			LMPlayer p = LMPlayer.getPlayer(getCommandSenderAsPlayer(ics));
+			EnkiData.Homes h = new EnkiData.Homes(p);
+			return h.list(true);
 		}
 		
 		return super.getTabStrings(ics, args, i);
@@ -31,18 +27,19 @@ public class CmdDelhome extends CmdEnki
 	
 	public String onCommand(ICommandSender ics, String[] args)
 	{
-		EntityPlayer ep = getCommandSenderAsPlayer(ics);
-		LMPlayer p = LMPlayer.getPlayer(ep);
-		
-		NBTTagCompound map = p.serverData.getCompoundTag("EnkiHomes");
+		LMPlayer p = LMPlayer.getPlayer(getCommandSenderAsPlayer(ics));
+		EnkiData.Homes h = new EnkiData.Homes(p);
 		
 		String name = args.length == 1 ? args[0] : "Default";
-		map.removeTag(name);
-		p.serverData.setTag("EnkiHomes", map);
 		
-		if(name.equals("Default"))
-			return FINE + "Home deleted!";
-		else
-			return FINE + "Deleted '" + name + "'";
+		if(h.homes.remove(name))
+		{
+			if(name.equals("Default"))
+				return FINE + "Home deleted!";
+			else
+				return FINE + "Deleted '" + name + "'";
+		}
+		
+		return "Home '" + name + "' not set!";
 	}
 }

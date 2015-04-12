@@ -77,6 +77,7 @@ public class EnkiModsEventHandler
 		if(e.phase.isPost())
 		{
 			Mailbox.mailMap.clear();
+			EnkiData.data.clear();
 			
 			NBTTagCompound tag = NBTHelper.readMap(e.getFile("EnkiMods.dat"));
 			
@@ -87,13 +88,9 @@ public class EnkiModsEventHandler
 				for(int i = 0; i < LMPlayer.map.size(); i++)
 				{
 					LMPlayer p = LMPlayer.map.values.get(i);
-					NBTTagCompound tag1 = players.getCompoundTag("" + p.playerID);
-					
-					if(!tag1.hasNoTags())
-					{
-						PlayerClaims pc = PlayerClaims.getClaims(p);
-						pc.readFromNBT(tag1.getCompoundTag("Claims"));
-					}
+					EnkiData.data.put(p.playerID, players.getCompoundTag("" + p.playerID));
+					(new EnkiData.Homes(p)).save();
+					EnkiData.Claims.load(p);
 				}
 				
 				NBTTagList mail = (NBTTagList)tag.getTag(EnkiData.TAG_MAIL);
@@ -111,6 +108,8 @@ public class EnkiModsEventHandler
 					}
 				}
 			}
+			
+			LatCoreMC.printChat(null, EnkiData.data);
 		}
 	}
 	
@@ -130,18 +129,12 @@ public class EnkiModsEventHandler
 		for(int i = 0; i < LMPlayer.map.size(); i++)
 		{
 			LMPlayer p = LMPlayer.map.values.get(i);
-			NBTTagCompound tag1 = new NBTTagCompound();
 			
-			PlayerClaims pc = PlayerClaims.getClaims(p);
+			(new EnkiData.Homes(p)).save();
+			EnkiData.Claims.save(p);
 			
-			if(pc != null && pc.shouldSave())
-			{
-				NBTTagCompound tag2 = new NBTTagCompound();
-				pc.writeToNBT(tag2);
-				tag1.setTag("Claims", tag2);
-			}
-			
-			players.setTag("" + p.playerID, tag1);
+			NBTTagCompound tag1 = EnkiData.data.get(p.playerID);
+			if(tag1 != null) players.setTag("" + p.playerID, tag1);
 		}
 		
 		tag.setTag("Players", players);

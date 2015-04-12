@@ -63,7 +63,10 @@ public class EnkiModsTickHandler
 					if(secondsLeft >= 300)
 						printServer(LIGHT_PURPLE + "Server will be restarting after " + msg);
 					
-					LatCoreMC.notifyPlayer(null, new Notification("Server restarts in...", msg, new ItemStack(Items.glowstone_dust), (secondsLeft <= 10) ? 1000L : 4000L));
+					if(secondsLeft <= 10L)
+						LatCoreMC.notifyPlayer(null, new Notification("Server restart!", null, new ItemStack(Items.clock, (int)secondsLeft), 1000L));
+					else
+						LatCoreMC.notifyPlayer(null, new Notification("Server restarts in...", msg, new ItemStack(Items.clock), 4000L));
 				}
 				
 				if(LatCoreMC.hasOnlinePlayers())

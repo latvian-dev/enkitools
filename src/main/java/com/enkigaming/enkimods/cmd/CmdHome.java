@@ -1,12 +1,10 @@
 package com.enkigaming.enkimods.cmd;
 
 import latmod.core.*;
-import latmod.core.util.FastList;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
 
-import com.enkigaming.enkimods.EnkiModsConfig;
+import com.enkigaming.enkimods.*;
 
 public class CmdHome extends CmdEnki
 {
@@ -20,11 +18,9 @@ public class CmdHome extends CmdEnki
 	{
 		if(i == 0)
 		{
-			LMPlayer p = LMPlayer.getPlayer(ics);
-			NBTTagCompound map = p.serverData.getCompoundTag("EnkiHomes");
-			FastList<String> keys = NBTHelper.getMapKeys(map);
-			keys.remove("Default"); keys.sort(null);
-			return keys.isEmpty() ? null : keys.toArray(new String[0]);
+			LMPlayer p = LMPlayer.getPlayer(getCommandSenderAsPlayer(ics));
+			EnkiData.Homes h = new EnkiData.Homes(p);
+			return h.list(true);
 		}
 		
 		return super.getTabStrings(ics, args, i);
@@ -34,25 +30,24 @@ public class CmdHome extends CmdEnki
 	{
 		EntityPlayerMP ep = getCommandSenderAsPlayer(ics);
 		LMPlayer p = LMPlayer.getPlayer(ep);
-		NBTTagCompound map = p.serverData.getCompoundTag("EnkiHomes");
+		EnkiData.Homes h = new EnkiData.Homes(p);
 		
 		String name = args.length == 1 ? args[0] : "Default";
-		int[] pos = map.getIntArray(name);
 		
-		if(pos.length == 4)
+		EnkiData.Homes.Home h1 = h.homes.get(name);
+		
+		if(h1 == null) return "Home '" + name + "' not set!";
+		
+		if(ep.worldObj.provider.dimensionId != h1.dim)
 		{
-			if(ep.worldObj.provider.dimensionId != pos[3])
-			{
-				if(EnkiModsConfig.General.crossDimHomes)
-					LatCoreMC.teleportEntity(ep, pos[3]);
-				else return "You can't teleport to another dimension!";
-			}
-			
-			ep.playerNetServerHandler.setPlayerLocation(pos[0] + 0.5D, pos[1] + 0.5D, pos[2] + 0.5D, ep.rotationYaw, ep.rotationPitch);
-			
-			if(name.equals("Default")) return FINE + "Teleported to home";
-			else return FINE + "Teleported to '" + name + "'";	
+			if(EnkiModsConfig.General.crossDimHomes)
+				LatCoreMC.teleportEntity(ep, h1.dim);
+			else return "You can't teleport to another dimension!";
 		}
-		else return "Home not set!";
+		
+		ep.playerNetServerHandler.setPlayerLocation(h1.x + 0.5D, h1.y + 0.5D, h1.z + 0.5D, ep.rotationYaw, ep.rotationPitch);
+		
+		if(name.equals("Default")) return FINE + "Teleported to home";
+		else return FINE + "Teleported to '" + name + "'";
 	}
 }

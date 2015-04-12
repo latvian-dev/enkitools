@@ -1,11 +1,11 @@
 package com.enkigaming.enkimods.cmd;
 
-import com.enkigaming.enkimods.EnkiData;
-
 import latmod.core.*;
 import latmod.core.util.Vertex.DimPos;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.nbt.NBTTagCompound;
+
+import com.enkigaming.enkimods.EnkiData;
 
 public class CmdTplast extends CmdEnki
 {
