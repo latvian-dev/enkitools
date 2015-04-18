@@ -107,16 +107,12 @@ public class EnkiModsEventHandler
 						Mailbox.mailMap.put(id, m);
 					}
 				}
+				
+				Mailbox.nextID = tag.getInteger("EnkiMailNextID");
 			}
 			
 			LatCoreMC.printChat(null, EnkiData.data);
 		}
-	}
-	
-	@SubscribeEvent
-	public void loadCommonLMData(LoadLMDataEvent.CommonData e)
-	{
-		Mailbox.nextID = e.tag.getInteger("EnkiMailNextID");
 	}
 	
 	@SubscribeEvent
@@ -154,13 +150,9 @@ public class EnkiModsEventHandler
 		
 		tag.setTag(EnkiData.TAG_MAIL, mail);
 		
+		tag.setInteger("EnkiMailNextID", Mailbox.nextID);
+		
 		NBTHelper.writeMap(e.getFile("EnkiMods.dat"), tag);
-	}
-	
-	@SubscribeEvent
-	public void saveCommonLMData(SaveLMDataEvent.CommonData e)
-	{
-		e.tag.setInteger("EnkiMailNextID", Mailbox.nextID);
 	}
 	
 	public void printIncomingMail(EntityPlayerMP ep, int m)
