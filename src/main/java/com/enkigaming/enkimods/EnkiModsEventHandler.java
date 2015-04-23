@@ -77,7 +77,6 @@ public class EnkiModsEventHandler
 		if(e.phase.isPost())
 		{
 			Mailbox.mailMap.clear();
-			EnkiData.data.clear();
 			
 			NBTTagCompound tag = NBTHelper.readMap(e.getFile("EnkiMods.dat"));
 			
@@ -88,9 +87,7 @@ public class EnkiModsEventHandler
 				for(int i = 0; i < LMPlayer.map.size(); i++)
 				{
 					LMPlayer p = LMPlayer.map.values.get(i);
-					EnkiData.data.put(p.playerID, players.getCompoundTag("" + p.playerID));
-					(new EnkiData.Homes(p)).save();
-					EnkiData.Claims.load(p);
+					EnkiData.load(p, players.getCompoundTag("" + p.playerID));
 				}
 				
 				NBTTagList mail = (NBTTagList)tag.getTag(EnkiData.TAG_MAIL);
@@ -110,8 +107,6 @@ public class EnkiModsEventHandler
 				
 				Mailbox.nextID = tag.getInteger("EnkiMailNextID");
 			}
-			
-			LatCoreMC.printChat(null, EnkiData.data);
 		}
 	}
 	
@@ -125,12 +120,9 @@ public class EnkiModsEventHandler
 		for(int i = 0; i < LMPlayer.map.size(); i++)
 		{
 			LMPlayer p = LMPlayer.map.values.get(i);
-			
-			(new EnkiData.Homes(p)).save();
-			EnkiData.Claims.save(p);
-			
-			NBTTagCompound tag1 = EnkiData.data.get(p.playerID);
-			if(tag1 != null) players.setTag("" + p.playerID, tag1);
+			NBTTagCompound tag1 = new NBTTagCompound();
+			EnkiData.save(p, tag1);
+			players.setTag("" + p.playerID, tag1);
 		}
 		
 		tag.setTag("Players", players);
@@ -161,9 +153,8 @@ public class EnkiModsEventHandler
 	@SubscribeEvent
 	public void playerLoggedOut(LMPlayerEvent.LoggedOut e)
 	{
-		NBTTagCompound tag = new NBTTagCompound();
-		new Vertex.DimPos(e.playerMP).writeToNBT(tag);
-		e.player.serverData.setTag(EnkiData.TAG_LAST_POS, tag);
+		EnkiData.Data d = EnkiData.getData(e.player);
+		d.lastPos = new Vertex.DimPos(e.playerMP);
 	}
 	
 	@SubscribeEvent
@@ -172,9 +163,8 @@ public class EnkiModsEventHandler
 		if(e.entity instanceof EntityPlayer)
 		{
 			LMPlayer p = LMPlayer.getPlayer(e.entity);
-			NBTTagCompound tag = new NBTTagCompound();
-			new Vertex.DimPos(e.entity).writeToNBT(tag);
-			p.serverData.setTag(EnkiData.TAG_LAST_POS, tag);
+			EnkiData.Data d = EnkiData.getData(p);
+			d.lastDeath = new Vertex.DimPos(e.entity);
 		}
 	}
 	

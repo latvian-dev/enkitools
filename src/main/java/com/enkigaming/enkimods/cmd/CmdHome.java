@@ -19,8 +19,8 @@ public class CmdHome extends CmdEnki
 		if(i == 0)
 		{
 			LMPlayer p = LMPlayer.getPlayer(getCommandSenderAsPlayer(ics));
-			EnkiData.Homes h = new EnkiData.Homes(p);
-			return h.list(true);
+			EnkiData.Data h = EnkiData.getData(p);
+			return h.listHomesNoDef();
 		}
 		
 		return super.getTabStrings(ics, args, i);
@@ -30,11 +30,11 @@ public class CmdHome extends CmdEnki
 	{
 		EntityPlayerMP ep = getCommandSenderAsPlayer(ics);
 		LMPlayer p = LMPlayer.getPlayer(ep);
-		EnkiData.Homes h = new EnkiData.Homes(p);
+		EnkiData.Data h = EnkiData.getData(p);
 		
 		String name = args.length == 1 ? args[0] : "Default";
 		
-		EnkiData.Homes.Home h1 = h.homes.get(name);
+		EnkiData.Data.Home h1 = h.getHome(name);
 		
 		if(h1 == null) return "Home '" + name + "' not set!";
 		

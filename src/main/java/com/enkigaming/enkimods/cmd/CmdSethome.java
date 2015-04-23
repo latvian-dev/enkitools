@@ -20,17 +20,15 @@ public class CmdSethome extends CmdEnki
 	{
 		EntityPlayerMP ep = getCommandSenderAsPlayer(ics);
 		LMPlayer p = LMPlayer.getPlayer(ep);
-		EnkiData.Homes h = new EnkiData.Homes(p);
+		EnkiData.Data h = EnkiData.getData(p);
 		ChunkCoordinates c = ep.getPlayerCoordinates();
 		
 		int maxHomes = Rank.getConfig(ep, RankConfig.MAX_HOME_COUNT).getInt();
-		if(maxHomes <= 0 || h.homes.size() >= maxHomes)
+		if(maxHomes <= 0 || h.homesSize() >= maxHomes)
 			return "You can't set any more home locations!";
 		
 		String name = args.length == 1 ? args[0] : "Default";
-		EnkiData.Homes.Home h1 = new EnkiData.Homes.Home(name, c.posX, c.posY, c.posZ, ep.dimension);
-		h.homes.put(h1.name, h1);
-		h.save();
+		h.addHome(name, c.posX, c.posY, c.posZ, ep.dimension);
 		
 		if(name.equals("Default"))
 			return FINE + "Home set!";

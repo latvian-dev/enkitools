@@ -18,8 +18,8 @@ public class CmdDelhome extends CmdEnki
 		if(i == 0)
 		{
 			LMPlayer p = LMPlayer.getPlayer(getCommandSenderAsPlayer(ics));
-			EnkiData.Homes h = new EnkiData.Homes(p);
-			return h.list(true);
+			EnkiData.Data h = EnkiData.getData(p);
+			return h.listHomesNoDef();
 		}
 		
 		return super.getTabStrings(ics, args, i);
@@ -28,11 +28,11 @@ public class CmdDelhome extends CmdEnki
 	public String onCommand(ICommandSender ics, String[] args)
 	{
 		LMPlayer p = LMPlayer.getPlayer(getCommandSenderAsPlayer(ics));
-		EnkiData.Homes h = new EnkiData.Homes(p);
+		EnkiData.Data h = EnkiData.getData(p);
 		
 		String name = args.length == 1 ? args[0] : "Default";
 		
-		if(h.homes.remove(name))
+		if(h.remHome(name))
 		{
 			if(name.equals("Default"))
 				return FINE + "Home deleted!";

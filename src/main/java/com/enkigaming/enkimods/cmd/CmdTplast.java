@@ -1,9 +1,7 @@
 package com.enkigaming.enkimods.cmd;
 
 import latmod.core.*;
-import latmod.core.util.Vertex.DimPos;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.nbt.NBTTagCompound;
 
 import com.enkigaming.enkimods.EnkiData;
 
@@ -14,21 +12,17 @@ public class CmdTplast extends CmdEnki
 	
 	public String onCommand(ICommandSender ics, String[] args)
 	{
+		checkArgs(args, 1);
 		LMPlayer p = getLMPlayer(args[0]);
 		
-		if(p.isOnline()) LatCoreMC.executeCommand(ics, "tp " + args[0]);
+		if(p.isOnline()) LatCoreMC.executeCommand(ics, "tp", new String[]{ args[0] });
 		else
 		{
-			NBTTagCompound tag = (NBTTagCompound)p.serverData.getTag(EnkiData.TAG_LAST_POS);
+			EnkiData.Data d = EnkiData.getData(p);
+			if(d.lastPos == null) return "No last position!";
 			
-			if(tag != null)
-			{
-				DimPos dp = new DimPos();
-				dp.readFromNBT(tag);
-				
-				if(dp.dim != p.getPlayerMP().dimension) return "Can't teleport to another dimension!";
-				LatCoreMC.executeCommand(ics, "tp " + dp.intX() + " " + dp.intY() + " " + dp.intZ());
-			}
+			if(d.lastPos.dim != p.getPlayerMP().dimension) return "Can't teleport to another dimension!";
+			LatCoreMC.executeCommand(ics, "tp", new String[]{ d.lastPos.pos.x + "", d.lastPos.pos.y + "", d.lastPos.pos.z + "" });
 		}
 		
 		return null;
