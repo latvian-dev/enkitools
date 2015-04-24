@@ -71,8 +71,8 @@ public class CmdTpOverride extends CommandBaseLC // CommandTeleport
 			z = func_110666_a(ics, who.posZ, args[++ai]);
 			dim = who.dimension;
 			
-			LatCoreMC.printChat(who, "Teleported to " + LatCore.stripInt(x, y, z));
-			if(who != ics) LatCoreMC.printChat(who, "Teleported " + LMPlayer.getPlayer(who).username + " to " + LatCore.stripInt(x, y, z));
+			LatCoreMC.printChat(who, "Teleported to " + LatCore.stripDoubleInt(x, y, z));
+			if(who != ics) LatCoreMC.printChat(who, "Teleported " + LMPlayer.getPlayer(who).username + " to " + LatCore.stripDoubleInt(x, y, z));
 		}
 		else printHelp(ics);
 		

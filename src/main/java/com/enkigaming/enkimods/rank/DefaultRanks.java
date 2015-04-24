@@ -99,7 +99,7 @@ public class DefaultRanks
 			r.commands.add("+weather");
 			r.commands.add("+admin");
 			r.commands.add("+latcoreadmin");
-			r.commands.add("+tplast");
+			r.commands.add("+tpl");
 			r.commands.add("+worldedit");
 			r.setConfig(RankConfig.IGNORE_SPAWN, "true");
 			r.setConfig(RankConfig.MAX_CLAIM_POWER, "5000");
