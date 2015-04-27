@@ -1,6 +1,6 @@
-def mod_name = "EnkiMods";
-def mod_group = "latmod.enkimods";
-def mod_class = "EnkiMods.java";
+def mod_name = "EnkiTools";
+def mod_group = "latmod.enkitools";
+def mod_class = "EnkiTools.java";
 
 buildscript {
     repositories {

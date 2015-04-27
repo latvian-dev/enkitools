@@ -1,8 +1,8 @@
 [
 {
-  "modid": "EnkiMods",
-  "name": "EnkiMods",
-  "description": "Plugins for EnkiGaming servers",
+  "modid": "EnkiTools",
+  "name": "EnkiTools",
+  "description": "",
   "version": "${version}",
   "url": "http://minecraft.curseforge.com/mc-mods/229926-enkitools",
   "updateUrl": "",
@@ -10,7 +10,7 @@
     "LatvianModder",
     "Baphometis"
   ],
-  "credits": "",
+  "credits": "EnkiGaming for letting me test on their servers",
   "logoFile": "",
   "screenshots": [
   ],

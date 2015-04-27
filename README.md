@@ -1,2 +1,5 @@
-# EnkiMods
-Plugins for EnkiGaming servers
+EnkiTools
+===============
+
+CurseForge link:
+http://minecraft.curseforge.com/mc-mods/229926-enkitools

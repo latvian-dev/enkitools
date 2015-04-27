@@ -120,17 +120,16 @@ public class CmdClaim extends CmdEnki
 				if(args.length > 1)
 				{
 					int r = parseInt(ics, args[1]);
-					int cr = (r + 8) / 16;
 					
 					FastList<Claim> cl = new FastList<Claim>();
 					
-					for(int x = -cr; x <= cr; x++)
-					for(int z = -cr; z <= cr; z++)
+					for(int x = -r; x <= r; x++)
+					for(int z = -r; z <= r; z++)
 					{
 						int cx = MathHelperLM.chunk(ep.posX) + x;
 						int cz = MathHelperLM.chunk(ep.posZ) + z;
 						
-						if(PlayerClaims.getClaim(x, z, ep.dimension) == null)
+						if(PlayerClaims.getClaim(cx, cz, ep.dimension) == null)
 							cl.add(new Claim(pc, cx, cz, ep.dimension));
 					}
 					
