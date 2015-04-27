@@ -1,8 +1,5 @@
 package com.enkigaming.enkimods;
 
-import java.io.File;
-import java.util.UUID;
-
 import latmod.core.*;
 import latmod.core.event.*;
 import latmod.core.util.*;
@@ -31,7 +28,6 @@ import cpw.mods.fml.common.eventhandler.*;
 public class EnkiModsEventHandler
 {
 	public static final EnkiModsEventHandler instance = new EnkiModsEventHandler();
-	public static final FastMap<UUID, String> customNames = new FastMap<UUID, String>();
 	
 	@SubscribeEvent
 	public void playerLoggedIn(LMPlayerEvent.LoggedIn e)
@@ -58,20 +54,6 @@ public class EnkiModsEventHandler
 		{
 			Rank.reload();
 			PlayerClaims.claimsMap.clear();
-			
-			customNames.clear();
-			
-			try
-			{
-				FastList<String> l = LatCore.loadFile(new File(LatCoreMC.latmodFolder, "EnkiMods/CustomNames.txt"));
-				
-				for(int i = 0; i < l.size(); i++)
-				{
-					String[] s = LatCore.split(l.get(i), ": ", 2);
-					customNames.put(UUID.fromString(s[0]), s[1]);
-				}
-			}
-			catch(Exception ex) { }
 		}
 		
 		if(e.phase.isPost())
@@ -211,6 +193,8 @@ public class EnkiModsEventHandler
 	@SubscribeEvent
 	public void onMobSpawned(net.minecraftforge.event.entity.EntityJoinWorldEvent e)
 	{
+		if(!EnkiModsConfig.General.peacefulSpawn) return;
+		
 		if((e.entity instanceof IMob || (e.entity instanceof EntityChicken && e.entity.riddenByEntity != null)) && EnkiMods.isSpawnChunkD(e.world, e.entity.posX, e.entity.posZ))
 			e.setCanceled(true);
 	}
@@ -218,6 +202,8 @@ public class EnkiModsEventHandler
 	@SubscribeEvent
 	public void onPlayerAttacked(net.minecraftforge.event.entity.living.LivingAttackEvent e)
 	{
+		if(EnkiModsConfig.General.spawnPVP || !EnkiMods.isSpawnChunkD(e.entity.worldObj, e.entity.posX, e.entity.posZ)) return;
+		
 		if(e.entity instanceof EntityPlayer && e.source instanceof EntityDamageSource)
 		{
 			Entity e1 = ((EntityDamageSource)e.source).getEntity();
@@ -226,7 +212,7 @@ public class EnkiModsEventHandler
 			{
 				EntityPlayerMP ep = (EntityPlayerMP)e1;
 				
-				if(EnkiMods.isSpawnChunkD(e.entity.worldObj, e.entity.posX, e.entity.posZ) && !ep.capabilities.isCreativeMode && !Rank.getConfig(ep, RankConfig.IGNORE_SPAWN).getBool())
+				if(!ep.capabilities.isCreativeMode && !Rank.getConfig(ep, RankConfig.IGNORE_SPAWN).getBool())
 					e.setCanceled(true);
 			}
 		}
@@ -235,13 +221,14 @@ public class EnkiModsEventHandler
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onChatEvent(ServerChatEvent e)
 	{
+		if(!EnkiModsConfig.General.overrideChat) return;
+		
 		LMPlayer p = LMPlayer.getPlayer(e.username);
 		if(p == null) return;
 		
 		Rank r = Rank.getPlayerRank(p);
 		
-		String name = EnkiModsEventHandler.customNames.get(e.player.getUniqueID());
-		if(name == null) name = e.username + "";
+		String name = e.username + "";
 		
 		if(r.prefix != null && r.prefix.length() > 0)
 			name = r.prefix.replace("c_", LatCoreMC.FORMATTING) + name;

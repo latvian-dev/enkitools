@@ -155,17 +155,16 @@ public class EnkiModsTickHandler
 	
 	public void printChunkChangedMessage(EntityPlayerMP ep)
 	{
-		PlayerClaims claims0 = PlayerClaims.getClaims(ep);
-		if(claims0 == null || claims0.notifyType == 0) return;
+		int notify = EnkiData.getData(LMPlayer.getPlayer(ep)).notifications;
 		
 		TrackedPlayer tp = new TrackedPlayer(ep);
 		tp.load();
 		
 		Notification n;
 		
-		if(claims0.notifyType == 1)
+		if(notify == 1)
 			n = getChunkScreenMessage(ep.worldObj, MathHelperLM.chunk(ep.posX), MathHelperLM.chunk(ep.posZ), ep);
-		else if(claims0.notifyType == 2)
+		else if(notify == 2)
 		{
 			String s = getChunkStatusMessage(ep.worldObj, MathHelperLM.chunk(ep.posX), MathHelperLM.chunk(ep.posZ), ep, false);
 			n = new Notification(s, "", null);
@@ -174,7 +173,7 @@ public class EnkiModsTickHandler
 		
 		if(!tp.lastChunkMessage.equals(n))
 		{
-			if(claims0.notifyType == 2)
+			if(notify == 2)
 				LatCoreMC.printChat(ep, n.title);
 			else
 				LatCoreMC.notifyPlayer(ep, n);

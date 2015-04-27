@@ -1,8 +1,8 @@
 package com.enkigaming.enkimods.cmd;
 
 import latmod.core.LatCoreMC;
-import net.minecraft.command.*;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayerMP;
 
 import com.enkigaming.enkimods.EnkiModsConfig;
 
@@ -12,19 +12,12 @@ public class CmdMotd extends CmdEnki
 	{ super("motd"); }
 	
 	public String onCommand(ICommandSender ics, String[] args)
-	{
-		if(ics instanceof EntityPlayer)
-			printMotd((EntityPlayer)ics);
-		else throw new PlayerNotFoundException();
-		
-		return null;
-	}
+	{ printMotd(getCommandSenderAsPlayer(ics)); return null; }
 	
-	public static void printMotd(EntityPlayer ep)
+	public static void printMotd(EntityPlayerMP ep)
 	{
 		if(!EnkiModsConfig.Login.motd.isEmpty()) for(String s : EnkiModsConfig.Login.motd)
 			LatCoreMC.printChat(ep, s.replace("&", LatCoreMC.FORMATTING).replace("<PlayerName>", ep.getDisplayName()));
-		
-		LatCoreMC.executeCommand(ep, "rules");
+		CmdRules.printRules(ep);
 	}
 }

@@ -21,9 +21,11 @@ public class EnkiModsConfig extends LMConfig
 		public static TwoObjects<Integer, Integer> restartClock;
 		
 		public static float nearDistance;
-		public static boolean overrideHelp;
 		public static boolean crossDimHomes;
 		public static boolean overrideCommands;
+		public static boolean overrideChat;
+		public static boolean spawnPVP;
+		public static boolean peacefulSpawn;
 		
 		public static void load(Category c)
 		{
@@ -36,9 +38,11 @@ public class EnkiModsConfig extends LMConfig
 			{ e.printStackTrace(); restartClock = new TwoObjects<Integer, Integer>(0, 0); }
 			
 			nearDistance = c.getFloat("nearDistance", 512F);
-			overrideHelp = c.getBool("overrideHelp", false);
 			crossDimHomes = c.getBool("crossDimHomes", true);
 			overrideCommands = c.getBool("overrideCommands", true);
+			overrideChat = c.getBool("overrideChat", true);
+			spawnPVP = c.getBool("spawnPVP", false);
+			peacefulSpawn = c.getBool("peacefulSpawn", true);
 		}
 	}
 	

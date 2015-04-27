@@ -61,18 +61,19 @@ public class CmdClaim extends CmdEnki
 		else if(args[0].equals("notify"))
 		{
 			String[] nt = notifyTypes();
+			EnkiData.Data d = EnkiData.getData(pc.owner);
 			
 			if(args.length == 2)
 			{
-				pc.notifyType = 0;
+				d.notifications = 0;
 				
 				for(int i = 0; i < nt.length; i++)
 				if(args[1].equals(nt[i]))
-				pc.notifyType = (byte)i;
+					d.notifications = (byte)i;
 				
-				return FINE + "Notifications set to '" + nt[pc.notifyType] + "' " + pc.notifyType;
+				return FINE + "Notifications set to '" + nt[d.notifications] + "'";
 			}
-			else return FINE + "Notifications: '" + nt[pc.notifyType] + "'";
+			else return FINE + "Notifications: '" + nt[d.notifications] + "'";
 		}
 		else if(args[0].equals("desc"))
 		{

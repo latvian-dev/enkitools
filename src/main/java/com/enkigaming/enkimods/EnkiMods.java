@@ -50,7 +50,7 @@ public class EnkiMods
 		e.registerServerCommand(new CmdSethome());
 		e.registerServerCommand(new CmdHome());
 		e.registerServerCommand(new CmdDelhome());
-		e.registerServerCommand(new CmdShutdownTimer());
+		e.registerServerCommand(new CmdRestartTimer());
 		e.registerServerCommand(new CmdAdmin());
 		e.registerServerCommand(new CmdSetRank());
 		e.registerServerCommand(new CmdGetRank());
@@ -59,10 +59,6 @@ public class EnkiMods
 		e.registerServerCommand(new CmdHead());
 		e.registerServerCommand(new CmdTop());
 		e.registerServerCommand(new CmdTplast());
-		//e.registerServerCommand(new CmdWorldEdit());
-		
-		if(EnkiModsConfig.General.overrideHelp)
-			e.registerServerCommand(new CmdHelpOverride());
 		
 		if(EnkiModsConfig.General.overrideCommands)
 		{

@@ -70,6 +70,8 @@ public class EnkiData
 			d.lastPos = new DimPos();
 			d.lastPos.readFromNBT(tag.getCompoundTag("LastPos"));
 		}
+		
+		d.notifications = tag.getByte("Notify");
 	}
 	
 	public static void save(LMPlayer p, NBTTagCompound tag)
@@ -92,7 +94,7 @@ public class EnkiData
 		{
 			PlayerClaims pc = PlayerClaims.getClaims(p);
 			
-			if(pc != null && pc.shouldSave())
+			if(pc != null)
 			{
 				NBTTagCompound tag1 = new NBTTagCompound();
 				pc.writeToNBT(tag1);
@@ -113,6 +115,8 @@ public class EnkiData
 			d.lastPos.writeToNBT(tag1);
 			tag.setTag("LastPos", tag1);
 		}
+		
+		tag.setByte("Notify", (byte)d.notifications);
 	}
 	
 	public static class Data
@@ -121,6 +125,7 @@ public class EnkiData
 		private final FastList<Home> homes;
 		public DimPos lastDeath = null;
 		public DimPos lastPos = null;
+		public int notifications = 1;
 		
 		private Data(LMPlayer p)
 		{

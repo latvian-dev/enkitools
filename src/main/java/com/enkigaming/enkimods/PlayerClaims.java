@@ -17,7 +17,6 @@ public class PlayerClaims
 	public final LMPlayer owner;
 	public final FastList<Claim> claims;
 	private String desc = "";
-	public byte notifyType = 0;
 	public boolean canExplode = true;
 	
 	public PlayerClaims(LMPlayer p)
@@ -42,15 +41,9 @@ public class PlayerClaims
 		
 		desc = tag.getString("Desc");
 		
-		if(!tag.hasKey("Notify")) notifyType = 1;
-		else notifyType = tag.getByte("Notify");
-		
 		if(!tag.hasKey("Explode")) canExplode = true;
 		else canExplode = tag.getBoolean("Explode");
 	}
-	
-	public boolean shouldSave()
-	{ return claims.size() > 0 || !desc.isEmpty() || notifyType != 1; }
 	
 	public void writeToNBT(NBTTagCompound tag)
 	{
@@ -65,7 +58,6 @@ public class PlayerClaims
 		if(c.tagCount() > 0) tag.setTag("Claims", c);
 		
 		tag.setString("Desc", desc);
-		tag.setByte("Notify", notifyType);
 		tag.setBoolean("Explode", canExplode);
 	}
 	

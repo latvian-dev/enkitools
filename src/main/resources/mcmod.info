@@ -3,8 +3,8 @@
   "modid": "EnkiMods",
   "name": "EnkiMods",
   "description": "Plugins for EnkiGaming servers",
-  "version": "1.0",
-  "url": "",
+  "version": "${version}",
+  "url": "http://minecraft.curseforge.com/mc-mods/229926-enkitools",
   "updateUrl": "",
   "authorList": [
     "LatvianModder",

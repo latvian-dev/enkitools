@@ -28,9 +28,7 @@ public class CmdSetRank extends CmdEnki
 		if(args.length >= 2)
 		{
 			Rank r = Rank.getRank(args[1]);
-			
-			LMPlayer p = LMPlayer.getPlayer(args[0]);
-			if(p == null) throw new PlayerNotFoundException();
+			LMPlayer p = getLMPlayer(args[0]);
 			
 			Rank.setPlayerRank(p.username, r);
 			EntityPlayer ep = p.getPlayerMP();

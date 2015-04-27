@@ -1,7 +1,6 @@
 package com.enkigaming.enkimods.cmd;
 
 import latmod.core.*;
-import latmod.core.cmd.CommandLM;
 import latmod.core.util.*;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -17,7 +16,7 @@ public class CmdAdmin extends CmdEnki
 	{ super("admin"); }
 	
 	public String[] getSubcommands(ICommandSender ics)
-	{ return new String[] { "invsee", "spawndist", "dist", "shutdown", "unclaim", "nick" }; }
+	{ return new String[] { "invsee", "spawndist", "dist", "shutdown", "unclaim" }; }
 	
 	public String[] getTabStrings(ICommandSender ics, String[] args, int i)
 	{
@@ -38,7 +37,6 @@ public class CmdAdmin extends CmdEnki
 		printHelpLine(ics, "dist <player>");
 		printHelpLine(ics, "shutdown [seconds | reset]");
 		printHelpLine(ics, "unclaim");
-		printHelpLine(ics, "nick <player> <nick|none>");
 	}
 	
 	public String onCommand(ICommandSender ics, String[] args)
@@ -48,7 +46,7 @@ public class CmdAdmin extends CmdEnki
 			if(args[0].equals("invsee"))
 			{
 				EntityPlayerMP ep0 = getCommandSenderAsPlayer(ics);
-				EntityPlayerMP ep = CommandLM.getPlayer(ics, args[1]);
+				EntityPlayerMP ep = getPlayer(ics, args[1]);
 				ep0.displayGUIChest(new InvSeeInventory(ep));
 			}
 			else if(args[0].equals("spawndist"))
@@ -56,7 +54,7 @@ public class CmdAdmin extends CmdEnki
 				EntityPlayerMP ep;
 				
 				if(args.length == 2)
-					ep = CommandLM.getPlayer(ics, args[1]);
+					ep = getPlayer(ics, args[1]);
 				else
 					ep = getCommandSenderAsPlayer(ics);
 				
@@ -66,7 +64,7 @@ public class CmdAdmin extends CmdEnki
 			else if(args[0].equals("dist"))
 			{
 				EntityPlayerMP ep = getCommandSenderAsPlayer(ics);
-				EntityPlayerMP ep1 = CommandLM.getPlayer(ics, args[1]);
+				EntityPlayerMP ep1 = getPlayer(ics, args[1]);
 				
 				LatCoreMC.printChat(ics, "Distance from spawn: " + (int)new Vertex(ep).dist(new Vertex(ep1)) + "m");
 			}
@@ -105,22 +103,6 @@ public class CmdAdmin extends CmdEnki
 					return FINE + "You can't unclaim land in spawn!";
 				else
 					return FINE + "Chunk is not claimed!";
-			}
-			else if(args[0].equals("nick"))
-			{
-				checkArgs(args, 3);
-				LMPlayer p = getLMPlayer(args[1]);
-				String n = (args[2].equals("none") || args[2].equalsIgnoreCase(p.username)) ? null : args[2];
-				
-				if(n != null) for(int i = 0; i < LMPlayer.map.size(); i++)
-				{
-					if(LMPlayer.map.values.get(i).username.equalsIgnoreCase(n))
-						return "Can't set custom nick to another username!";
-				}
-				
-				EnkiModsEventHandler.customNames.put(p.uuid, n);
-				if(n == null) return FINE + "Custom nick removed";
-				else return FINE + "Custom nick set to " + n;
 			}
 		}
 		
