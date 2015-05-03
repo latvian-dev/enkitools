@@ -34,6 +34,9 @@ public class EnkiData
 			File oldPlayers = new File(oldDir, "Players.txt");
 			if(oldPlayers.exists()) LatCore.copyFile(oldPlayers, players);
 			
+			File oldConfig = new File(oldDir, "Config.cfg");
+			if(oldConfig.exists()) LatCore.copyFile(oldConfig, new File(LatCoreMC.latmodFolder, "enkitools/old_config_backup.cfg"));
+			
 			LatCore.deleteFile(oldDir);
 		}
 	}

@@ -2,7 +2,7 @@ package latmod.enkitools.cmd;
 
 import latmod.core.*;
 import latmod.enkitools.rank.Rank;
-import net.minecraft.command.*;
+import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class CmdSetRank extends CmdEnki

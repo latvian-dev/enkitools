@@ -22,15 +22,12 @@ public class EnkiToolsConfig
 		if(EnkiData.config.exists())
 			instance = LatCore.fromJsonFromFile(EnkiData.config, EnkiToolsConfig.class);
 		
-		if(instance == null)
-		{
-			instance = new EnkiToolsConfig();
-			instance.load();
-			saveConfig();
-			return false;
-		}
+		boolean retTrue = instance != null;
+		if(instance == null) instance = new EnkiToolsConfig();
 		
-		return true;
+		instance.load();
+		saveConfig();
+		return retTrue;
 	}
 	
 	public static final void saveConfig()
@@ -94,7 +91,7 @@ public class EnkiToolsConfig
 		
 		public void load()
 		{
-			if(motd == null) motd = new String[] { "Hello, <PlayerName>!", "Welcome to this server!" };
+			if(motd == null) motd = new String[] { "$6Hello, $c$player$$6 $and$ welcome to the server!", "$9// The Admins //" };
 			
 			for(int i = 0; i < motd.length; i++)
 				motd[i] = motd[i].trim().replace("c_", LatCoreMC.FORMATTING);
@@ -107,7 +104,7 @@ public class EnkiToolsConfig
 				"minecraft:stone_pickaxe x 1 x 0",
 				"minecraft:stone_showel x 1 x 0",
 				"minecraft:stone_axe x 1 x 0",
-				"minecraft:cooked_beef x 64 x 0",
+				"minecraft:cooked_beef x 16 x 0",
 			};
 		}
 		

@@ -4,7 +4,8 @@ import java.util.*;
 
 import latmod.core.util.*;
 import latmod.enkitools.*;
-import latmod.enkitools.PlayerClaims.*;
+import latmod.enkitools.PlayerClaims.Claim;
+import latmod.enkitools.PlayerClaims.ClaimResult;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 

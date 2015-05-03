@@ -16,7 +16,7 @@ public class CmdMotd extends CmdEnki
 	public static void printMotd(EntityPlayerMP ep)
 	{
 		if(EnkiToolsConfig.get().login.motd.length > 0) for(String s : EnkiToolsConfig.get().login.motd)
-			LatCoreMC.printChat(ep, s.replace("&", LatCoreMC.FORMATTING).replace("<and>", "&").replace("<PlayerName>", ep.getDisplayName()));
+			LatCoreMC.printChat(ep, s.replace("$and$", "&").replace("$player$", ep.getDisplayName()).replace("$", LatCoreMC.FORMATTING));
 		CmdRules.printRules(ep);
 	}
 }
