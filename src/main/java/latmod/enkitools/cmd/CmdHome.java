@@ -33,18 +33,14 @@ public class CmdHome extends CmdEnki
 		
 		String name = args.length == 1 ? args[0] : "Default";
 		
-		EnkiData.Data.Home h1 = h.getHome(name);
+		EnkiData.Home h1 = h.getHome(name);
 		
 		if(h1 == null) return "Home '" + name + "' not set!";
 		
-		if(ep.worldObj.provider.dimensionId != h1.dim)
-		{
-			if(EnkiToolsConfig.get().general.crossDimHomes)
-				LatCoreMC.teleportEntity(ep, h1.dim);
-			else return "You can't teleport to another dimension!";
-		}
+		if(ep.worldObj.provider.dimensionId != h1.dim && !EnkiToolsConfig.get().general.crossDimHomes)
+			return "You can't teleport to another dimension!";
 		
-		ep.playerNetServerHandler.setPlayerLocation(h1.x + 0.5D, h1.y + 0.5D, h1.z + 0.5D, ep.rotationYaw, ep.rotationPitch);
+		h1.teleportPlayer(ep);
 		
 		if(name.equals("Default")) return FINE + "Teleported to home";
 		else return FINE + "Teleported to '" + name + "'";

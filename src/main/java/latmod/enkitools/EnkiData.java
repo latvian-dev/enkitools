@@ -5,6 +5,7 @@ import java.io.File;
 import latmod.core.*;
 import latmod.core.util.*;
 import latmod.core.util.Vertex.DimPos;
+import net.minecraft.entity.player.*;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class EnkiData
@@ -41,6 +42,9 @@ public class EnkiData
 		}
 	}
 	
+	public static Data getData(EntityPlayer ep)
+	{ return getData(LMPlayer.getPlayer(ep)); }
+	
 	public static Data getData(LMPlayer p)
 	{
 		Data h = data.get(p.playerID);
@@ -64,7 +68,7 @@ public class EnkiData
 				for(int i = 0; i < l.size(); i++)
 				{
 					int[] a = tag1.getIntArray(l.get(i));
-					d.addHome(l.get(i), a[0], a[1], a[2], a[3]);
+					d.setHome(l.get(i), a[0], a[1], a[2], a[3]);
 				}
 			}
 		}
@@ -101,7 +105,7 @@ public class EnkiData
 			
 			for(int i = 0; i < d.homes.size(); i++)
 			{
-				Data.Home h1 = d.homes.get(i);
+				Home h1 = d.homes.get(i);
 				tag1.setIntArray(h1.name, new int[] { h1.x, h1.y, h1.z, h1.dim });
 			}
 			
@@ -144,6 +148,10 @@ public class EnkiData
 		public DimPos lastPos = null;
 		public int notifications = 1;
 		
+		// Local //
+		public Vertex.DimPos.Rot last;
+		public Notification lastChunkMessage = new Notification("", "", null);
+		
 		private Data(LMPlayer p)
 		{
 			player = p;
@@ -168,7 +176,7 @@ public class EnkiData
 		public Home getHome(String s)
 		{ return homes.getObj(s); }
 		
-		public boolean addHome(String s, int x, int y, int z, int dim)
+		public boolean setHome(String s, int x, int y, int z, int dim)
 		{
 			int i = homes.indexOf(s);
 			if(i == -1) { homes.add(new Home(s, x, y, z, dim)); return true; }
@@ -181,20 +189,55 @@ public class EnkiData
 		public int homesSize()
 		{ return homes.size(); }
 		
-		public static class Home
+		public boolean hasMoved(Vertex.DimPos.Rot pos)
+		{ return !last.equals(pos); }
+		
+		public void updatePos(Vertex.DimPos.Rot pos)
+		{ last = pos; }
+	}
+	
+	public static class Warps
+	{
+		public static final FastList<Home> warps = new FastList<Home>();
+		
+		public static String[] listWarps()
 		{
-			public String name;
-			public int x, y, z;
-			public int dim;
-			
-			public Home(String s, int px, int py, int pz, int d)
-			{ name = s; x = px; y = py; z = pz; dim = d; }
-			
-			public String toString()
-			{ return name; }
-			
-			public boolean equals(Object o)
-			{ return o != null && (o == this || o.toString().equals(toString())); }
+			String[] s = new String[warps.size()];
+			for(int i = 0; i < s.length; i++)
+				s[i] = warps.get(i).name;
+			return s;
 		}
+		
+		public static Home getWarp(String s)
+		{ return warps.getObj(s); }
+		
+		public static boolean setWarp(String s, int x, int y, int z, int dim)
+		{
+			int i = warps.indexOf(s);
+			if(i == -1) { warps.add(new Home(s, x, y, z, dim)); return true; }
+			else { warps.set(i, new Home(s, x, y, z, dim)); return false; }
+		}
+		
+		public static boolean remWarp(String s)
+		{ return warps.remove(s); }
+	}
+	
+	public static class Home
+	{
+		public String name;
+		public int x, y, z;
+		public int dim;
+		
+		public Home(String s, int px, int py, int pz, int d)
+		{ name = s; x = px; y = py; z = pz; dim = d; }
+		
+		public String toString()
+		{ return name; }
+		
+		public boolean equals(Object o)
+		{ return o != null && (o == this || o.toString().equals(toString())); }
+		
+		public void teleportPlayer(EntityPlayerMP ep)
+		{ LatCoreMC.teleportPlayer(ep, x + 0.5D, y + 0.5D, z + 0.5D, dim); }
 	}
 }

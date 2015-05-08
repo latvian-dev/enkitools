@@ -40,7 +40,6 @@ public class EnkiTools
 	public void serverStarting(FMLServerStartingEvent e)
 	{
 		e.registerServerCommand(new CmdNear());
-		e.registerServerCommand(new CmdMail());
 		e.registerServerCommand(new CmdVanish());
 		e.registerServerCommand(new CmdMotd());
 		e.registerServerCommand(new CmdRules());
@@ -57,6 +56,7 @@ public class EnkiTools
 		e.registerServerCommand(new CmdHead());
 		e.registerServerCommand(new CmdTop());
 		e.registerServerCommand(new CmdTplast());
+		e.registerServerCommand(new CmdWarp());
 		
 		if(EnkiToolsConfig.get().general.overrideCommands)
 		{

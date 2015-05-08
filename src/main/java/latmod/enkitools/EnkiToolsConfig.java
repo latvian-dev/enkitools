@@ -55,6 +55,8 @@ public class EnkiToolsConfig
 		@Expose public Boolean overrideCommands;
 		@Expose public Boolean overrideChat;
 		@Expose public Boolean enableRestartClock;
+		@Expose public Boolean enableWarpSigns;
+		@Expose public Boolean enableHomeSigns;
 		
 		public int restartHours = 0;
 		public int restartMinutes = 0;
@@ -67,6 +69,8 @@ public class EnkiToolsConfig
 			if(overrideCommands == null) overrideCommands = true;
 			if(overrideChat == null) overrideChat = true;
 			if(enableRestartClock == null) enableRestartClock = true;
+			if(enableWarpSigns == null) enableWarpSigns = true;
+			if(enableHomeSigns == null) enableHomeSigns = true;
 			
 			try
 			{

@@ -15,7 +15,7 @@ public class CmdAdmin extends CmdEnki
 	{ super("admin"); }
 	
 	public String[] getSubcommands(ICommandSender ics)
-	{ return new String[] { "invsee", "spawndist", "dist", "shutdown", "unclaim" }; }
+	{ return new String[] { "invsee", "spawndist", "dist", "shutdown", "unclaim", "setwarp", "delwarp" }; }
 	
 	public String[] getTabStrings(ICommandSender ics, String[] args, int i)
 	{
@@ -36,6 +36,7 @@ public class CmdAdmin extends CmdEnki
 		printHelpLine(ics, "dist <player>");
 		printHelpLine(ics, "shutdown [seconds | reset]");
 		printHelpLine(ics, "unclaim");
+		printHelpLine(ics, "setwarp | delwarp [name]");
 	}
 	
 	public String onCommand(ICommandSender ics, String[] args)
@@ -102,6 +103,26 @@ public class CmdAdmin extends CmdEnki
 					return FINE + "You can't unclaim land in spawn!";
 				else
 					return FINE + "Chunk is not claimed!";
+			}
+			else if(args[0].equals("setwarp"))
+			{
+				checkArgs(args, 2);
+				EntityPlayerMP ep = getCommandSenderAsPlayer(ics);
+				ChunkCoordinates c = ep.getPlayerCoordinates();
+				
+				EnkiData.Warps.setWarp(args[1], c.posX, c.posY, c.posZ, ep.worldObj.provider.dimensionId);
+				
+				return FINE + "Warp '" + args[1] + "' set!";
+			}
+			else if(args[0].equals("delwarp"))
+			{
+				checkArgs(args, 2);
+				
+				if(EnkiData.Warps.remWarp(args[1]))
+				{
+					return FINE + "Warp '" + args[0] + "' removed!";
+				}
+				return "Warp '" + args[0] + "' doesn't exist!";
 			}
 		}
 		

@@ -3,7 +3,7 @@ package latmod.enkitools;
 import latmod.core.*;
 import latmod.core.event.*;
 import latmod.core.util.*;
-import latmod.enkitools.Mailbox.Mail;
+import latmod.enkitools.EnkiData.Home;
 import latmod.enkitools.PlayerClaims.Claim;
 import latmod.enkitools.cmd.CmdMotd;
 import latmod.enkitools.rank.*;
@@ -13,9 +13,7 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.player.*;
 import net.minecraft.event.*;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.*;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.*;
@@ -31,18 +29,14 @@ public class EnkiToolsEventHandler
 	public void playerLoggedIn(LMPlayerEvent.LoggedIn e)
 	{
 		Rank.getPlayerRank(e.player);
-		
+		EnkiData.getData(e.player).updatePos(new Vertex.DimPos.Rot(e.playerMP));
 		CmdMotd.printMotd(e.playerMP);
-		int c = Mailbox.getMailFor(e.player.uuid).size();
-		if(c > 0) printIncomingMail(e.playerMP, c);
 		
 		if(e.firstTime)
 		{
 			for(int i = 0; i < EnkiToolsConfig.get().login.startingInvI.size(); i++)
 				InvUtils.giveItem(e.playerMP, EnkiToolsConfig.get().login.startingInvI.get(i));
 		}
-		
-		EnkiToolsTickHandler.TrackedPlayer.get(e.playerMP);
 	}
 	
 	@SubscribeEvent
@@ -56,36 +50,36 @@ public class EnkiToolsEventHandler
 		
 		if(e.phase.isPost())
 		{
-			Mailbox.mailMap.clear();
-			
 			NBTTagCompound tag = NBTHelper.readMap(e.getFile("EnkiMods.dat"));
 			
 			if(tag != null)
 			{
-				NBTTagCompound players = tag.getCompoundTag("Players");
-				
-				for(int i = 0; i < LMPlayer.map.size(); i++)
 				{
-					LMPlayer p = LMPlayer.map.values.get(i);
-					EnkiData.load(p, players.getCompoundTag("" + p.playerID));
-				}
-				
-				NBTTagList mail = (NBTTagList)tag.getTag(EnkiData.TAG_MAIL);
-				
-				if(mail != null && mail.tagCount() > 0)
-				{
-					for(int i = 0; i < mail.tagCount(); i++)
+					NBTTagCompound tag1 = tag.getCompoundTag("Players");
+					
+					for(int i = 0; i < LMPlayer.map.size(); i++)
 					{
-						NBTTagCompound tag1 = mail.getCompoundTagAt(i);
-						
-						int id = tag1.getInteger("ID");
-						Mail m = new Mail(id);
-						m.readFromNBT(tag1);
-						Mailbox.mailMap.put(id, m);
+						LMPlayer p = LMPlayer.map.values.get(i);
+						EnkiData.load(p, tag1.getCompoundTag("" + p.playerID));
 					}
 				}
 				
-				Mailbox.nextID = tag.getInteger("EnkiMailNextID");
+				{
+					EnkiData.Warps.warps.clear();
+					
+					NBTTagCompound tag1 = (NBTTagCompound)tag.getTag("Warps");
+					
+					if(tag1 != null && !tag1.hasNoTags())
+					{
+						FastList<String> l = NBTHelper.getMapKeys(tag1);
+						
+						for(int i = 0; i < l.size(); i++)
+						{
+							int[] a = tag1.getIntArray(l.get(i));
+							EnkiData.Warps.setWarp(l.get(i), a[0], a[1], a[2], a[3]);
+						}
+					}
+				}
 			}
 		}
 	}
@@ -107,28 +101,20 @@ public class EnkiToolsEventHandler
 		
 		tag.setTag("Players", players);
 		
-		NBTTagList mail = new NBTTagList();
-		
-		for(int i = 0; i < Mailbox.mailMap.size(); i++)
 		{
-			Mail m = Mailbox.mailMap.values.get(i);
-			
 			NBTTagCompound tag1 = new NBTTagCompound();
 			
-			tag1.setInteger("ID", m.mailID);
-			m.writeToNBT(tag1);
-			mail.appendTag(tag1);
+			for(int i = 0; i < EnkiData.Warps.warps.size(); i++)
+			{
+				Home h1 = EnkiData.Warps.warps.get(i);
+				tag1.setIntArray(h1.name, new int[] { h1.x, h1.y, h1.z, h1.dim });
+			}
+			
+			tag.setTag("Warps", tag1);
 		}
-		
-		tag.setTag(EnkiData.TAG_MAIL, mail);
-		
-		tag.setInteger("EnkiMailNextID", Mailbox.nextID);
 		
 		NBTHelper.writeMap(e.getFile("EnkiMods.dat"), tag);
 	}
-	
-	public void printIncomingMail(EntityPlayerMP ep, int m)
-	{ LatCoreMC.notifyPlayer(ep, new Notification(m + " New message" + MathHelperLM.getPluralWord(m, "!", "s!"), EnumChatFormatting.GRAY + "" + EnumChatFormatting.ITALIC + "EnkiMail", new ItemStack(Items.writable_book), 10000L)); }
 	
 	@SubscribeEvent
 	public void playerLoggedOut(LMPlayerEvent.LoggedOut e)

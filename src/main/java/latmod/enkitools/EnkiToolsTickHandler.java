@@ -10,7 +10,6 @@ import latmod.enkitools.PlayerClaims.Claim;
 import net.minecraft.entity.player.*;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
@@ -77,23 +76,23 @@ public class EnkiToolsTickHandler
 					for(int i = 0; i < players.size(); i++)
 					{
 						EntityPlayerMP ep = players.get(i);
-						TrackedPlayer tp = TrackedPlayer.get(ep);
+						EnkiData.Data d = EnkiData.getData(ep);
 						Vertex.DimPos.Rot pos = new Vertex.DimPos.Rot(ep);
 						
-						if(tp.hasMoved(pos))
+						if(d.hasMoved(pos))
 						{
 							if(EnkiTools.isOutsideWorldBorder(ep.worldObj, ep.posX, ep.posZ))
 							{
-								if(ep.dimension == tp.last.dim)
+								if(ep.dimension == d.last.dim)
 								{
 									ep.motionX = ep.motionY = ep.motionZ = 0D;
-									ep.playerNetServerHandler.setPlayerLocation(tp.last.pos.x, tp.last.pos.y, tp.last.pos.z, ep.rotationYaw, ep.rotationPitch);
+									ep.playerNetServerHandler.setPlayerLocation(d.last.pos.x, d.last.pos.y, d.last.pos.z, ep.rotationYaw, ep.rotationPitch);
 									LatCoreMC.printChat(ep, "You have reached the world border!");
 								}
 								else LatCoreMC.printChat(ep, "You have reached the world border, please return to your home or portal!");
 							}
 							
-							tp.updatePos(pos);
+							d.updatePos(pos);
 						}
 						
 						printChunkChangedMessage(ep);
@@ -103,63 +102,11 @@ public class EnkiToolsTickHandler
 		}
 	}
 	
-	public static class TrackedPlayer
-	{
-		public final EntityPlayerMP player;
-		public final LMPlayer playerLM;
-		public Vertex.DimPos.Rot last;
-		public Notification lastChunkMessage = new Notification("", "", null);
-		
-		private TrackedPlayer(EntityPlayerMP ep)
-		{
-			player = ep;
-			playerLM = LMPlayer.getPlayer(ep);
-			last = new Vertex.DimPos.Rot(ep);
-		}
-		
-		public void load()
-		{
-			NBTTagCompound tag = playerLM.tempData.getCompoundTag(DATA_KEY);
-			last.readFromNBT(tag.getCompoundTag("Pos"));
-			lastChunkMessage = Notification.readFromNBT(tag.getCompoundTag("Msg"));
-		}
-		
-		public void save()
-		{
-			NBTTagCompound tag = new NBTTagCompound();
-			
-			NBTTagCompound tagLast = new NBTTagCompound();
-			last.writeToNBT(tagLast);
-			tag.setTag("Pos", tagLast);
-			
-			NBTTagCompound tagMsg = new NBTTagCompound();
-			lastChunkMessage.writeToNBT(tagMsg);
-			tag.setTag("Msg", tagMsg);
-			
-			playerLM.tempData.setTag(DATA_KEY, tag);
-		}
-		
-		public boolean hasMoved(Vertex.DimPos.Rot pos)
-		{ return !last.equals(pos); }
-		
-		public void updatePos(Vertex.DimPos.Rot pos)
-		{ last = pos; save(); }
-		
-		public static TrackedPlayer get(EntityPlayerMP ep)
-		{
-			TrackedPlayer tp = new TrackedPlayer(ep);
-			if(tp.playerLM.tempData.hasKey(DATA_KEY)) tp.load();
-			else tp.updatePos(new Vertex.DimPos.Rot(ep));
-			return tp;
-		}
-	}
-	
 	public void printChunkChangedMessage(EntityPlayerMP ep)
 	{
 		int notify = EnkiData.getData(LMPlayer.getPlayer(ep)).notifications;
 		
-		TrackedPlayer tp = new TrackedPlayer(ep);
-		tp.load();
+		EnkiData.Data d = EnkiData.getData(ep);
 		
 		Notification n;
 		
@@ -172,15 +119,14 @@ public class EnkiToolsTickHandler
 		}
 		else return;
 		
-		if(!tp.lastChunkMessage.equals(n))
+		if(!d.lastChunkMessage.equals(n))
 		{
 			if(notify == 2)
 				LatCoreMC.printChat(ep, n.title);
 			else
 				LatCoreMC.notifyPlayer(ep, n);
 			
-			tp.lastChunkMessage = n;
-			tp.save();
+			d.lastChunkMessage = n;
 		}
 	}
 	
