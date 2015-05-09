@@ -1,14 +1,13 @@
 [
 {
-  "modid": "EnkiTools",
-  "name": "EnkiTools",
+  "modid": "EnkiIRC",
+  "name": "EnkiIRC",
   "description": "",
   "version": "${version}",
-  "url": "http://minecraft.curseforge.com/mc-mods/229926-enkitools",
+  "url": "",
   "updateUrl": "",
   "authorList": [
-    "LatvianModder",
-    "Baphometis"
+    "LatvianModder"
   ],
   "credits": "EnkiGaming for letting me test on their servers",
   "logoFile": "",

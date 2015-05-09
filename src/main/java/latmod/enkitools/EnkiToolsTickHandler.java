@@ -6,7 +6,6 @@ import java.util.*;
 
 import latmod.core.*;
 import latmod.core.util.*;
-import latmod.enkitools.PlayerClaims.Claim;
 import net.minecraft.entity.player.*;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -132,7 +131,7 @@ public class EnkiToolsTickHandler
 	
 	public String getChunkStatusMessage(World w, int x, int z, EntityPlayer ep, boolean owner)
 	{
-		Claim claim = PlayerClaims.getClaim(x, z, w.provider.dimensionId);
+		EnkiData.Claim claim = EnkiData.Claim.getClaim(x, z, w.provider.dimensionId);
 		
 		if(claim == null)
 		{
@@ -153,7 +152,7 @@ public class EnkiToolsTickHandler
 	
 	public Notification getChunkScreenMessage(World w, int x, int z, EntityPlayer ep)
 	{
-		Claim claim = PlayerClaims.getClaim(x, z, w.provider.dimensionId);
+		EnkiData.Claim claim = EnkiData.Claim.getClaim(x, z, w.provider.dimensionId);
 		
 		long t = 1500L;
 		

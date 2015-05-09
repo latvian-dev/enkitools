@@ -4,7 +4,6 @@ import latmod.core.*;
 import latmod.core.event.*;
 import latmod.core.util.*;
 import latmod.enkitools.EnkiData.Home;
-import latmod.enkitools.PlayerClaims.Claim;
 import latmod.enkitools.cmd.CmdMotd;
 import latmod.enkitools.rank.*;
 import net.minecraft.block.Block;
@@ -13,6 +12,7 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.player.*;
 import net.minecraft.event.*;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.*;
 import net.minecraftforge.common.util.FakePlayer;
@@ -32,10 +32,11 @@ public class EnkiToolsEventHandler
 		EnkiData.getData(e.player).updatePos(new Vertex.DimPos.Rot(e.playerMP));
 		CmdMotd.printMotd(e.playerMP);
 		
-		if(e.firstTime)
+		if(e.firstTime && EnkiToolsConfig.get() != null && EnkiToolsConfig.get().login != null)
 		{
-			for(int i = 0; i < EnkiToolsConfig.get().login.startingInvI.size(); i++)
-				InvUtils.giveItem(e.playerMP, EnkiToolsConfig.get().login.startingInvI.get(i));
+			FastList<ItemStack> items = EnkiToolsConfig.get().login.startingInvI;
+			if(items != null && !items.isEmpty()) for(ItemStack is : items)
+				InvUtils.giveItem(e.playerMP, is);
 		}
 	}
 	
@@ -45,7 +46,7 @@ public class EnkiToolsEventHandler
 		if(e.phase.isPre())
 		{
 			Rank.reload();
-			PlayerClaims.claimsMap.clear();
+			EnkiData.clearData();
 		}
 		
 		if(e.phase.isPost())
@@ -65,8 +66,6 @@ public class EnkiToolsEventHandler
 				}
 				
 				{
-					EnkiData.Warps.warps.clear();
-					
 					NBTTagCompound tag1 = (NBTTagCompound)tag.getTag("Warps");
 					
 					if(tag1 != null && !tag1.hasNoTags())
@@ -160,7 +159,7 @@ public class EnkiToolsEventHandler
 			return false;
 		}
 		
-		Claim cc = PlayerClaims.getClaimD(e.x, e.z, e.entity.dimension);
+		EnkiData.Claim cc = EnkiData.Claim.getClaimD(e.x, e.z, e.entity.dimension);
 		
 		if(cc != null && !cc.playerClaims.owner.isFriend(LMPlayer.getPlayer(e.entityPlayer)))
 		{
@@ -272,7 +271,7 @@ public class EnkiToolsEventHandler
 		) e.setCanceled(true);
 		else
 		{
-			PlayerClaims.Claim p = PlayerClaims.getClaimD(e.explosion.explosionX, e.explosion.explosionZ, e.world.provider.dimensionId);
+			EnkiData.Claim p = EnkiData.Claim.getClaimD(e.explosion.explosionX, e.explosion.explosionZ, e.world.provider.dimensionId);
 			
 			if(p != null && !p.playerClaims.canExplode)
 				e.setCanceled(true);

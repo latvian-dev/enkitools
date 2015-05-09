@@ -68,7 +68,7 @@ public class EnkiToolsConfig
 			if(crossDimHomes == null) crossDimHomes = true;
 			if(overrideCommands == null) overrideCommands = true;
 			if(overrideChat == null) overrideChat = true;
-			if(enableRestartClock == null) enableRestartClock = true;
+			if(enableRestartClock == null) enableRestartClock = false;
 			if(enableWarpSigns == null) enableWarpSigns = true;
 			if(enableHomeSigns == null) enableHomeSigns = true;
 			

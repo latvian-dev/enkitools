@@ -27,7 +27,7 @@ public class CmdSethome extends CmdEnki
 			return "You can't set any more home locations!";
 		
 		String name = args.length == 1 ? args[0] : "Default";
-		h.setHome(name, c.posX, c.posY, c.posZ, ep.dimension);
+		h.setHome(name, c.posX, c.posY, c.posZ, ep.worldObj.provider.dimensionId);
 		
 		if(name.equals("Default"))
 			return FINE + "Home set!";

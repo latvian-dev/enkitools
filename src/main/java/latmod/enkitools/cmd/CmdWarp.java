@@ -1,7 +1,7 @@
 package latmod.enkitools.cmd;
 
-import latmod.core.*;
-import latmod.enkitools.*;
+import latmod.core.LatCoreMC;
+import latmod.enkitools.EnkiData;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 

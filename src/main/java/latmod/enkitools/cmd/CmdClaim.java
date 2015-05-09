@@ -4,8 +4,8 @@ import java.util.*;
 
 import latmod.core.util.*;
 import latmod.enkitools.*;
-import latmod.enkitools.PlayerClaims.Claim;
-import latmod.enkitools.PlayerClaims.ClaimResult;
+import latmod.enkitools.EnkiData.Claim;
+import latmod.enkitools.EnkiData.ClaimResult;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -53,14 +53,13 @@ public class CmdClaim extends CmdEnki
 			return null;
 		}
 		
-		PlayerClaims pc = PlayerClaims.getClaims(ep);
+		EnkiData.Data d = EnkiData.getData(ep);
 		
 		if(args[0].equals("list"))
-			return FINE + "You have claimed " + pc.claims.size() + " / " + chStr(pc.getMaxPower());
+			return FINE + "You have claimed " + d.claims.claims.size() + " / " + chStr(d.claims.getMaxPower());
 		else if(args[0].equals("notify"))
 		{
 			String[] nt = notifyTypes();
-			EnkiData.Data d = EnkiData.getData(pc.owner);
 			
 			if(args.length == 2)
 			{
@@ -80,7 +79,7 @@ public class CmdClaim extends CmdEnki
 			{
 				if(args[1].equals("none"))
 				{
-					pc.setDesc("");
+					d.claims.setDesc("");
 					return FINE + "Description cleared";
 				}
 				else
@@ -93,7 +92,7 @@ public class CmdClaim extends CmdEnki
 						return FINE + "Invalid desc!";
 					else
 					{
-						pc.setDesc(desc);
+						d.claims.setDesc(desc);
 						return FINE + "Description set to '" + desc + "'";
 					}
 				}
@@ -105,14 +104,14 @@ public class CmdClaim extends CmdEnki
 		{
 			if(args.length == 2)
 			{
-				pc.canExplode = args[1].equals("true");
-				return FINE + "Explosions set to " + (pc.canExplode ? "enabled" : "disabled");
+				d.claims.canExplode = args[1].equals("true");
+				return FINE + "Explosions set to " + (d.claims.canExplode ? "enabled" : "disabled");
 			}
-			else return FINE + "Explosions enabled: " + pc.canExplode;
+			else return FINE + "Explosions enabled: " + d.claims.canExplode;
 		}
 		else
 		{
-			Claim cc = new Claim(pc, ep);
+			Claim cc = new Claim(d.claims, ep);
 			
 			if(args[0].equals("claim"))
 			{
@@ -128,8 +127,8 @@ public class CmdClaim extends CmdEnki
 						int cx = MathHelperLM.chunk(ep.posX) + x;
 						int cz = MathHelperLM.chunk(ep.posZ) + z;
 						
-						if(PlayerClaims.getClaim(cx, cz, ep.dimension) == null)
-							cl.add(new Claim(pc, cx, cz, ep.dimension));
+						if(EnkiData.Claim.getClaim(cx, cz, ep.dimension) == null)
+							cl.add(new Claim(d.claims, cx, cz, ep.dimension));
 					}
 					
 					cl.sort(new ClaimDistComp(cc));
@@ -137,13 +136,13 @@ public class CmdClaim extends CmdEnki
 					int chc = 0;
 					
 					for(int i = 0; i < cl.size(); i++)
-						if(pc.changeChunk(ep, cl.get(i), true, false) == ClaimResult.SUCCESS) chc++;
+						if(d.claims.changeChunk(ep, cl.get(i), true, false) == ClaimResult.SUCCESS) chc++;
 					
 					return FINE + "Claimed " + chStr(chc);
 				}
 				else
 				{
-					ClaimResult r = pc.changeChunk(ep, cc, true, false);
+					ClaimResult r = d.claims.changeChunk(ep, cc, true, false);
 					
 					if(r == ClaimResult.SUCCESS)
 						return null;
@@ -162,13 +161,13 @@ public class CmdClaim extends CmdEnki
 			{
 				if(args.length > 1)
 				{
-					if(pc.claims.size() == 0)
+					if(d.claims.claims.size() == 0)
 						return FINE + "Unclaimed " + chStr(0);
 					
 					if(args[1].equals("all"))
 					{
-						int i = pc.claims.size();
-						pc.claims.clear();
+						int i = d.claims.claims.size();
+						d.claims.claims.clear();
 						return FINE + "Unclaimed " + chStr(i);
 					}
 					else
@@ -176,9 +175,9 @@ public class CmdClaim extends CmdEnki
 						int r = parseInt(ics, args[1]);
 						
 						FastList<Claim> cl = new FastList<Claim>();
-						for(int i = 0; i < pc.claims.size(); i++)
+						for(int i = 0; i < d.claims.claims.size(); i++)
 						{
-							Claim c1 = pc.claims.get(i);
+							Claim c1 = d.claims.claims.get(i);
 							if(c1.getDistSq(cc) <= r * r)
 								cl.add(c1);
 						}
@@ -188,14 +187,14 @@ public class CmdClaim extends CmdEnki
 						int chc = 0;
 						
 						for(int i = 0; i < cl.size(); i++)
-							if(pc.changeChunk(ep, cl.get(i), false, false) == ClaimResult.SUCCESS) chc++;
+							if(d.claims.changeChunk(ep, cl.get(i), false, false) == ClaimResult.SUCCESS) chc++;
 						
 						return FINE + "Unclaimed " + chStr(chc);
 					}
 				}
 				else
 				{
-					ClaimResult r = pc.changeChunk(ep, cc, false, false);
+					ClaimResult r = d.claims.changeChunk(ep, cc, false, false);
 					
 					if(r == ClaimResult.SUCCESS)
 						return null;

@@ -3,8 +3,8 @@ package latmod.enkitools.cmd;
 import latmod.core.LatCoreMC;
 import latmod.core.util.*;
 import latmod.enkitools.*;
-import latmod.enkitools.PlayerClaims.Claim;
-import latmod.enkitools.PlayerClaims.ClaimResult;
+import latmod.enkitools.EnkiData.Claim;
+import latmod.enkitools.EnkiData.ClaimResult;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChunkCoordinates;
@@ -15,7 +15,7 @@ public class CmdAdmin extends CmdEnki
 	{ super("admin"); }
 	
 	public String[] getSubcommands(ICommandSender ics)
-	{ return new String[] { "invsee", "spawndist", "dist", "shutdown", "unclaim", "setwarp", "delwarp" }; }
+	{ return new String[] { "invsee", "spawndist", "dist", "shutdown", "unclaim", "setwarp", "delwarp", "setborder" }; }
 	
 	public String[] getTabStrings(ICommandSender ics, String[] args, int i)
 	{
@@ -37,6 +37,7 @@ public class CmdAdmin extends CmdEnki
 		printHelpLine(ics, "shutdown [seconds | reset]");
 		printHelpLine(ics, "unclaim");
 		printHelpLine(ics, "setwarp | delwarp [name]");
+		printHelpLine(ics, "setborder <radius> | <round | square>");
 	}
 	
 	public String onCommand(ICommandSender ics, String[] args)
@@ -90,10 +91,10 @@ public class CmdAdmin extends CmdEnki
 			else if(args[0].equals("unclaim"))
 			{
 				EntityPlayerMP ep = getCommandSenderAsPlayer(ics);
-				PlayerClaims pc = PlayerClaims.getClaims(ep);
-				Claim cc = new Claim(pc, ep);
+				EnkiData.Data d = EnkiData.getData(ep);
+				Claim cc = new Claim(d.claims, ep);
 				
-				ClaimResult r = pc.changeChunk(ep, cc, false, false);
+				ClaimResult r = d.claims.changeChunk(ep, cc, false, false);
 				
 				EnkiToolsTickHandler.instance.printChunkChangedMessage(ep);
 				
@@ -111,7 +112,6 @@ public class CmdAdmin extends CmdEnki
 				ChunkCoordinates c = ep.getPlayerCoordinates();
 				
 				EnkiData.Warps.setWarp(args[1], c.posX, c.posY, c.posZ, ep.worldObj.provider.dimensionId);
-				
 				return FINE + "Warp '" + args[1] + "' set!";
 			}
 			else if(args[0].equals("delwarp"))
@@ -119,9 +119,7 @@ public class CmdAdmin extends CmdEnki
 				checkArgs(args, 2);
 				
 				if(EnkiData.Warps.remWarp(args[1]))
-				{
 					return FINE + "Warp '" + args[0] + "' removed!";
-				}
 				return "Warp '" + args[0] + "' doesn't exist!";
 			}
 		}
