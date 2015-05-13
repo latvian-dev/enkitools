@@ -131,7 +131,9 @@ public class EnkiToolsConfig
 		@Expose public Boolean peacefulSpawn;
 		@Expose public Boolean enableWorldBorder;
 		@Expose public Boolean worldBorderAt0x0;
+		@Expose public Boolean worldBorderSquare;
 		@Expose public Integer spawnDistance;
+		@Expose public Boolean spawnSquare;
 		@Expose public Map<Integer, Integer> worldBorder;
 		@Expose public String[] spawnBreakWhitelist;
 		@Expose public String[] spawnInteractWhitelist;
@@ -142,7 +144,9 @@ public class EnkiToolsConfig
 			if(peacefulSpawn == null) peacefulSpawn = true;
 			if(enableWorldBorder == null) enableWorldBorder = true;
 			if(worldBorderAt0x0 == null) worldBorderAt0x0 = true;
+			if(worldBorderSquare == null) worldBorderSquare = true;
 			if(spawnDistance == null) spawnDistance = 300;
+			if(spawnSquare == null) spawnSquare = false;
 			
 			if(worldBorder == null)
 			{

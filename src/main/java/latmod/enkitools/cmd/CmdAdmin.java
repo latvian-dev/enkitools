@@ -122,6 +122,56 @@ public class CmdAdmin extends CmdEnki
 					return FINE + "Warp '" + args[0] + "' removed!";
 				return "Warp '" + args[0] + "' doesn't exist!";
 			}
+			else if(args[0].equals("setborder"))
+			{
+				checkArgs(args, 2);
+				
+				if(args[1].equals("square"))
+				{
+					EnkiToolsConfig.get().world.worldBorderSquare = true;
+					EnkiToolsConfig.saveConfig();
+					return FINE + "World border is now a square";
+				}
+				if(args[1].equals("round"))
+				{
+					EnkiToolsConfig.get().world.worldBorderSquare = false;
+					EnkiToolsConfig.saveConfig();
+					return FINE + "World border is now round";
+				}
+				else if(args[1].equals("spawn"))
+				{
+					checkArgs(args, 3);
+					
+					if(args[2].equals("square"))
+					{
+						EnkiToolsConfig.get().world.spawnSquare = true;
+						EnkiToolsConfig.saveConfig();
+						return FINE + "World border is now a square";
+					}
+					if(args[2].equals("round"))
+					{
+						EnkiToolsConfig.get().world.spawnSquare = false;
+						EnkiToolsConfig.saveConfig();
+						return FINE + "World border is now round";
+					}
+					else
+					{
+						int dist = parseInt(ics, args[2]);
+						EnkiToolsConfig.get().world.spawnDistance = dist;
+						EnkiToolsConfig.saveConfig();
+						return FINE + "Spawn set to " + dist;
+					}
+				}
+				
+				checkArgs(args, 3);
+				
+				int dim = parseInt(ics, args[1]);
+				int dist = parseInt(ics, args[2]);
+				
+				EnkiToolsConfig.get().world.worldBorder.put(dim, dist);
+				EnkiToolsConfig.saveConfig();
+				return FINE + "World border for dimension " + dim + " set to " + dist;
+			}
 		}
 		
 		return null;
