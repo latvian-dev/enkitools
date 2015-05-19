@@ -275,7 +275,7 @@ public class EnkiData
 		{ return o != null && (o == this || o.toString().equals(toString())); }
 		
 		public void teleportPlayer(EntityPlayerMP ep)
-		{ LatCoreMC.teleportPlayer(ep, x + 0.5D, y + 0.5D, z + 0.5D, dim); }
+		{ Teleporter.travelEntity(ep, x + 0.5D, y + 0.5D, z + 0.5D, dim); }
 	}
 	
 	public static class Claim

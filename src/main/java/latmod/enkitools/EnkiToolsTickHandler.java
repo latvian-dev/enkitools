@@ -58,13 +58,10 @@ public class EnkiToolsTickHandler
 					
 					if(msg != null)
 					{
-						if(secondsLeft >= 300)
+						if(secondsLeft >= 60)
 							printServer(LIGHT_PURPLE + "Server will be restarting after " + msg);
 						
-						if(secondsLeft <= 10L)
-							LatCoreMC.notifyPlayer(null, new Notification("Server restart!", null, new ItemStack(Items.clock, (int)secondsLeft), 1000L));
-						else
-							LatCoreMC.notifyPlayer(null, new Notification("Server restarts in...", msg, new ItemStack(Items.clock), 4000L));
+						LatCoreMC.notifyPlayer(null, new Notification("Server restarts in...", msg, new ItemStack(Items.clock), 4000));
 					}
 				}
 				
@@ -154,7 +151,7 @@ public class EnkiToolsTickHandler
 	{
 		EnkiData.Claim claim = EnkiData.Claim.getClaim(x, z, w.provider.dimensionId);
 		
-		long t = 1500L;
+		int t = 1500;
 		
 		if(claim == null)
 		{

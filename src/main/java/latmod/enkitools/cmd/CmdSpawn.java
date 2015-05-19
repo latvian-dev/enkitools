@@ -1,6 +1,6 @@
 package latmod.enkitools.cmd;
 
-import latmod.core.LatCoreMC;
+import latmod.core.*;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChunkCoordinates;
@@ -18,7 +18,8 @@ public class CmdSpawn extends CmdEnki
 		while(ep.worldObj.getBlock(spawn.posX, spawn.posY, spawn.posZ).getCollisionBoundingBoxFromPool(ep.worldObj, spawn.posX, spawn.posY, spawn.posZ) != null)
 			spawn.posY++;
 		
-		LatCoreMC.teleportPlayer(ep, spawn.posX + 0.5D, spawn.posY + 1D, spawn.posZ + 0.5D, ep.worldObj.provider.dimensionId);
-		return FINE + "Teleported to spawn";
+		if(Teleporter.travelEntity(ep, spawn.posX + 0.5D, spawn.posY + 1D, spawn.posZ + 0.5D, ep.worldObj.provider.dimensionId))
+			return FINE + "Teleported to spawn";
+		return "Failed to teleport!";
 	}
 }

@@ -23,13 +23,13 @@ public class CmdTplast extends CmdEnki
 		if(p.isOnline())
 		{
 			EntityPlayerMP ep1 = p.getPlayerMP();
-			LatCoreMC.teleportPlayer(ep, ep1.posX, ep1.posY, ep1.posZ, ep1.dimension);
+			Teleporter.travelEntity(ep, ep1.posX, ep1.posY, ep1.posZ, ep1.dimension);
 		}
 		else
 		{
 			EnkiData.Data d = EnkiData.getData(p);
 			if(d.lastPos == null) return "No last position!";
-			LatCoreMC.teleportPlayer(ep, d.lastPos.pos.x, d.lastPos.pos.y, d.lastPos.pos.z, d.lastPos.dim);
+			Teleporter.travelEntity(ep, d.lastPos.pos.x, d.lastPos.pos.y, d.lastPos.pos.z, d.lastPos.dim);
 		}
 		
 		return FINE + "Teleported to " + p.username + "!";

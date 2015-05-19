@@ -14,6 +14,7 @@ import net.minecraft.entity.player.*;
 import net.minecraft.event.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.*;
 import net.minecraft.util.*;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.*;
@@ -140,6 +141,35 @@ public class EnkiToolsEventHandler
 		
 		if(e.action == PlayerInteractEvent.Action.RIGHT_CLICK_AIR) return;
 		if(!canInteract(e)) e.setCanceled(true);
+		else
+		{
+			TileEntity te = e.world.getTileEntity(e.x, e.y, e.z);
+			
+			if(te != null && !te.isInvalid() && te instanceof TileEntitySign)
+			{
+				TileEntitySign t = (TileEntitySign)te;
+				
+				if(EnkiToolsConfig.get().general.enableHomeSigns)
+				{
+					if(t.signText[1].equals("[home]"))
+					{
+						LatCoreMC.executeCommand(e.entityPlayer, "home " + t.signText[2]);
+						e.setCanceled(true);
+						return;
+					}
+				}
+				
+				if(EnkiToolsConfig.get().general.enableWarpSigns)
+				{
+					if(!t.signText[2].isEmpty() && t.signText[1].equals("[warp]"))
+					{
+						LatCoreMC.executeCommand(e.entityPlayer, "warp " + t.signText[2]);
+						e.setCanceled(true);
+						return;
+					}
+				}
+			}
+		}
 	}
 	
 	private boolean canInteract(net.minecraftforge.event.entity.player.PlayerInteractEvent e)
@@ -222,8 +252,8 @@ public class EnkiToolsEventHandler
 		
 		IChatComponent nameC = new ChatComponentText(name);
 		
-		nameC.getChatStyle().setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText("/tell " + name)));
-		nameC.getChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/tell " + name + " "));
+		//nameC.getChatStyle().setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText("/tell " + name)));
+		//nameC.getChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/tell " + name + " "));
 		
 		e.component.appendSibling(new ChatComponentText("<"));
 		e.component.appendSibling(nameC);
