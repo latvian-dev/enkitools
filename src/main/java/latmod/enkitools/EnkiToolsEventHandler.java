@@ -141,7 +141,7 @@ public class EnkiToolsEventHandler
 		
 		if(e.action == PlayerInteractEvent.Action.RIGHT_CLICK_AIR) return;
 		if(!canInteract(e)) e.setCanceled(true);
-		else
+		else if(e.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK)
 		{
 			TileEntity te = e.world.getTileEntity(e.x, e.y, e.z);
 			
@@ -180,11 +180,13 @@ public class EnkiToolsEventHandler
 		{
 			if(Rank.getConfig(e.entityPlayer, RankConfig.IGNORE_SPAWN).getBool()) return true;
 			
-			if(e.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK && LatCore.contains(EnkiToolsConfig.get().world.spawnBreakWhitelist, getName(e)))
+			String bn = getName(e);
+			
+			if(e.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK && LatCore.contains(EnkiToolsConfig.get().world.spawnBreakWhitelist, bn))
 				return true;
 			
-			if(e.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK && LatCore.contains(EnkiToolsConfig.get().world.spawnInteractWhitelist, getName(e)))
-				return true;
+			if(e.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK && LatCore.contains(EnkiToolsConfig.get().world.spawnInteractWhitelist, bn))
+				return !LatCore.contains(EnkiToolsConfig.get().world.placementBlacklist, bn);
 			
 			return false;
 		}
@@ -240,16 +242,11 @@ public class EnkiToolsEventHandler
 		if(p == null) return;
 		
 		Rank r = Rank.getPlayerRank(p);
+		if(r == null) return;
 		
-		String name = e.username + "";
-		
-		if(r.prefix != null && r.prefix.length() > 0)
-			name = r.prefix.replace("c_", LatCoreMC.FORMATTING) + name;
-		
-		if(name.contains(LatCoreMC.FORMATTING)) name = name + EnumChatFormatting.RESET;
+		String name = r.getUsername(e.username);
 		
 		e.component = new ChatComponentTranslation("");
-		
 		IChatComponent nameC = new ChatComponentText(name);
 		
 		//nameC.getChatStyle().setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText("/tell " + name)));
@@ -319,18 +316,10 @@ public class EnkiToolsEventHandler
 		}
 	}
 	
-	/*
 	@SubscribeEvent
 	public void customInfo(LMPlayerEvent.CustomInfo e)
 	{
 		Rank r = Rank.getPlayerRank(e.player);
-		
-		if(r != Rank.getDefaultRank())
-			e.player.clientInfo.add("Rank: " + r.prefix.replace("c_", LatCoreMC.FORMATTING) + r.rankID);
-		
-		PlayerClaims pc = PlayerClaims.getClaims(e.player);
-		if(pc.claims.size() > 0)
-			e.player.clientInfo.add("Claimed chunks: " + pc.claims.size() + " / " + pc.getMaxPower());
+		e.info.add("Rank: " + EnumChatFormatting.YELLOW + r.rankID);
 	}
-	*/
 }

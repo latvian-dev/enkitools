@@ -179,10 +179,10 @@ public class EnkiData
 	{
 		public final LMPlayer player;
 		private final FastList<Home> homes;
+		public final PlayerClaims claims;
 		public DimPos lastDeath = null;
 		public DimPos lastPos = null;
 		public int notifications = 1;
-		public PlayerClaims claims;
 		
 		// Local //
 		public Vertex.DimPos.Rot last;
@@ -391,6 +391,7 @@ public class EnkiData
 				else
 				{
 					claims.add(c);
+					owner.updateInfo(null);
 					return ClaimResult.SUCCESS;
 				}
 			}
@@ -399,6 +400,7 @@ public class EnkiData
 				if(claims.contains(c))
 				{
 					claims.remove(c);
+					owner.updateInfo(null);
 					return ClaimResult.SUCCESS;
 				}
 				else

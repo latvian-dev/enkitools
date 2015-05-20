@@ -34,7 +34,6 @@ public class CmdSetRank extends CmdEnki
 			
 			if(ep != null)
 			{
-				ep.refreshDisplayName();
 				if(!(ics instanceof EntityPlayer) || !((EntityPlayer)ics).getUniqueID().equals(ep.getUniqueID()))
 					LatCoreMC.printChat(ep, "Your rank is set to " + r.rankID);
 			}

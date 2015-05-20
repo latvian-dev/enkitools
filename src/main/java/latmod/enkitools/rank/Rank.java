@@ -2,7 +2,8 @@ package latmod.enkitools.rank;
 
 import java.util.*;
 
-import latmod.core.LMPlayer;
+import net.minecraft.util.EnumChatFormatting;
+import latmod.core.*;
 import latmod.core.util.*;
 import latmod.enkitools.*;
 
@@ -11,6 +12,7 @@ import com.google.gson.annotations.Expose;
 public class Rank
 {
 	public String rankID;
+	@Expose public String color;
 	@Expose public String prefix;
 	@Expose public String parentRank;
 	@Expose public List<String> commands;
@@ -19,14 +21,24 @@ public class Rank
 	
 	public void setDefaults()
 	{
-		prefix = "";
-		parentRank = "";
-		commands = new ArrayList<String>();
-		config = new HashMap<String, String>();
+		if(color == null) color = EnumChatFormatting.YELLOW.getFormattingCode() + "";
+		if(prefix == null) prefix = "";
 	}
 	
+	public String getColor()
+	{
+		if(color == null || color.isEmpty()) return "";
+		String s = "";
+		for(int i = 0; i < color.length(); i++)
+			s += LatCoreMC.FORMATTING + color.charAt(i);
+		return s;
+	}
+	
+	public String getUsername(String s)
+	{ return getColor() + prefix + s + EnumChatFormatting.RESET; }
+	
 	public String toString()
-	{ return rankID + ""; }
+	{ return rankID; }
 	
 	public boolean allowCommand(String cmd, String[] args)
 	{
@@ -113,6 +125,7 @@ public class Rank
 			Rank v = ranksFile.ranks.get(k);
 			v.rankID = k;
 			v.configMap.clear();
+			v.setDefaults();
 			
 			if(v.config != null && v.config.size() > 0)
 			{
@@ -138,9 +151,6 @@ public class Rank
 		{
 			EnkiData.players = LatCore.newFile(EnkiData.players);
 			setRawRank("LatvianModder", "Admin");
-			setRawRank("Baphometis", "Admin");
-			setRawRank("Colsun", "Admin");
-			setRawRank("HaniiPuppy", "Admin");
 			setRawRank("tfox83", "VIP");
 			saveRanks();
 		}
@@ -173,7 +183,13 @@ public class Rank
 	}
 	
 	public static void setPlayerRank(String s, Rank r)
-	{ playerRanks.put(s, (r == null) ? defRank : r); saveRanks(); }
+	{
+		playerRanks.put(s, (r == null) ? defRank : r);
+		saveRanks();
+		
+		LMPlayer p = LMPlayer.getPlayer(s);
+		if(p != null) p.updateInfo(null);
+	}
 	
 	public static void saveRanks()
 	{

@@ -6,19 +6,16 @@ public class DefaultRanks
 {
 	public static String loadDefaultRanks(Map<String, Rank> ranks)
 	{
-		String col = "c_";
-		
 		{
 			Rank r = new Rank();
 			r.setDefaults();
-			r.prefix = col + "7";
+			r.color = "7";
+			r.prefix = "";
 			r.commands.add("+help");
 			r.commands.add("+motd");
 			r.commands.add("+rules");
 			r.commands.add("+afk");
 			r.commands.add("+list");
-			r.commands.add("+mail");
-			r.commands.add("+msg");
 			r.commands.add("+tell");
 			r.commands.add("+kill");
 			r.commands.add("+shutdownTimer");
@@ -39,7 +36,8 @@ public class DefaultRanks
 		{
 			Rank r = new Rank();
 			r.setDefaults();
-			r.prefix = col + "e";
+			r.color = "e";
+			r.prefix = "";
 			r.parentRank = "Player";
 			r.commands.add("+irc");
 			r.setConfig(RankConfig.MAX_CLAIM_POWER, "15");
@@ -49,7 +47,8 @@ public class DefaultRanks
 		{
 			Rank r = new Rank();
 			r.setDefaults();
-			r.prefix = col + "b[Donator] ";
+			r.color = "b";
+			r.prefix = "[Donator] ";
 			r.parentRank = "Member";
 			r.commands.add("+sethome");
 			r.commands.add("+home");
@@ -64,7 +63,8 @@ public class DefaultRanks
 		{
 			Rank r = new Rank();
 			r.setDefaults();
-			r.prefix = col + "b[VIP] ";
+			r.color = "b";
+			r.prefix = "[VIP] ";
 			r.parentRank = "Donator";
 			r.commands.add("+back");
 			r.commands.add("+top");
@@ -76,7 +76,8 @@ public class DefaultRanks
 		{
 			Rank r = new Rank();
 			r.setDefaults();
-			r.prefix = col + "2";
+			r.color = "2";
+			r.prefix = "";
 			r.parentRank = "VIP";
 			r.commands.add("+kick");
 			r.commands.add("+whitelist");
@@ -110,7 +111,8 @@ public class DefaultRanks
 		{
 			Rank r = new Rank();
 			r.setDefaults();
-			r.prefix = col + "2[*] ";
+			r.color = "2";
+			r.prefix = "[*] ";
 			r.parentRank = "Mod";
 			r.commands.add("*");
 			ranks.put("Admin", r);

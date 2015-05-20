@@ -137,6 +137,7 @@ public class EnkiToolsConfig
 		@Expose public Map<Integer, Integer> worldBorder;
 		@Expose public String[] spawnBreakWhitelist;
 		@Expose public String[] spawnInteractWhitelist;
+		@Expose public String[] placementBlacklist;
 		
 		public void load()
 		{
@@ -163,9 +164,17 @@ public class EnkiToolsConfig
 			
 			if(spawnInteractWhitelist == null) spawnInteractWhitelist = new String[]
 			{
-					"Natura:BerryBush",
 					"minecraft:furnace",
-					"minecraft:crafting_table"
+					"minecraft:crafting_table",
+					"minecraft:sign",
+					"minecraft:door",
+					"Natura:BerryBush",
+					"IC2:blockPersonal",
+					"Mystcraft:BlockBookstand",
+			};
+			
+			if(placementBlacklist == null) placementBlacklist = new String[]
+			{
 			};
 		}
 		
