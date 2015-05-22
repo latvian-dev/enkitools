@@ -1,6 +1,6 @@
 package latmod.enkitools.cmd;
 
-import latmod.core.*;
+import latmod.core.Teleporter;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChunkCoordinates;
