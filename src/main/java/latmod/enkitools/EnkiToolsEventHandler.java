@@ -320,6 +320,6 @@ public class EnkiToolsEventHandler
 	public void customInfo(LMPlayerEvent.CustomInfo e)
 	{
 		Rank r = Rank.getPlayerRank(e.player);
-		e.info.add("Rank: " + EnumChatFormatting.YELLOW + r.rankID);
+		e.info.add("Rank: " + r.getColor() + r.rankID);
 	}
 }
