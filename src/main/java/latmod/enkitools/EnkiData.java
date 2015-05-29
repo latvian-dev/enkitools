@@ -373,7 +373,7 @@ public class EnkiData
 		
 		public ClaimResult changeChunk(EntityPlayer ep, Claim c, boolean add, boolean admin)
 		{
-			if(EnkiTools.isSpawnChunk(ep.worldObj, c.posX, c.posZ) || EnkiTools.isOutsideWorldBorder(ep.worldObj, c.posX * 16D + 8D, c.posZ * 16D + 8D))
+			if(EnkiTools.isSpawnChunk(ep.worldObj, c.posX, c.posZ) || EnkiTools.isOutsideWorldBorder(ep.worldObj.provider.dimensionId, c.posX * 16D + 8D, c.posZ * 16D + 8D))
 				return ClaimResult.SPAWN;
 			
 			Claim c0 = Claim.getClaim(c.posX, c.posZ, c.dim);

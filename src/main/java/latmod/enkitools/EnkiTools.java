@@ -89,18 +89,18 @@ public class EnkiTools
 	public static boolean isSpawnChunkD(World w, double x, double z)
 	{ return isSpawnChunk(w, MathHelperLM.chunk(x), MathHelperLM.chunk(z)); }
 	
-	public static boolean isOutsideWorldBorder(World w, double x, double z)
+	public static boolean isOutsideWorldBorder(int dim, double x, double z)
 	{
 		if(!EnkiToolsConfig.get().world.enableWorldBorder) return false;
 		
-		int dist = EnkiToolsConfig.get().world.getWorldBorder(w.provider.dimensionId);
+		int dist = EnkiToolsConfig.get().world.getWorldBorder(dim);
 		
 		if(dist <= 0) return false;
 		
 		if(EnkiToolsConfig.get().world.worldBorderAt0x0)
 			return (x < - dist || x > dist) || (z < - dist || z > + dist);
 		
-		Vertex c = LatCoreMC.getSpawnPoint(w);
+		Vertex c = LatCoreMC.getSpawnPoint(dim);
 		return (x < c.x - dist || x > c.x + dist) || (z < c.z - dist || z > c.z + dist);
 	}
 }

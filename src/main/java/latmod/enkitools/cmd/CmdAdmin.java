@@ -15,7 +15,7 @@ public class CmdAdmin extends CmdEnki
 	{ super("admin"); }
 	
 	public String[] getSubcommands(ICommandSender ics)
-	{ return new String[] { "invsee", "spawndist", "dist", "shutdown", "unclaim", "setwarp", "delwarp", "setborder" }; }
+	{ return new String[] { "invsee", "spawndist", "dist", "shutdown", "unclaim", "setwarp", "delwarp", "setworldborder", "setspawnborder" }; }
 	
 	public String[] getTabStrings(ICommandSender ics, String[] args, int i)
 	{
@@ -37,7 +37,8 @@ public class CmdAdmin extends CmdEnki
 		printHelpLine(ics, "shutdown [seconds | reset]");
 		printHelpLine(ics, "unclaim");
 		printHelpLine(ics, "setwarp | delwarp [name]");
-		printHelpLine(ics, "setborder <radius> | <round | square>");
+		printHelpLine(ics, "setworldborder <radius> | <round | square>");
+		printHelpLine(ics, "setspawnborder <radius> | <round | square>");
 	}
 	
 	public String onCommand(ICommandSender ics, String[] args)
@@ -122,7 +123,7 @@ public class CmdAdmin extends CmdEnki
 					return FINE + "Warp '" + args[0] + "' removed!";
 				return "Warp '" + args[0] + "' doesn't exist!";
 			}
-			else if(args[0].equals("setborder"))
+			else if(args[0].equals("setworldborder"))
 			{
 				checkArgs(args, 2);
 				
@@ -138,30 +139,6 @@ public class CmdAdmin extends CmdEnki
 					EnkiToolsConfig.saveConfig();
 					return FINE + "World border is now round";
 				}
-				else if(args[1].equals("spawn"))
-				{
-					checkArgs(args, 3);
-					
-					if(args[2].equals("square"))
-					{
-						EnkiToolsConfig.get().world.spawnSquare = true;
-						EnkiToolsConfig.saveConfig();
-						return FINE + "World border is now a square";
-					}
-					if(args[2].equals("round"))
-					{
-						EnkiToolsConfig.get().world.spawnSquare = false;
-						EnkiToolsConfig.saveConfig();
-						return FINE + "World border is now round";
-					}
-					else
-					{
-						int dist = parseInt(ics, args[2]);
-						EnkiToolsConfig.get().world.spawnDistance = dist;
-						EnkiToolsConfig.saveConfig();
-						return FINE + "Spawn set to " + dist;
-					}
-				}
 				
 				checkArgs(args, 3);
 				
@@ -171,6 +148,30 @@ public class CmdAdmin extends CmdEnki
 				EnkiToolsConfig.get().world.worldBorder.put(dim, dist);
 				EnkiToolsConfig.saveConfig();
 				return FINE + "World border for dimension " + dim + " set to " + dist;
+			}
+			else if(args[0].equals("setspawnborder"))
+			{
+				checkArgs(args, 2);
+				
+				if(args[1].equals("square"))
+				{
+					EnkiToolsConfig.get().world.spawnSquare = true;
+					EnkiToolsConfig.saveConfig();
+					return FINE + "Spawn area is now a square";
+				}
+				if(args[1].equals("round"))
+				{
+					EnkiToolsConfig.get().world.spawnSquare = false;
+					EnkiToolsConfig.saveConfig();
+					return FINE + "Spawn area is now round";
+				}
+				else
+				{
+					int dist = parseInt(ics, args[1]);
+					EnkiToolsConfig.get().world.spawnDistance = dist;
+					EnkiToolsConfig.saveConfig();
+					return FINE + "Spawn distance set to " + dist;
+				}
 			}
 		}
 		

@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.common.DimensionManager;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
@@ -65,34 +66,41 @@ public class EnkiToolsTickHandler
 					}
 				}
 				
-				if(LatCoreMC.hasOnlinePlayers())
+				for(EntityPlayerMP ep : LatCoreMC.getAllOnlinePlayers().values)
 				{
-					FastList<EntityPlayerMP> players = LatCoreMC.getAllOnlinePlayers().values;
+					EnkiData.Data d = EnkiData.getData(ep);
+					Vertex.DimPos.Rot pos = new Vertex.DimPos.Rot(ep);
 					
-					for(int i = 0; i < players.size(); i++)
+					if(d.hasMoved(pos))
 					{
-						EntityPlayerMP ep = players.get(i);
-						EnkiData.Data d = EnkiData.getData(ep);
-						Vertex.DimPos.Rot pos = new Vertex.DimPos.Rot(ep);
-						
-						if(d.hasMoved(pos))
+						if(EnkiTools.isOutsideWorldBorder(ep.worldObj.provider.dimensionId, ep.posX, ep.posZ))
 						{
-							if(EnkiTools.isOutsideWorldBorder(ep.worldObj, ep.posX, ep.posZ))
-							{
-								if(ep.dimension == d.last.dim)
-								{
-									ep.motionX = ep.motionY = ep.motionZ = 0D;
-									ep.playerNetServerHandler.setPlayerLocation(d.last.pos.x, d.last.pos.y, d.last.pos.z, ep.rotationYaw, ep.rotationPitch);
-									LatCoreMC.printChat(ep, "You have reached the world border!");
-								}
-								else LatCoreMC.printChat(ep, "You have reached the world border, please return to your home or portal!");
-							}
+							ep.motionX = ep.motionY = ep.motionZ = 0D;
+							LatCoreMC.printChat(ep, "You have reached the world border!");
 							
-							d.updatePos(pos);
+							if(EnkiTools.isOutsideWorldBorder(d.last.dim, d.last.pos.x, d.last.pos.z))
+							{
+								LatCoreMC.printChat(ep, "Teleporting to spawn!");
+								Vertex spawn = LatCoreMC.getSpawnPoint(0);
+								
+								if(EnkiTools.isOutsideWorldBorder(0, spawn.x, spawn.z))
+								{
+									spawn.x = spawn.z = 0.5D;
+									spawn.y = DimensionManager.getWorld(0).getTopSolidOrLiquidBlock(0, 0);
+								}
+								
+								Teleporter.travelEntity(ep, spawn.x, spawn.y, spawn.z, 0);
+							}
+							else
+							{
+								Teleporter.travelEntity(ep, d.last.pos.x, d.last.pos.y, d.last.pos.z, ep.worldObj.provider.dimensionId);
+							}
 						}
 						
-						printChunkChangedMessage(ep);
+						d.updatePos(pos);
 					}
+					
+					printChunkChangedMessage(ep);
 				}
 			}
 		}

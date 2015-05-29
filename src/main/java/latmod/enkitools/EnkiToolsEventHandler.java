@@ -174,6 +174,8 @@ public class EnkiToolsEventHandler
 	
 	private boolean canInteract(net.minecraftforge.event.entity.player.PlayerInteractEvent e)
 	{
+		if(EnkiTools.isOutsideWorldBorder(e.world.provider.dimensionId, e.x, e.z)) return false;
+		
 		if(e.entityPlayer.capabilities.isCreativeMode) return true;
 		
 		if(e.world.provider.dimensionId == 0 && EnkiToolsConfig.get().world.spawnDistance > 0F && EnkiTools.isSpawnChunkD(e.world, e.x, e.z))
@@ -294,7 +296,7 @@ public class EnkiToolsEventHandler
 	public void onExplosion(ExplosionEvent.Start e)
 	{
 		if(EnkiTools.isSpawnChunkD(e.world, e.explosion.explosionX, e.explosion.explosionZ)
-		|| EnkiTools.isOutsideWorldBorder(e.world, e.explosion.explosionX, e.explosion.explosionZ)
+		|| EnkiTools.isOutsideWorldBorder(e.world.provider.dimensionId, e.explosion.explosionX, e.explosion.explosionZ)
 		) e.setCanceled(true);
 		else
 		{
