@@ -137,7 +137,7 @@ public class EnkiToolsEventHandler
 	@SubscribeEvent
 	public void onBlockClick(net.minecraftforge.event.entity.player.PlayerInteractEvent e)
 	{
-		if(e.world.isRemote) return;
+		//if(e.world.isRemote) return;
 		
 		if(e.action == PlayerInteractEvent.Action.RIGHT_CLICK_AIR) return;
 		if(!canInteract(e)) e.setCanceled(true);
@@ -149,24 +149,17 @@ public class EnkiToolsEventHandler
 			{
 				TileEntitySign t = (TileEntitySign)te;
 				
-				if(EnkiToolsConfig.get().general.enableHomeSigns)
+				if(EnkiToolsConfig.get().general.enableHomeSigns && t.signText[1].equals("[home]"))
 				{
-					if(t.signText[1].equals("[home]"))
-					{
-						LatCoreMC.executeCommand(e.entityPlayer, "home " + t.signText[2]);
-						e.setCanceled(true);
-						return;
-					}
+					LatCoreMC.executeCommand(e.entityPlayer, "home " + t.signText[2]);
+					e.setCanceled(true);
+					return;
 				}
-				
-				if(EnkiToolsConfig.get().general.enableWarpSigns)
+				else if(EnkiToolsConfig.get().general.enableWarpSigns && !t.signText[2].isEmpty() && t.signText[1].equals("[warp]"))
 				{
-					if(!t.signText[2].isEmpty() && t.signText[1].equals("[warp]"))
-					{
-						LatCoreMC.executeCommand(e.entityPlayer, "warp " + t.signText[2]);
-						e.setCanceled(true);
-						return;
-					}
+					LatCoreMC.executeCommand(e.entityPlayer, "warp " + t.signText[2]);
+					e.setCanceled(true);
+					return;
 				}
 			}
 		}
