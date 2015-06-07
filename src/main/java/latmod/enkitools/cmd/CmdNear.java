@@ -1,15 +1,16 @@
 package latmod.enkitools.cmd;
 
-import latmod.core.LatCoreMC;
-import latmod.core.util.FastList;
 import latmod.enkitools.EnkiToolsConfig;
+import latmod.ftbu.core.LatCoreMC;
+import latmod.ftbu.core.cmd.*;
+import latmod.ftbu.core.util.FastList;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.*;
 
-public class CmdNear extends CmdEnki
+public class CmdNear extends CommandLM
 {
 	public CmdNear()
-	{ super("near"); }
+	{ super("near", CommandLevel.ALL); }
 	
 	public String onCommand(ICommandSender ics, String[] args)
 	{

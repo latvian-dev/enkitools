@@ -2,19 +2,20 @@ package latmod.enkitools.cmd;
 
 import java.util.*;
 
-import latmod.core.util.*;
 import latmod.enkitools.*;
 import latmod.enkitools.EnkiData.Claim;
 import latmod.enkitools.EnkiData.ClaimResult;
+import latmod.ftbu.core.cmd.*;
+import latmod.ftbu.core.util.*;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 
-public class CmdClaim extends CmdEnki
+public class CmdClaim extends CommandLM
 {
 	private static final String[] notifyTypes() { return new String[] { "off", "screen", "chat" }; }
 	
 	public CmdClaim()
-	{ super("e"); }
+	{ super("e", CommandLevel.ALL); }
 	
 	@SuppressWarnings("all")
 	public List getCommandAliases()

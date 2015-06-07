@@ -1,14 +1,15 @@
 package latmod.enkitools.cmd;
 
-import latmod.core.LatCoreMC;
 import latmod.enkitools.EnkiToolsConfig;
+import latmod.ftbu.core.LatCoreMC;
+import latmod.ftbu.core.cmd.*;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 
-public class CmdMotd extends CmdEnki
+public class CmdMotd extends CommandLM
 {
 	public CmdMotd()
-	{ super("motd"); }
+	{ super("motd", CommandLevel.ALL); }
 	
 	public String onCommand(ICommandSender ics, String[] args)
 	{ printMotd(getCommandSenderAsPlayer(ics)); return null; }

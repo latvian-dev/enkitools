@@ -1,11 +1,11 @@
 package latmod.enkitools;
 
-import latmod.core.*;
-import latmod.core.event.*;
-import latmod.core.util.*;
 import latmod.enkitools.EnkiData.Home;
 import latmod.enkitools.cmd.CmdMotd;
 import latmod.enkitools.rank.*;
+import latmod.ftbu.core.*;
+import latmod.ftbu.core.event.*;
+import latmod.ftbu.core.util.*;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.IMob;
@@ -251,18 +251,18 @@ public class EnkiToolsEventHandler
 		e.component.appendSibling(nameC);
 		e.component.appendSibling(new ChatComponentText(">"));
 		
-		String[] msg = LatCore.split(e.message, " ");
+		String[] msg = e.message.split(" ");
 		
-		for(int i = 0; i < msg.length; i++)
+		for(String s : msg)
 		{
-			IChatComponent c = new ChatComponentText(" " + msg[i]);
+			IChatComponent c = new ChatComponentText(" " + s);
 			
-			if(msg[i].startsWith("http://") || msg[i].startsWith("https://"))
+			if(s.startsWith("http://") || s.startsWith("https://"))
 			{
 				c = new ChatComponentText(" [Link]");
 				c.getChatStyle().setColor(EnumChatFormatting.GOLD);
-				c.getChatStyle().setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(msg[i])));
-				c.getChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, msg[i]));
+				c.getChatStyle().setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText(s)));
+				c.getChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, s));
 			}
 			
 			e.component.appendSibling(c);

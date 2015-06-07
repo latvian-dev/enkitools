@@ -1,16 +1,17 @@
 package latmod.enkitools.cmd;
 
-import latmod.core.*;
 import latmod.enkitools.EnkiData;
 import latmod.enkitools.rank.*;
+import latmod.ftbu.core.*;
+import latmod.ftbu.core.cmd.*;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChunkCoordinates;
 
-public class CmdSethome extends CmdEnki
+public class CmdSethome extends CommandLM
 {
 	public CmdSethome()
-	{ super("sethome"); }
+	{ super("sethome", CommandLevel.ALL); }
 	
 	public void printHelp(ICommandSender ics)
 	{ LatCoreMC.printChat(ics, "/sethome [name]"); }

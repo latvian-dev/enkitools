@@ -1,14 +1,15 @@
 package latmod.enkitools.cmd;
 
-import latmod.core.LMPlayer;
 import latmod.enkitools.EnkiData;
+import latmod.ftbu.core.LMPlayer;
+import latmod.ftbu.core.cmd.*;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 
-public class CmdBack extends CmdEnki
+public class CmdBack extends CommandLM
 {
 	public CmdBack()
-	{ super("back"); }
+	{ super("back", CommandLevel.ALL); }
 	
 	public String onCommand(ICommandSender ics, String[] args)
 	{

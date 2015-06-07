@@ -1,28 +1,29 @@
 package latmod.enkitools;
 
-import latmod.core.*;
-import latmod.core.util.*;
 import latmod.enkitools.cmd.*;
+import latmod.ftbu.core.*;
+import latmod.ftbu.core.util.*;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.*;
 
-@Mod(modid = EnkiTools.MODID, name = "EnkiTools", version = "@VERSION@", acceptableRemoteVersions = "*", dependencies = "required-after:LatCoreMC")
+@Mod(modid = EnkiTools.MOD_ID, name = "EnkiTools", version = "@VERSION@", acceptableRemoteVersions = "*", dependencies = "required-after:FTBU")
 public class EnkiTools
 {
-	protected static final String MODID = "EnkiTools";
+	protected static final String MOD_ID = "EnkiTools";
 	
-	@Mod.Instance(EnkiTools.MODID)
+	@Mod.Instance(MOD_ID)
 	public static EnkiTools inst;
 	
+	@LMMod.Instance(MOD_ID)
 	public static LMMod mod;
 	
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent e)
 	{
 		EnkiData.init();
-		mod = new LMMod(e, null, null);
+		LMMod.init(this, null, null);
 		EnkiToolsConfig.loadConfig();
 		
 		LatCoreMC.addEventHandler(EnkiToolsEventHandler.instance, true, false, true);

@@ -1,6 +1,6 @@
 package latmod.enkitools.cmd;
 
-import latmod.core.cmd.CommandLevel;
+import latmod.ftbu.core.cmd.CommandLevel;
 import net.minecraft.command.CommandGameRule;
 
 public class CmdGameruleOverride extends CommandGameRule

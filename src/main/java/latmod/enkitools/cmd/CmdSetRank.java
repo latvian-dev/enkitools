@@ -1,14 +1,15 @@
 package latmod.enkitools.cmd;
 
-import latmod.core.*;
 import latmod.enkitools.rank.Rank;
+import latmod.ftbu.core.*;
+import latmod.ftbu.core.cmd.*;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 
-public class CmdSetRank extends CmdEnki
+public class CmdSetRank extends CommandLM
 {
 	public CmdSetRank()
-	{ super("setrank"); }
+	{ super("setrank", CommandLevel.ALL); }
 	
 	public void printHelp(ICommandSender ics)
 	{ LatCoreMC.printChat(ics, "/setrank <player> <rank>"); }

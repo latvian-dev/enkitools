@@ -1,14 +1,15 @@
 package latmod.enkitools.cmd;
 
-import latmod.core.LatCoreMC;
 import latmod.enkitools.EnkiData;
+import latmod.ftbu.core.LatCoreMC;
+import latmod.ftbu.core.cmd.*;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 
-public class CmdWarp extends CmdEnki
+public class CmdWarp extends CommandLM
 {
 	public CmdWarp()
-	{ super("warp"); }
+	{ super("warp", CommandLevel.ALL); }
 	
 	public void printHelp(ICommandSender ics)
 	{ LatCoreMC.printChat(ics, "/warp [name]"); }

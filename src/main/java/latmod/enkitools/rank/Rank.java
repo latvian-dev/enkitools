@@ -2,9 +2,9 @@ package latmod.enkitools.rank;
 
 import java.util.*;
 
-import latmod.core.*;
-import latmod.core.util.*;
 import latmod.enkitools.*;
+import latmod.ftbu.core.*;
+import latmod.ftbu.core.util.*;
 import net.minecraft.util.EnumChatFormatting;
 
 import com.google.gson.annotations.Expose;

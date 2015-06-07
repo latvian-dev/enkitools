@@ -4,8 +4,8 @@ import static net.minecraft.util.EnumChatFormatting.*;
 
 import java.util.*;
 
-import latmod.core.*;
-import latmod.core.util.*;
+import latmod.ftbu.core.*;
+import latmod.ftbu.core.util.*;
 import net.minecraft.entity.player.*;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;

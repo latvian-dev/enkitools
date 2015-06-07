@@ -1,15 +1,16 @@
 package latmod.enkitools.cmd;
 
-import latmod.core.InvUtils;
+import latmod.ftbu.core.InvUtils;
+import latmod.ftbu.core.cmd.*;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.*;
 import net.minecraft.nbt.*;
 
-public class CmdHead extends CmdEnki
+public class CmdHead extends CommandLM
 {
 	public CmdHead()
-	{ super("head"); }
+	{ super("head", CommandLevel.ALL); }
 	
 	public String onCommand(ICommandSender ics, String[] args)
 	{

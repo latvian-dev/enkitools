@@ -1,14 +1,15 @@
 package latmod.enkitools.cmd;
 
 import latmod.enkitools.EnkiToolsConfig;
+import latmod.ftbu.core.cmd.*;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.util.*;
 
-public class CmdRules extends CmdEnki
+public class CmdRules extends CommandLM
 {
 	public CmdRules()
-	{ super("rules"); }
+	{ super("rules", CommandLevel.ALL); }
 	
 	public String onCommand(ICommandSender ics, String[] args)
 	{ if(!printRules(ics)) return "Link not set!"; return null; }

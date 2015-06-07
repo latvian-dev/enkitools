@@ -1,13 +1,14 @@
 package latmod.enkitools.cmd;
 
-import latmod.core.*;
 import latmod.enkitools.EnkiData;
+import latmod.ftbu.core.*;
+import latmod.ftbu.core.cmd.*;
 import net.minecraft.command.ICommandSender;
 
-public class CmdDelhome extends CmdEnki
+public class CmdDelhome extends CommandLM
 {
 	public CmdDelhome()
-	{ super("delhome"); }
+	{ super("delhome", CommandLevel.ALL); }
 	
 	public void printHelp(ICommandSender ics)
 	{ LatCoreMC.printChat(ics, "/delhome [name]"); }

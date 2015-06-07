@@ -1,6 +1,6 @@
 package latmod.enkitools.rank;
 
-import latmod.core.util.FastMap;
+import latmod.ftbu.core.util.FastMap;
 
 public class RankConfig
 {

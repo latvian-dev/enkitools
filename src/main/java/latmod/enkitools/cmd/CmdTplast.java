@@ -1,14 +1,15 @@
 package latmod.enkitools.cmd;
 
-import latmod.core.*;
 import latmod.enkitools.EnkiData;
+import latmod.ftbu.core.*;
+import latmod.ftbu.core.cmd.*;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 
-public class CmdTplast extends CmdEnki
+public class CmdTplast extends CommandLM
 {
 	public CmdTplast()
-	{ super("tpl"); }
+	{ super("tpl", CommandLevel.OP); }
 	
 	public NameType getUsername(String[] args, int i)
 	{ if(i == 0) return NameType.OFF; return NameType.NONE; }

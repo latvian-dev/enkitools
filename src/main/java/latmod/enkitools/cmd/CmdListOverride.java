@@ -1,13 +1,12 @@
 package latmod.enkitools.cmd;
 
-import latmod.core.*;
-import latmod.core.cmd.CommandLevel;
-import latmod.core.mod.cmd.CommandBaseLC;
+import latmod.ftbu.core.*;
+import latmod.ftbu.core.cmd.*;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 
-public class CmdListOverride extends CommandBaseLC
+public class CmdListOverride extends CommandLM
 {
 	public CmdListOverride()
 	{ super("list", CommandLevel.ALL); }

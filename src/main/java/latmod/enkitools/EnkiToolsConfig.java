@@ -2,8 +2,8 @@ package latmod.enkitools;
 
 import java.util.*;
 
-import latmod.core.*;
-import latmod.core.util.*;
+import latmod.ftbu.core.*;
+import latmod.ftbu.core.util.*;
 import net.minecraft.item.ItemStack;
 
 import com.google.gson.annotations.Expose;
@@ -74,7 +74,7 @@ public class EnkiToolsConfig
 			
 			try
 			{
-				String s[] = LatCore.split(restartClock, ":");
+				String s[] = restartClock.split(":");
 				restartHours = Integer.parseInt(s[0]);
 				restartMinutes = Integer.parseInt(s[1]);
 			}

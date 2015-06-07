@@ -3,10 +3,10 @@ package latmod.enkitools;
 import java.io.File;
 import java.util.UUID;
 
-import latmod.core.*;
-import latmod.core.util.*;
-import latmod.core.util.Vertex.DimPos;
 import latmod.enkitools.rank.*;
+import latmod.ftbu.core.*;
+import latmod.ftbu.core.util.*;
+import latmod.ftbu.core.util.Vertex.DimPos;
 import net.minecraft.entity.player.*;
 import net.minecraft.nbt.*;
 import net.minecraft.util.EnumChatFormatting;

@@ -1,18 +1,19 @@
 package latmod.enkitools.cmd;
 
-import latmod.core.LatCoreMC;
-import latmod.core.util.*;
 import latmod.enkitools.*;
 import latmod.enkitools.EnkiData.Claim;
 import latmod.enkitools.EnkiData.ClaimResult;
+import latmod.ftbu.core.LatCoreMC;
+import latmod.ftbu.core.cmd.*;
+import latmod.ftbu.core.util.*;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChunkCoordinates;
 
-public class CmdAdmin extends CmdEnki
+public class CmdAdmin extends CommandLM
 {
 	public CmdAdmin()
-	{ super("admin"); }
+	{ super("admin", CommandLevel.OP); }
 	
 	public String[] getSubcommands(ICommandSender ics)
 	{ return new String[] { "invsee", "spawndist", "dist", "shutdown", "unclaim", "setwarp", "delwarp", "worldborder", "spawnarea" }; }
@@ -86,7 +87,7 @@ public class CmdAdmin extends CmdEnki
 			{
 				if(args[1].contains(":"))
 				{
-					String s[] = LatCore.split(args[1], ":");
+					String s[] = args[1].split(":");
 					int h = Integer.parseInt(s[0]);
 					int m = Integer.parseInt(s[1]);
 					sec = h * 3600 + m * 60;

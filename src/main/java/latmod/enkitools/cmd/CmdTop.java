@@ -1,13 +1,14 @@
 package latmod.enkitools.cmd;
 
-import latmod.core.util.MathHelperLM;
+import latmod.ftbu.core.cmd.*;
+import latmod.ftbu.core.util.MathHelperLM;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 
-public class CmdTop extends CmdEnki
+public class CmdTop extends CommandLM
 {
 	public CmdTop()
-	{ super("top"); }
+	{ super("top", CommandLevel.ALL); }
 	
 	public String onCommand(ICommandSender ics, String[] args)
 	{

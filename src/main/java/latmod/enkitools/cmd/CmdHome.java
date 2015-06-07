@@ -1,14 +1,15 @@
 package latmod.enkitools.cmd;
 
-import latmod.core.*;
 import latmod.enkitools.*;
+import latmod.ftbu.core.*;
+import latmod.ftbu.core.cmd.*;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 
-public class CmdHome extends CmdEnki
+public class CmdHome extends CommandLM
 {
 	public CmdHome()
-	{ super("home"); }
+	{ super("home", CommandLevel.ALL); }
 	
 	public void printHelp(ICommandSender ics)
 	{ LatCoreMC.printChat(ics, "/home [name]"); }

@@ -1,13 +1,14 @@
 package latmod.enkitools.cmd;
 
-import latmod.core.*;
 import latmod.enkitools.rank.Rank;
+import latmod.ftbu.core.*;
+import latmod.ftbu.core.cmd.*;
 import net.minecraft.command.ICommandSender;
 
-public class CmdGetRank extends CmdEnki
+public class CmdGetRank extends CommandLM
 {
 	public CmdGetRank()
-	{ super("getrank"); }
+	{ super("getrank", CommandLevel.ALL); }
 	
 	public String onCommand(ICommandSender ics, String[] args)
 	{

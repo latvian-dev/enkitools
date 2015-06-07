@@ -1,16 +1,17 @@
 package latmod.enkitools.cmd;
 
-import latmod.core.Teleporter;
+import latmod.ftbu.core.Teleporter;
+import latmod.ftbu.core.cmd.*;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 
-public class CmdSpawn extends CmdEnki
+public class CmdSpawn extends CommandLM
 {
 	public CmdSpawn()
-	{ super("spawn"); }
+	{ super("spawn", CommandLevel.ALL); }
 	
 	public String onCommand(ICommandSender ics, String[] args)
 	{
