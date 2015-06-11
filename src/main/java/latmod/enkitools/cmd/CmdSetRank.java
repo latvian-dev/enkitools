@@ -30,7 +30,7 @@ public class CmdSetRank extends CommandLM
 			Rank r = Rank.getRank(args[1]);
 			LMPlayer p = getLMPlayer(args[0]);
 			
-			Rank.setPlayerRank(p.username, r);
+			Rank.setPlayerRank(p.getName(), r);
 			EntityPlayer ep = p.getPlayerMP();
 			
 			if(ep != null)
@@ -39,7 +39,7 @@ public class CmdSetRank extends CommandLM
 					LatCoreMC.printChat(ep, "Your rank is set to " + r.rankID);
 			}
 			
-			return FINE + p.username + " now is " + r.rankID;
+			return FINE + p.getName() + " now is " + r.rankID;
 		}
 		else printHelp(ics);
 		return null;

@@ -210,12 +210,12 @@ public class Rank
 		if(!hasLoaded) { reload(); hasLoaded = true; }
 		
 		if(ep == null) return defRank;
-		Rank r = playerRanks.get(ep.username);
+		Rank r = playerRanks.get(ep.getName());
 		
 		if(r == null)
 		{
 			r = defRank;
-			playerRanks.put(ep.username, r);
+			playerRanks.put(ep.getName(), r);
 			saveRanks();
 			return r;
 		}

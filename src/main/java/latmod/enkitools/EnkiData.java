@@ -13,12 +13,14 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
+import com.mojang.authlib.GameProfile;
+
 public class EnkiData
 {
 	public static final String TAG_MAIL = "Mail";
 	
 	public static final FastMap<Integer, Data> data = new FastMap<Integer, Data>();
-	public static final Data fakePlayerData = new Data(new LMPlayer(-1, new UUID(0L, 0L), "FakePlayer"));
+	public static final Data fakePlayerData = new Data(new LMPlayer(-1, new GameProfile(new UUID(0L, 0L), "FakePlayer")));
 	
 	public static File config;
 	public static File ranks;
@@ -359,10 +361,10 @@ public class EnkiData
 			if(ownerDesc)
 			{
 				String s = desc.length() > 0 ? ("\"" + desc + "\" " + EnumChatFormatting.ITALIC) : "Claimed by ";
-				return s + owner.username;
+				return s + owner.getName();
 			}
 			
-			return EnumChatFormatting.ITALIC + (desc.length() > 0 ? ("\"" + desc + "\"") : "Claimed by " + owner.username);
+			return EnumChatFormatting.ITALIC + (desc.length() > 0 ? ("\"" + desc + "\"") : "Claimed by " + owner.getName());
 		}
 		
 		public void setDesc(String s)
@@ -373,8 +375,11 @@ public class EnkiData
 		
 		public ClaimResult changeChunk(EntityPlayer ep, Claim c, boolean add, boolean admin)
 		{
-			if(EnkiTools.isSpawnChunk(ep.worldObj, c.posX, c.posZ) || EnkiTools.isOutsideWorldBorder(ep.worldObj.provider.dimensionId, c.posX * 16D + 8D, c.posZ * 16D + 8D))
+			if(EnkiTools.isSpawnChunk(ep.worldObj.provider.dimensionId, c.posX, c.posZ))
 				return ClaimResult.SPAWN;
+			
+			if(EnkiTools.isOutsideWorldBorder(ep.worldObj.provider.dimensionId, c.posX, c.posZ))
+				return ClaimResult.WORLD_BORDER;
 			
 			Claim c0 = Claim.getClaim(c.posX, c.posZ, c.dim);
 			
@@ -430,6 +435,7 @@ public class EnkiData
 		SUCCESS,
 		ALREADY_DONE,
 		SPAWN,
+		WORLD_BORDER,
 		NO_POWER,
 		NOT_OWNER,
 	}

@@ -28,9 +28,9 @@ public class CmdListOverride extends CommandLM
 			LMPlayer p = LMPlayer.getPlayer(ep);
 			
 			if(args.length > 0 && args[0].equals("uuids"))
-				LatCoreMC.printChat(ics, p.username + " :: " + ep.getUniqueID());
+				LatCoreMC.printChat(ics, p.getName() + " :: " + ep.getUniqueID());
 			else
-				LatCoreMC.printChat(ics, p.username);
+				LatCoreMC.printChat(ics, p.getName());
 		}
 		
 		return null;

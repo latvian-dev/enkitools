@@ -56,6 +56,8 @@ public class CmdAdmin extends CommandLM
 		}
 		else if(args[0].equals("invsee"))
 		{
+			checkArgs(args, 2);
+			
 			EntityPlayerMP ep0 = getCommandSenderAsPlayer(ics);
 			EntityPlayerMP ep = getPlayer(ics, args[1]);
 			ep0.displayGUIChest(new InvSeeInventory(ep));
@@ -74,6 +76,8 @@ public class CmdAdmin extends CommandLM
 		}
 		else if(args[0].equals("dist"))
 		{
+			checkArgs(args, 2);
+			
 			EntityPlayerMP ep = getCommandSenderAsPlayer(ics);
 			EntityPlayerMP ep1 = getPlayer(ics, args[1]);
 			
@@ -81,6 +85,8 @@ public class CmdAdmin extends CommandLM
 		}
 		else if(args[0].equals("shutdown"))
 		{
+			checkArgs(args, 2);
+			
 			int sec = 60;
 			
 			if(args.length == 2)

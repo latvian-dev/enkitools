@@ -73,17 +73,17 @@ public class EnkiToolsTickHandler
 					
 					if(d.hasMoved(pos))
 					{
-						if(EnkiTools.isOutsideWorldBorder(ep.worldObj.provider.dimensionId, ep.posX, ep.posZ))
+						if(EnkiTools.isOutsideWorldBorderD(ep.worldObj.provider.dimensionId, ep.posX, ep.posZ))
 						{
 							ep.motionX = ep.motionY = ep.motionZ = 0D;
 							LatCoreMC.printChat(ep, "You have reached the world border!");
 							
-							if(EnkiTools.isOutsideWorldBorder(d.last.dim, d.last.pos.x, d.last.pos.z))
+							if(EnkiTools.isOutsideWorldBorderD(d.last.dim, d.last.pos.x, d.last.pos.z))
 							{
 								LatCoreMC.printChat(ep, "Teleporting to spawn!");
 								Vertex spawn = LatCoreMC.getSpawnPoint(0);
 								
-								if(EnkiTools.isOutsideWorldBorder(0, spawn.x, spawn.z))
+								if(EnkiTools.isOutsideWorldBorderD(0, spawn.x, spawn.z))
 								{
 									spawn.x = spawn.z = 0.5D;
 									spawn.y = DimensionManager.getWorld(0).getTopSolidOrLiquidBlock(0, 0);
@@ -140,7 +140,7 @@ public class EnkiToolsTickHandler
 		
 		if(claim == null)
 		{
-			if(EnkiTools.isSpawnChunk(w, x, z))
+			if(EnkiTools.isSpawnChunk(w.provider.dimensionId, x, z))
 				return AQUA + "Spawn area";
 			else
 				return GREEN + "Wilderness";
@@ -163,7 +163,7 @@ public class EnkiToolsTickHandler
 		
 		if(claim == null)
 		{
-			if(EnkiTools.isSpawnChunk(w, x, z))
+			if(EnkiTools.isSpawnChunk(w.provider.dimensionId, x, z))
 				return new Notification(AQUA + "Spawn area", "", new ItemStack(Items.nether_star), t);
 			else
 				return new Notification(DARK_GREEN + "Wilderness", "", new ItemStack(Items.skull, 1, 4), t);
@@ -171,9 +171,9 @@ public class EnkiToolsTickHandler
 		else
 		{
 			if(claim.playerClaims.owner.isFriend(LMPlayer.getPlayer(ep)))
-				return new Notification(GREEN + claim.playerClaims.getRawDesc(), GRAY + claim.playerClaims.owner.username, new ItemStack(Items.skull, 1, 3), t);
+				return new Notification(GREEN + claim.playerClaims.getRawDesc(), GRAY + claim.playerClaims.owner.getName(), new ItemStack(Items.skull, 1, 3), t);
 			else
-				return new Notification(BLUE + claim.playerClaims.getRawDesc(), GRAY + claim.playerClaims.owner.username, new ItemStack(Items.skull, 1, 1), t);
+				return new Notification(BLUE + claim.playerClaims.getRawDesc(), GRAY + claim.playerClaims.owner.getName(), new ItemStack(Items.skull, 1, 1), t);
 		}
 	}
 	

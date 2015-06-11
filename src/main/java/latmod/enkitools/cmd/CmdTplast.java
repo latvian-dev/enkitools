@@ -33,6 +33,6 @@ public class CmdTplast extends CommandLM
 			Teleporter.travelEntity(ep, d.lastPos.pos.x, d.lastPos.pos.y, d.lastPos.pos.z, d.lastPos.dim);
 		}
 		
-		return FINE + "Teleported to " + p.username + "!";
+		return FINE + "Teleported to " + p.getName() + "!";
 	}
 }

@@ -24,7 +24,7 @@ public class CmdGetRank extends CommandLM
 					Rank r = Rank.getPlayerRank(ep);
 					
 					if(r != Rank.getDefaultRank())
-						LatCoreMC.printChat(ics, ep.username + ": " + r.rankID);
+						LatCoreMC.printChat(ics, ep.getName() + ": " + r.rankID);
 				}
 				
 				return null;
@@ -34,7 +34,7 @@ public class CmdGetRank extends CommandLM
 		else
 			ep = getLMPlayer(ics);
 		
-		return FINE + ep.username + " is " + Rank.getPlayerRank(ep).rankID;
+		return FINE + ep.getName() + " is " + Rank.getPlayerRank(ep).rankID;
 	}
 	
 	public NameType getUsername(String[] args, int i)

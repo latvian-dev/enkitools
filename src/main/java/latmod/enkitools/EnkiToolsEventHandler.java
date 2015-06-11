@@ -167,11 +167,11 @@ public class EnkiToolsEventHandler
 	
 	private boolean canInteract(net.minecraftforge.event.entity.player.PlayerInteractEvent e)
 	{
-		if(EnkiTools.isOutsideWorldBorder(e.world.provider.dimensionId, e.x, e.z)) return false;
+		if(EnkiTools.isOutsideWorldBorderD(e.world.provider.dimensionId, e.x, e.z)) return false;
 		
 		if(e.entityPlayer.capabilities.isCreativeMode) return true;
 		
-		if(e.world.provider.dimensionId == 0 && EnkiToolsConfig.get().world.spawnDistance > 0F && EnkiTools.isSpawnChunkD(e.world, e.x, e.z))
+		if(e.world.provider.dimensionId == 0 && EnkiToolsConfig.get().world.spawnDistance > 0F && EnkiTools.isSpawnChunkD(e.world.provider.dimensionId, e.x, e.z))
 		{
 			if(Rank.getConfig(e.entityPlayer, RankConfig.IGNORE_SPAWN).getBool()) return true;
 			
@@ -205,14 +205,14 @@ public class EnkiToolsEventHandler
 	{
 		if(!EnkiToolsConfig.get().world.peacefulSpawn) return;
 		
-		if((e.entity instanceof IMob || (e.entity instanceof EntityChicken && e.entity.riddenByEntity != null)) && EnkiTools.isSpawnChunkD(e.world, e.entity.posX, e.entity.posZ))
+		if((e.entity instanceof IMob || (e.entity instanceof EntityChicken && e.entity.riddenByEntity != null)) && EnkiTools.isSpawnChunkD(e.world.provider.dimensionId, e.entity.posX, e.entity.posZ))
 			e.setCanceled(true);
 	}
 	
 	@SubscribeEvent
 	public void onPlayerAttacked(net.minecraftforge.event.entity.living.LivingAttackEvent e)
 	{
-		if(EnkiToolsConfig.get().world.spawnPVP || !EnkiTools.isSpawnChunkD(e.entity.worldObj, e.entity.posX, e.entity.posZ)) return;
+		if(EnkiToolsConfig.get().world.spawnPVP || !EnkiTools.isSpawnChunkD(e.entity.worldObj.provider.dimensionId, e.entity.posX, e.entity.posZ)) return;
 		
 		if(e.entity instanceof EntityPlayer && e.source instanceof EntityDamageSource)
 		{
@@ -288,8 +288,8 @@ public class EnkiToolsEventHandler
 	@SubscribeEvent
 	public void onExplosion(ExplosionEvent.Start e)
 	{
-		if(EnkiTools.isSpawnChunkD(e.world, e.explosion.explosionX, e.explosion.explosionZ)
-		|| EnkiTools.isOutsideWorldBorder(e.world.provider.dimensionId, e.explosion.explosionX, e.explosion.explosionZ)
+		if(EnkiTools.isSpawnChunkD(e.world.provider.dimensionId, e.explosion.explosionX, e.explosion.explosionZ)
+		|| EnkiTools.isOutsideWorldBorderD(e.world.provider.dimensionId, e.explosion.explosionX, e.explosion.explosionZ)
 		) e.setCanceled(true);
 		else
 		{
