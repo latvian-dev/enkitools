@@ -12,8 +12,6 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public class CmdClaim extends CommandLM
 {
-	private static final String[] notifyTypes() { return new String[] { "off", "screen", "chat" }; }
-	
 	public CmdClaim()
 	{ super("e", CommandLevel.ALL); }
 	
@@ -27,7 +25,6 @@ public class CmdClaim extends CommandLM
 		printHelpLine(ics, "unclaim [radius | all]");
 		printHelpLine(ics, "list");
 		printHelpLine(ics, "desc <none | description...>");
-		printHelpLine(ics, "notify [" + LatCore.unsplit(notifyTypes(), " | ") + "]");
 		printHelpLine(ics, "explosions [true | false]");
 		printHelpLine(ics, "get");
 	}
@@ -35,8 +32,7 @@ public class CmdClaim extends CommandLM
 	public String[] getTabStrings(ICommandSender ics, String args[], int i)
 	{
 		if(i == 0) return new String[]{ "claim", "unclaim", "get", "list", "desc", "notify", "explosions" };
-		if(i == 1 && isArg(args, 0, "notify")) return notifyTypes();
-		if(i == 1 && isArg(args, 0, "noboom")) return new String[]{ "true", "false" };
+		if(i == 1 && isArg(args, 0, "explosions")) return new String[]{ "true", "false" };
 		return super.getTabStrings(ics, args, i);
 	}
 	
@@ -58,22 +54,6 @@ public class CmdClaim extends CommandLM
 		
 		if(args[0].equals("list"))
 			return FINE + "You have claimed " + d.claims.claims.size() + " / " + chStr(d.claims.getMaxPower());
-		else if(args[0].equals("notify"))
-		{
-			String[] nt = notifyTypes();
-			
-			if(args.length == 2)
-			{
-				d.notifications = 0;
-				
-				for(int i = 0; i < nt.length; i++)
-				if(args[1].equals(nt[i]))
-					d.notifications = (byte)i;
-				
-				return FINE + "Notifications set to '" + nt[d.notifications] + "'";
-			}
-			else return FINE + "Notifications: '" + nt[d.notifications] + "'";
-		}
 		else if(args[0].equals("desc"))
 		{
 			if(args.length >= 2)

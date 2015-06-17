@@ -120,8 +120,6 @@ public class EnkiData
 			d.lastPos = new DimPos();
 			d.lastPos.readFromNBT(tag.getCompoundTag("LastPos"));
 		}
-		
-		d.notifications = tag.getByte("Notify");
 	}
 	
 	public static void save(LMPlayer p, NBTTagCompound tag)
@@ -173,8 +171,6 @@ public class EnkiData
 			d.lastPos.writeToNBT(tag1);
 			tag.setTag("LastPos", tag1);
 		}
-		
-		tag.setByte("Notify", (byte)d.notifications);
 	}
 	
 	public static class Data
@@ -184,7 +180,6 @@ public class EnkiData
 		public final PlayerClaims claims;
 		public DimPos lastDeath = null;
 		public DimPos lastPos = null;
-		public int notifications = 1;
 		
 		// Local //
 		public Vertex.DimPos.Rot last;

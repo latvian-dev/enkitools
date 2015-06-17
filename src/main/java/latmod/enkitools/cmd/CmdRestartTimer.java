@@ -1,6 +1,6 @@
 package latmod.enkitools.cmd;
 
-import latmod.enkitools.*;
+import latmod.enkitools.EnkiToolsConfig;
 import latmod.ftbu.core.cmd.*;
 import latmod.ftbu.core.util.LatCore;
 import net.minecraft.command.ICommandSender;

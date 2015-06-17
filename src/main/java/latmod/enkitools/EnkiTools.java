@@ -47,7 +47,6 @@ public class EnkiTools
 		e.registerServerCommand(new CmdHome());
 		e.registerServerCommand(new CmdDelhome());
 		e.registerServerCommand(new CmdRestartTimer());
-		e.registerServerCommand(new CmdAdmin());
 		e.registerServerCommand(new CmdSetRank());
 		e.registerServerCommand(new CmdGetRank());
 		e.registerServerCommand(new CmdClaim());
@@ -92,8 +91,6 @@ public class EnkiTools
 	
 	public static boolean isOutsideWorldBorder(int dim, int cx, int cz)
 	{
-		return false;
-		/*
 		if(!EnkiToolsConfig.get().world.enableWorldBorder) return false;
 		int dist = EnkiToolsConfig.get().world.getWorldBorder(dim);
 		if(dist <= 0) return false;
@@ -102,8 +99,7 @@ public class EnkiTools
 		Vertex c = EnkiToolsConfig.get().world.worldBorderAt0x0 ? worldCenter : LatCoreMC.getSpawnPoint(dim);
 		double x1 = ((int)(c.x / 16D)) * 16D + 8.5D;
 		double z1 = ((int)(c.z / 16D)) * 16D + 8.5D;
-		return MathHelperLM.distSq(x, 0D, z, x1, 0D, z1) <= dist * dist;
-		*/
+		return MathHelperLM.distSq(x, 0D, z, x1, 0D, z1) > dist * dist;
 	}
 	
 	public static boolean isOutsideWorldBorderD(int dim, double x, double z)
