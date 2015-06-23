@@ -29,6 +29,8 @@ public class EnkiToolsEventHandler
 	@SubscribeEvent
 	public void playerLoggedIn(LMPlayerEvent.LoggedIn e)
 	{
+		if(e.side.isClient()) return;
+		
 		Rank.getPlayerRank(e.player);
 		EnkiData.getData(e.player).updatePos(new Vertex.DimPos.Rot(e.playerMP));
 		CmdMotd.printMotd(e.playerMP);
@@ -119,6 +121,8 @@ public class EnkiToolsEventHandler
 	@SubscribeEvent
 	public void playerLoggedOut(LMPlayerEvent.LoggedOut e)
 	{
+		if(e.side.isClient()) return;
+		
 		EnkiData.Data d = EnkiData.getData(e.player);
 		d.lastPos = new Vertex.DimPos(e.playerMP);
 	}
@@ -301,19 +305,20 @@ public class EnkiToolsEventHandler
 	}
 	
 	@SubscribeEvent
-	public void onReload(ReloadEvent r)
+	public void onReload(ReloadEvent e)
 	{
-		if(r.side.isServer())
-		{
-			EnkiToolsConfig.loadConfig();
-			EnkiToolsTickHandler.instance.resetTimer(true);
-			Rank.reload();
-		}
+		if(e.side.isClient()) return;
+		
+		EnkiToolsConfig.loadConfig();
+		//FIXME: EnkiToolsTickHandler.instance.resetTimer(true);
+		Rank.reload();
 	}
 	
 	@SubscribeEvent
 	public void customInfo(LMPlayerEvent.CustomInfo e)
 	{
+		if(e.side.isClient()) return;
+		
 		Rank r = Rank.getPlayerRank(e.player);
 		e.info.add("Rank: " + r.getColor() + r.rankID);
 	}

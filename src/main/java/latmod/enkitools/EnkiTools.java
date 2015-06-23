@@ -1,8 +1,12 @@
 package latmod.enkitools;
 
+import java.lang.reflect.Field;
+
 import latmod.enkitools.cmd.*;
 import latmod.ftbu.core.*;
-import latmod.ftbu.core.util.*;
+import latmod.ftbu.core.util.MathHelperLM;
+import net.minecraft.server.management.ServerConfigurationManager;
+import net.minecraft.util.ChunkCoordinates;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.*;
 
@@ -25,7 +29,6 @@ public class EnkiTools
 		EnkiToolsConfig.loadConfig();
 		
 		LatCoreMC.addEventHandler(EnkiToolsEventHandler.instance, true, false, true);
-		LatCoreMC.addEventHandler(EnkiToolsTickHandler.instance, false, true, false);
 	}
 	
 	@Mod.EventHandler
@@ -62,17 +65,17 @@ public class EnkiTools
 			e.registerServerCommand(new CmdGamemodeOverride());
 			e.registerServerCommand(new CmdGameruleOverride());
 		}
+		
+		try
+		{
+			Field f = ServerConfigurationManager.class.getField("commandsAllowedForAll");
+			f.set(LatCoreMC.getServer().getConfigurationManager(), true);
+		}
+		catch(Exception ex)
+		{ ex.printStackTrace(); }
 	}
 	
-	@Mod.EventHandler
-	public void serverStarted(FMLServerStartedEvent e)
-	{ EnkiToolsTickHandler.instance.resetTimer(true); }
-	
-	@Mod.EventHandler
-	public void serverStopped(FMLServerStoppedEvent e)
-	{ EnkiToolsTickHandler.instance.resetTimer(false); }
-	
-	public static final Vertex worldCenter = new Vertex(0.5D, 65.5D, 0.5D);
+	public static final ChunkCoordinates worldCenter = new ChunkCoordinates(0, 0, 0);
 	
 	public static boolean isSpawnChunk(int dim, int cx, int cz)
 	{
@@ -80,9 +83,9 @@ public class EnkiTools
 		double x = cx * 16D + 8.5D;
 		double z = cz * 16D + 8.5D;
 		int dist = EnkiToolsConfig.get().world.spawnDistance;
-		Vertex c = LatCoreMC.getSpawnPoint(dim);
-		double x1 = ((int)(c.x / 16D)) * 16D + 8.5D;
-		double z1 = ((int)(c.z / 16D)) * 16D + 8.5D;
+		ChunkCoordinates c = LatCoreMC.getSpawnPoint(dim);
+		double x1 = MathHelperLM.chunk(c.posX) * 16D + 8.5D;
+		double z1 = MathHelperLM.chunk(c.posZ) * 16D + 8.5D;
 		return MathHelperLM.distSq(x, 0D, z, x1, 0D, z1) <= dist * dist;
 	}
 	
@@ -96,9 +99,9 @@ public class EnkiTools
 		if(dist <= 0) return false;
 		double x = cx * 16D + 8.5D;
 		double z = cz * 16D + 8.5D;
-		Vertex c = EnkiToolsConfig.get().world.worldBorderAt0x0 ? worldCenter : LatCoreMC.getSpawnPoint(dim);
-		double x1 = ((int)(c.x / 16D)) * 16D + 8.5D;
-		double z1 = ((int)(c.z / 16D)) * 16D + 8.5D;
+		ChunkCoordinates c = EnkiToolsConfig.get().world.worldBorderAt0x0 ? worldCenter : LatCoreMC.getSpawnPoint(dim);
+		double x1 = MathHelperLM.chunk(c.posX) * 16D + 8.5D;
+		double z1 = MathHelperLM.chunk(c.posZ) * 16D + 8.5D;
 		return MathHelperLM.distSq(x, 0D, z, x1, 0D, z1) > dist * dist;
 	}
 	

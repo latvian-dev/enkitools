@@ -188,7 +188,7 @@ public class Rank
 		saveRanks();
 		
 		LMPlayer p = LMPlayer.getPlayer(s);
-		if(p != null) p.updateInfo(null);
+		if(p != null) p.sendInfo(null);
 	}
 	
 	public static void saveRanks()

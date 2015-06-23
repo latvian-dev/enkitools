@@ -368,7 +368,7 @@ public class EnkiData
 		public String getRawDesc()
 		{ return desc.isEmpty() ? "Claimed area" : desc; }
 		
-		public ClaimResult changeChunk(EntityPlayer ep, Claim c, boolean add, boolean admin)
+		public ClaimResult changeChunk(EntityPlayerMP ep, Claim c, boolean add, boolean admin)
 		{
 			if(EnkiTools.isSpawnChunk(ep.worldObj.provider.dimensionId, c.posX, c.posZ))
 				return ClaimResult.SPAWN;
@@ -391,7 +391,7 @@ public class EnkiData
 				else
 				{
 					claims.add(c);
-					owner.updateInfo(null);
+					owner.sendInfo(null);
 					return ClaimResult.SUCCESS;
 				}
 			}
@@ -400,7 +400,7 @@ public class EnkiData
 				if(claims.contains(c))
 				{
 					claims.remove(c);
-					owner.updateInfo(null);
+					owner.sendInfo(null);
 					return ClaimResult.SUCCESS;
 				}
 				else

@@ -8,7 +8,7 @@ import latmod.enkitools.EnkiData.ClaimResult;
 import latmod.ftbu.core.cmd.*;
 import latmod.ftbu.core.util.*;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 
 public class CmdClaim extends CommandLM
 {
@@ -42,7 +42,7 @@ public class CmdClaim extends CommandLM
 	
 	public String onCommand(ICommandSender ics, String[] args)
 	{
-		EntityPlayer ep = getCommandSenderAsPlayer(ics);
+		EntityPlayerMP ep = getCommandSenderAsPlayer(ics);
 		
 		if(args.length == 0)
 		{
@@ -188,7 +188,7 @@ public class CmdClaim extends CommandLM
 				}
 			}
 			else if(args[0].equals("get"))
-				return FINE + EnkiToolsTickHandler.instance.getChunkStatusMessage(ep.worldObj, MathHelperLM.chunk(ep.posX), MathHelperLM.chunk(ep.posZ), ep, true);
+				;//FIXME: return FINE + EnkiToolsTickHandler.instance.getChunkStatusMessage(ep.worldObj, MathHelperLM.chunk(ep.posX), MathHelperLM.chunk(ep.posZ), ep, true);
 		}
 		
 		return null;
