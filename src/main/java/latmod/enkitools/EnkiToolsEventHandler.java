@@ -1,18 +1,15 @@
 package latmod.enkitools;
 
-import latmod.enkitools.EnkiData.Home;
-import latmod.enkitools.cmd.CmdMotd;
 import latmod.enkitools.rank.*;
 import latmod.ftbu.core.*;
 import latmod.ftbu.core.event.*;
-import latmod.ftbu.core.util.*;
+import latmod.ftbu.core.util.LatCore;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.player.*;
 import net.minecraft.event.*;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.*;
 import net.minecraft.util.*;
@@ -32,15 +29,6 @@ public class EnkiToolsEventHandler
 		if(e.side.isClient()) return;
 		
 		Rank.getPlayerRank(e.player);
-		EnkiData.getData(e.player).updatePos(new Vertex.DimPos.Rot(e.playerMP));
-		CmdMotd.printMotd(e.playerMP);
-		
-		if(e.firstTime && EnkiToolsConfig.get() != null && EnkiToolsConfig.get().login != null)
-		{
-			FastList<ItemStack> items = EnkiToolsConfig.get().login.startingInvI;
-			if(items != null && !items.isEmpty()) for(ItemStack is : items)
-				InvUtils.giveItem(e.playerMP, is);
-		}
 	}
 	
 	@SubscribeEvent
@@ -67,21 +55,6 @@ public class EnkiToolsEventHandler
 						EnkiData.load(p, tag1.getCompoundTag("" + p.playerID));
 					}
 				}
-				
-				{
-					NBTTagCompound tag1 = (NBTTagCompound)tag.getTag("Warps");
-					
-					if(tag1 != null && !tag1.hasNoTags())
-					{
-						FastList<String> l = NBTHelper.getMapKeys(tag1);
-						
-						for(int i = 0; i < l.size(); i++)
-						{
-							int[] a = tag1.getIntArray(l.get(i));
-							EnkiData.Warps.setWarp(l.get(i), a[0], a[1], a[2], a[3]);
-						}
-					}
-				}
 			}
 		}
 	}
@@ -103,28 +76,7 @@ public class EnkiToolsEventHandler
 		
 		tag.setTag("Players", players);
 		
-		{
-			NBTTagCompound tag1 = new NBTTagCompound();
-			
-			for(int i = 0; i < EnkiData.Warps.warps.size(); i++)
-			{
-				Home h1 = EnkiData.Warps.warps.get(i);
-				tag1.setIntArray(h1.name, new int[] { h1.x, h1.y, h1.z, h1.dim });
-			}
-			
-			tag.setTag("Warps", tag1);
-		}
-		
 		NBTHelper.writeMap(e.getFile("EnkiMods.dat"), tag);
-	}
-	
-	@SubscribeEvent
-	public void playerLoggedOut(LMPlayerEvent.LoggedOut e)
-	{
-		if(e.side.isClient()) return;
-		
-		EnkiData.Data d = EnkiData.getData(e.player);
-		d.lastPos = new Vertex.DimPos(e.playerMP);
 	}
 	
 	@SubscribeEvent
@@ -134,7 +86,8 @@ public class EnkiToolsEventHandler
 		{
 			LMPlayer p = LMPlayer.getPlayer(e.entity);
 			EnkiData.Data d = EnkiData.getData(p);
-			d.lastDeath = new Vertex.DimPos(e.entity);
+			if(d.lastDeath == null) d.lastDeath = new EntityPos();
+			d.lastDeath.set(e.entity);
 		}
 	}
 	

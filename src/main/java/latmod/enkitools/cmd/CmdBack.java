@@ -1,7 +1,7 @@
 package latmod.enkitools.cmd;
 
 import latmod.enkitools.EnkiData;
-import latmod.ftbu.core.LMPlayer;
+import latmod.ftbu.core.*;
 import latmod.ftbu.core.cmd.*;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -17,8 +17,7 @@ public class CmdBack extends CommandLM
 		LMPlayer p = LMPlayer.getPlayer(ep);
 		EnkiData.Data d = EnkiData.getData(p);
 		if(d.lastDeath == null) return "No deathpoint found!";
-		if(d.lastDeath.dim != ep.worldObj.provider.dimensionId) return "You can't teleport to another dimension!";
-		else ep.playerNetServerHandler.setPlayerLocation(d.lastDeath.pos.x, d.lastDeath.pos.y, d.lastDeath.pos.z, 0F, 0F);
+		Teleporter.travelEntity(ep, d.lastDeath);
 		return null;
 	}
 }

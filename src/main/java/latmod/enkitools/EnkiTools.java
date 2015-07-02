@@ -43,21 +43,15 @@ public class EnkiTools
 	{
 		e.registerServerCommand(new CmdNear());
 		e.registerServerCommand(new CmdVanish());
-		e.registerServerCommand(new CmdMotd());
-		e.registerServerCommand(new CmdRules());
-		e.registerServerCommand(new CmdSpawn());
 		e.registerServerCommand(new CmdSethome());
 		e.registerServerCommand(new CmdHome());
 		e.registerServerCommand(new CmdDelhome());
-		e.registerServerCommand(new CmdRestartTimer());
 		e.registerServerCommand(new CmdSetRank());
 		e.registerServerCommand(new CmdGetRank());
 		e.registerServerCommand(new CmdClaim());
 		e.registerServerCommand(new CmdBack());
 		e.registerServerCommand(new CmdHead());
 		e.registerServerCommand(new CmdTop());
-		e.registerServerCommand(new CmdTplast());
-		e.registerServerCommand(new CmdWarp());
 		
 		if(EnkiToolsConfig.get().general.overrideCommands)
 		{

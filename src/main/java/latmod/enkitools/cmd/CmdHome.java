@@ -34,7 +34,7 @@ public class CmdHome extends CommandLM
 		
 		String name = args.length == 1 ? args[0] : "Default";
 		
-		EnkiData.Home h1 = h.getHome(name);
+		LMWorld.Warp h1 = h.getHome(name);
 		
 		if(h1 == null) return "Home '" + name + "' not set!";
 		

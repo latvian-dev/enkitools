@@ -6,7 +6,6 @@ import java.util.UUID;
 import latmod.enkitools.rank.*;
 import latmod.ftbu.core.*;
 import latmod.ftbu.core.util.*;
-import latmod.ftbu.core.util.Vertex.DimPos;
 import net.minecraft.entity.player.*;
 import net.minecraft.nbt.*;
 import net.minecraft.util.EnumChatFormatting;
@@ -63,7 +62,6 @@ public class EnkiData
 	
 	public static void clearData()
 	{
-		EnkiData.Warps.warps.clear();
 	}
 	
 	public static void load(LMPlayer p, NBTTagCompound tag)
@@ -109,16 +107,8 @@ public class EnkiData
 		
 		if(tag.hasKey("LastDeath"))
 		{
-			d.lastDeath = new DimPos();
+			d.lastDeath = new EntityPos();
 			d.lastDeath.readFromNBT(tag.getCompoundTag("LastDeath"));
-		}
-		
-		d.lastPos = null;
-		
-		if(tag.hasKey("LastPos"))
-		{
-			d.lastPos = new DimPos();
-			d.lastPos.readFromNBT(tag.getCompoundTag("LastPos"));
 		}
 	}
 	
@@ -132,7 +122,7 @@ public class EnkiData
 			
 			for(int i = 0; i < d.homes.size(); i++)
 			{
-				Home h1 = d.homes.get(i);
+				LMWorld.Warp h1 = d.homes.get(i);
 				tag1.setIntArray(h1.name, new int[] { h1.x, h1.y, h1.z, h1.dim });
 			}
 			
@@ -164,31 +154,22 @@ public class EnkiData
 			d.lastDeath.writeToNBT(tag1);
 			tag.setTag("LastDeath", tag1);
 		}
-		
-		if(d.lastPos != null)
-		{
-			NBTTagCompound tag1 = new NBTTagCompound();
-			d.lastPos.writeToNBT(tag1);
-			tag.setTag("LastPos", tag1);
-		}
 	}
 	
 	public static class Data
 	{
 		public final LMPlayer player;
-		private final FastList<Home> homes;
+		private final FastList<LMWorld.Warp> homes;
 		public final PlayerClaims claims;
-		public DimPos lastDeath = null;
-		public DimPos lastPos = null;
+		public EntityPos lastDeath = null;
 		
 		// Local //
-		public Vertex.DimPos.Rot last;
 		public Notification lastChunkMessage = new Notification("", "", null);
 		
 		private Data(LMPlayer p)
 		{
 			player = p;
-			homes = new FastList<Home>();
+			homes = new FastList<LMWorld.Warp>();
 			claims = new PlayerClaims(player);
 		}
 		
@@ -203,18 +184,18 @@ public class EnkiData
 		public String[] listHomesNoDef()
 		{
 			FastList<String> list = new FastList<String>();
-			for(Home h : homes) if(!h.name.equals("Default")) list.add(h.name);
+			for(LMWorld.Warp h : homes) if(!h.name.equals("Default")) list.add(h.name);
 			return list.toArray(new String[0]);
 		}
 		
-		public Home getHome(String s)
+		public LMWorld.Warp getHome(String s)
 		{ return homes.getObj(s); }
 		
 		public boolean setHome(String s, int x, int y, int z, int dim)
 		{
 			int i = homes.indexOf(s);
-			if(i == -1) { homes.add(new Home(s, x, y, z, dim)); return true; }
-			else { homes.set(i, new Home(s, x, y, z, dim)); return false; }
+			if(i == -1) { homes.add(new LMWorld.Warp(s, x, y, z, dim)); return true; }
+			else { homes.set(i, new LMWorld.Warp(s, x, y, z, dim)); return false; }
 		}
 		
 		public boolean remHome(String s)
@@ -222,57 +203,6 @@ public class EnkiData
 		
 		public int homesSize()
 		{ return homes.size(); }
-		
-		public boolean hasMoved(Vertex.DimPos.Rot pos)
-		{ return !last.equals(pos); }
-		
-		public void updatePos(Vertex.DimPos.Rot pos)
-		{ last = pos; }
-	}
-	
-	public static class Warps
-	{
-		public static final FastList<Home> warps = new FastList<Home>();
-		
-		public static String[] listWarps()
-		{
-			String[] s = new String[warps.size()];
-			for(int i = 0; i < s.length; i++)
-				s[i] = warps.get(i).name;
-			return s;
-		}
-		
-		public static Home getWarp(String s)
-		{ return warps.getObj(s); }
-		
-		public static boolean setWarp(String s, int x, int y, int z, int dim)
-		{
-			int i = warps.indexOf(s);
-			if(i == -1) { warps.add(new Home(s, x, y, z, dim)); return true; }
-			else { warps.set(i, new Home(s, x, y, z, dim)); return false; }
-		}
-		
-		public static boolean remWarp(String s)
-		{ return warps.remove(s); }
-	}
-	
-	public static class Home
-	{
-		public String name;
-		public int x, y, z;
-		public int dim;
-		
-		public Home(String s, int px, int py, int pz, int d)
-		{ name = s; x = px; y = py; z = pz; dim = d; }
-		
-		public String toString()
-		{ return name; }
-		
-		public boolean equals(Object o)
-		{ return o != null && (o == this || o.toString().equals(toString())); }
-		
-		public void teleportPlayer(EntityPlayerMP ep)
-		{ Teleporter.travelEntity(ep, x + 0.5D, y + 0.5D, z + 0.5D, dim); }
 	}
 	
 	public static class Claim
@@ -331,7 +261,7 @@ public class EnkiData
 			if(c1 == null && c2 == null) return true;
 			if(c1 != null && c2 == null) return false;
 			if(c1 == null && c2 != null) return false;
-			return c1.object1.owner.equals(c2.object1.owner);
+			return c1.object1.owner.equalsPlayer(c2.object1.owner);
 		}
 	}
 	
@@ -413,7 +343,7 @@ public class EnkiData
 			if(o == null) return false;
 			if(o == this) return true;
 			if(o instanceof UUID) return o.equals(owner);
-			if(o instanceof PlayerClaims) return ((PlayerClaims)o).owner.equals(owner);
+			if(o instanceof PlayerClaims) return ((PlayerClaims)o).owner.equalsPlayer(owner);
 			return false;
 		}
 		
