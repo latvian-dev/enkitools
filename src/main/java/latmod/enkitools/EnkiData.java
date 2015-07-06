@@ -121,10 +121,7 @@ public class EnkiData
 			NBTTagCompound tag1 = new NBTTagCompound();
 			
 			for(int i = 0; i < d.homes.size(); i++)
-			{
-				LMWorld.Warp h1 = d.homes.get(i);
-				tag1.setIntArray(h1.name, new int[] { h1.x, h1.y, h1.z, h1.dim });
-			}
+				tag1.setIntArray(d.homes.keys.get(i), d.homes.values.get(i).toIntArray());
 			
 			tag.setTag("Homes", tag1);
 		}
@@ -159,200 +156,35 @@ public class EnkiData
 	public static class Data
 	{
 		public final LMPlayer player;
-		private final FastList<LMWorld.Warp> homes;
-		public final PlayerClaims claims;
-		public EntityPos lastDeath = null;
-		
-		// Local //
-		public Notification lastChunkMessage = new Notification("", "", null);
+		private final FastMap<String, EntityPos> homes;
 		
 		private Data(LMPlayer p)
 		{
 			player = p;
-			homes = new FastList<LMWorld.Warp>();
-			claims = new PlayerClaims(player);
+			homes = new FastMap<String, EntityPos>();
 		}
 		
 		public String[] listHomes()
-		{
-			String[] s = new String[homes.size()];
-			for(int i = 0; i < s.length; i++)
-				s[i] = homes.get(i).name;
-			return s;
-		}
+		{ return homes.keys.toArray(new String[0]); }
 		
 		public String[] listHomesNoDef()
 		{
-			FastList<String> list = new FastList<String>();
-			for(LMWorld.Warp h : homes) if(!h.name.equals("Default")) list.add(h.name);
+			FastList<String> list = homes.keys.clone();
+			list.remove("Default");
 			return list.toArray(new String[0]);
 		}
 		
-		public LMWorld.Warp getHome(String s)
-		{ return homes.getObj(s); }
+		public EntityPos getHome(String s)
+		{ return homes.get(s); }
 		
 		public boolean setHome(String s, int x, int y, int z, int dim)
-		{
-			int i = homes.indexOf(s);
-			if(i == -1) { homes.add(new LMWorld.Warp(s, x, y, z, dim)); return true; }
-			else { homes.set(i, new LMWorld.Warp(s, x, y, z, dim)); return false; }
-		}
+		{ return homes.put(s, new EntityPos(x + 0.5D, y + 0.5D, z + 0.5D, dim)); }
 		
 		public boolean remHome(String s)
 		{ return homes.remove(s); }
 		
 		public int homesSize()
 		{ return homes.size(); }
-	}
-	
-	public static class Claim
-	{
-		public final PlayerClaims playerClaims;
-		public final int posX;
-		public final int posZ;
-		public final int dim;
-		
-		public Claim(PlayerClaims p, int x, int z, int d)
-		{ playerClaims = p; posX = x; posZ = z; dim = d; }
-		
-		public Claim(PlayerClaims p, EntityPlayer ep)
-		{ this(p, MathHelperLM.chunk(ep.posX), MathHelperLM.chunk(ep.posZ), ep.dimension); }
-		
-		public boolean equals(Object o)
-		{ return (o != null && o instanceof Claim) ? equalsClaim((Claim)o) : null; }
-		
-		public boolean equalsClaim(Claim c)
-		{ return dim == c.dim && posX == c.posX && posZ == c.posZ; }
-		
-		public Chunk getChunk(World w)
-		{ return w.getChunkFromChunkCoords(posX, posZ); }
-		
-		public double getDistSq(double x, double z)
-		{
-			double x0 = (posX + 0.5D) * 16D;
-			double z0 = (posZ + 0.5D) * 16D;
-			return MathHelperLM.distSq(x0, 0D, z0, x, 0D, z);
-		}
-		
-		public double getDistSq(Claim c)
-		{ return getDistSq((c.posX + 0.5D) * 16D, (c.posZ + 0.5D) * 16D); }
-		
-		// Static //
-		
-		public static Claim getClaim(int cx, int cz, int dim)
-		{
-			for(Data d : data)
-			{
-				for(Claim c : d.claims.claims)
-				{
-					if(c.dim == dim && c.posX == cx && c.posZ == cz)
-						return c;
-				}
-			}
-			
-			return null;
-		}
-		
-		public static Claim getClaimD(double x, double z, int dim)
-		{ return getClaim(MathHelperLM.chunk(x), MathHelperLM.chunk(z), dim); }
-		
-		public static boolean claimsEquals(TwoObjects<PlayerClaims, Claim> c1, TwoObjects<PlayerClaims, Claim> c2)
-		{
-			if(c1 == null && c2 == null) return true;
-			if(c1 != null && c2 == null) return false;
-			if(c1 == null && c2 != null) return false;
-			return c1.object1.owner.equalsPlayer(c2.object1.owner);
-		}
-	}
-	
-	public static class PlayerClaims
-	{
-		public final LMPlayer owner;
-		public final FastList<Claim> claims;
-		private String desc = "";
-		public boolean canExplode = true;
-		
-		public PlayerClaims(LMPlayer p)
-		{
-			owner = p;
-			claims = new FastList<Claim>();
-		}
-		
-		public int getMaxPower()
-		{ return Rank.getConfig(owner, RankConfig.MAX_CLAIM_POWER).getInt(); }
-		
-		public String getDesc(boolean ownerDesc)
-		{
-			if(ownerDesc)
-			{
-				String s = desc.length() > 0 ? ("\"" + desc + "\" " + EnumChatFormatting.ITALIC) : "Claimed by ";
-				return s + owner.getName();
-			}
-			
-			return EnumChatFormatting.ITALIC + (desc.length() > 0 ? ("\"" + desc + "\"") : "Claimed by " + owner.getName());
-		}
-		
-		public void setDesc(String s)
-		{ desc = (s == null) ? "" : s; }
-		
-		public String getRawDesc()
-		{ return desc.isEmpty() ? "Claimed area" : desc; }
-		
-		public ClaimResult changeChunk(EntityPlayerMP ep, Claim c, boolean add, boolean admin)
-		{
-			if(EnkiTools.isSpawnChunk(ep.worldObj.provider.dimensionId, c.posX, c.posZ))
-				return ClaimResult.SPAWN;
-			
-			if(EnkiTools.isOutsideWorldBorder(ep.worldObj.provider.dimensionId, c.posX, c.posZ))
-				return ClaimResult.WORLD_BORDER;
-			
-			Claim c0 = Claim.getClaim(c.posX, c.posZ, c.dim);
-			
-			if(!admin && c0 != null && !c0.playerClaims.owner.equals(ep.getUniqueID()))
-				return ClaimResult.NOT_OWNER;
-			
-			if(add && !admin)
-			{
-				if(claims.size() >= getMaxPower())
-					return ClaimResult.NO_POWER;
-				
-				if(claims.contains(c))
-					return ClaimResult.ALREADY_DONE;
-				else
-				{
-					claims.add(c);
-					owner.sendInfo(null);
-					return ClaimResult.SUCCESS;
-				}
-			}
-			else
-			{
-				if(claims.contains(c))
-				{
-					claims.remove(c);
-					owner.sendInfo(null);
-					return ClaimResult.SUCCESS;
-				}
-				else
-					return ClaimResult.ALREADY_DONE;
-			}
-		}
-		
-		public boolean equals(Object o)
-		{
-			if(o == null) return false;
-			if(o == this) return true;
-			if(o instanceof UUID) return o.equals(owner);
-			if(o instanceof PlayerClaims) return ((PlayerClaims)o).owner.equalsPlayer(owner);
-			return false;
-		}
-		
-		public String toString()
-		{ return LatCoreMC.removeFormatting(getDesc(true) + ", " + claims.size() + " / " + getMaxPower()); }
-	}
-	
-	public static class AdminClaims
-	{
 	}
 	
 	public static enum ClaimResult

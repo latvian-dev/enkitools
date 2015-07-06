@@ -41,17 +41,13 @@ public class EnkiTools
 	@Mod.EventHandler
 	public void serverStarting(FMLServerStartingEvent e)
 	{
-		e.registerServerCommand(new CmdNear());
-		e.registerServerCommand(new CmdVanish());
 		e.registerServerCommand(new CmdSethome());
 		e.registerServerCommand(new CmdHome());
 		e.registerServerCommand(new CmdDelhome());
 		e.registerServerCommand(new CmdSetRank());
 		e.registerServerCommand(new CmdGetRank());
 		e.registerServerCommand(new CmdClaim());
-		e.registerServerCommand(new CmdBack());
 		e.registerServerCommand(new CmdHead());
-		e.registerServerCommand(new CmdTop());
 		
 		if(EnkiToolsConfig.get().general.overrideCommands)
 		{

@@ -34,14 +34,14 @@ public class CmdHome extends CommandLM
 		
 		String name = args.length == 1 ? args[0] : "Default";
 		
-		LMWorld.Warp h1 = h.getHome(name);
+		EntityPos pos = h.getHome(name);
 		
-		if(h1 == null) return "Home '" + name + "' not set!";
+		if(pos == null) return "Home '" + name + "' not set!";
 		
-		if(ep.worldObj.provider.dimensionId != h1.dim && !EnkiToolsConfig.get().general.crossDimHomes)
+		if(ep.worldObj.provider.dimensionId != pos.dim && !EnkiToolsConfig.get().general.crossDimHomes)
 			return "You can't teleport to another dimension!";
 		
-		h1.teleportPlayer(ep);
+		Teleporter.teleportPlayer(ep, pos);
 		
 		if(name.equals("Default")) return FINE + "Teleported to home";
 		else return FINE + "Teleported to '" + name + "'";
