@@ -2,11 +2,10 @@ package latmod.enkitools.cmd;
 
 import latmod.enkitools.EnkiData;
 import latmod.enkitools.rank.*;
-import latmod.ftbu.core.*;
+import latmod.ftbu.core.LatCoreMC;
 import latmod.ftbu.core.cmd.*;
+import latmod.ftbu.core.world.LMPlayerServer;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.ChunkCoordinates;
 
 public class CmdSethome extends CommandLM
 {
@@ -18,19 +17,16 @@ public class CmdSethome extends CommandLM
 	
 	public String onCommand(ICommandSender ics, String[] args)
 	{
-		EntityPlayerMP ep = getCommandSenderAsPlayer(ics);
-		LMPlayer p = LMPlayer.getPlayer(ep);
-		EnkiData.Data h = EnkiData.getData(p);
-		ChunkCoordinates c = ep.getPlayerCoordinates();
+		LMPlayerServer p = getLMPlayer(ics);
 		
-		int maxHomes = Rank.getConfig(ep, RankConfig.MAX_HOME_COUNT).getInt();
-		if(maxHomes <= 0 || h.homesSize() >= maxHomes)
+		int maxHomes = Rank.getConfig(p, RankConfig.MAX_HOME_COUNT).getInt();
+		if(maxHomes <= 0 || EnkiData.Homes.homesSize(p) >= maxHomes)
 			return "You can't set any more home locations!";
 		
-		String name = args.length == 1 ? args[0] : "Default";
-		h.setHome(name, c.posX, c.posY, c.posZ, ep.worldObj.provider.dimensionId);
+		String name = args.length == 1 ? args[0] : EnkiData.Homes.DEF;
+		EnkiData.Homes.setHome(p, name, p.getLastPos());
 		
-		if(name.equals("Default"))
+		if(name.equals(EnkiData.Homes.DEF))
 			return FINE + "Home set!";
 		else
 			return FINE + "Home '" + name + "' set!";

@@ -3,8 +3,10 @@ package latmod.enkitools.rank;
 import java.util.*;
 
 import latmod.enkitools.*;
-import latmod.ftbu.core.*;
+import latmod.ftbu.core.LatCoreMC;
+import latmod.ftbu.core.net.MessageLM;
 import latmod.ftbu.core.util.*;
+import latmod.ftbu.core.world.*;
 import net.minecraft.util.EnumChatFormatting;
 
 import com.google.gson.annotations.Expose;
@@ -100,7 +102,7 @@ public class Rank
 	
 	private static Rank defRank = null;
 	private static final FastMap<String, Rank> ranks = new FastMap<String, Rank>();
-	private static final FastMap<String, Rank> playerRanks = new FastMap<String, Rank>();
+	private static final FastMap<LMPlayerServer, Rank> playerRanks = new FastMap<LMPlayerServer, Rank>();
 	
 	public static void reload()
 	{
@@ -116,7 +118,7 @@ public class Rank
 			
 			LatCore.toJsonFile(EnkiData.ranks, ranksFile);
 		}
-		else ranksFile = LatCore.fromJsonFromFile(EnkiData.ranks, RanksFile.class);
+		else ranksFile = LatCore.fromJsonFile(EnkiData.ranks, RanksFile.class);
 		
 		ranks.clear();
 		
@@ -147,48 +149,38 @@ public class Rank
 		
 		playerRanks.clear();
 		
-		if(!EnkiData.players.exists())
+		try
 		{
-			EnkiData.players = LatCore.newFile(EnkiData.players);
-			setRawRank("LatvianModder", "Admin");
-			setRawRank("tfox83", "VIP");
-			saveRanks();
-		}
-		else
-		{
-			try
+			FastList<String> al = LatCore.loadFile(EnkiData.players);
+			
+			if(al != null && al.size() > 0)
 			{
-				FastList<String> al = LatCore.loadFile(EnkiData.players);
-				
-				if(al != null && al.size() > 0)
+				for(int i = 0; i < al.size(); i++)
 				{
-					for(int i = 0; i < al.size(); i++)
-					{
-						String[] s = al.get(i).split(": ");
-						
-						if(s != null && s.length == 2)
-							setRawRank(s[0], s[1]);
-					}
+					String[] s = al.get(i).split(": ");
+					
+					if(s != null && s.length >= 2)
+						setRawRank(LMWorld.server.getPlayer(s[0]), Rank.getRank(s[1]));
 				}
 			}
-			catch(Exception e)
-			{ e.printStackTrace(); }
 		}
-	}
-	
-	private static void setRawRank(String s, String s1)
-	{
-		Rank r = Rank.getRank(s1);
-		if(r != null) playerRanks.put(s, r);
-	}
-	
-	public static void setPlayerRank(String s, Rank r)
-	{
-		playerRanks.put(s, (r == null) ? defRank : r);
-		saveRanks();
+		catch(Exception e)
+		{ e.printStackTrace(); }
 		
-		LMPlayer p = LMPlayer.getPlayer(s);
-		if(p != null) p.sendInfo(null);
+		saveRanks();
+	}
+	
+	private static void setRawRank(LMPlayerServer p, Rank r)
+	{
+		if(p == null) return;
+		playerRanks.put(p, (r == null) ? defRank : r);
+	}
+	
+	public static void setPlayerRank(LMPlayerServer p, Rank r)
+	{
+		setRawRank(p, r);
+		saveRanks();
+		if(p != null) MessageLM.sendTo(null, p.getInfo());
 	}
 	
 	public static void saveRanks()
@@ -196,7 +188,7 @@ public class Rank
 		FastList<String> al = new FastList<String>();
 		
 		for(int i = 0; i < playerRanks.size(); i++)
-			al.add(playerRanks.keys.get(i) + ": " + playerRanks.values.get(i));
+			al.add(playerRanks.keys.get(i).uuidString + ": " + playerRanks.values.get(i));
 		
 		al.sort(null);
 		
@@ -205,17 +197,17 @@ public class Rank
 	}
 	
 	private static boolean hasLoaded = false;
-	public static Rank getPlayerRank(LMPlayer ep)
+	public static Rank getPlayerRank(LMPlayerServer p)
 	{
 		if(!hasLoaded) { reload(); hasLoaded = true; }
 		
-		if(ep == null) return defRank;
-		Rank r = playerRanks.get(ep.getName());
+		if(p == null) return defRank;
+		Rank r = playerRanks.get(p.getUUID());
 		
 		if(r == null)
 		{
 			r = defRank;
-			playerRanks.put(ep.getName(), r);
+			playerRanks.put(p, r);
 			saveRanks();
 			return r;
 		}
@@ -234,7 +226,7 @@ public class Rank
 	}
 	
 	public static RankConfig.Inst getConfig(Object o, RankConfig c)
-	{ Rank r = getPlayerRank(LMPlayer.getPlayer(o)); return r.getConfig(c); }
+	{ return getPlayerRank(LMWorld.server.getPlayer(o)).getConfig(c); }
 	
 	public void setConfig(RankConfig c, String val)
 	{

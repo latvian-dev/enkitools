@@ -3,7 +3,8 @@ package latmod.enkitools.cmd;
 import latmod.enkitools.*;
 import latmod.ftbu.core.*;
 import latmod.ftbu.core.cmd.*;
-import net.minecraft.command.ICommandSender;
+import latmod.ftbu.core.world.LMPlayerServer;
+import net.minecraft.command.*;
 import net.minecraft.entity.player.EntityPlayerMP;
 
 public class CmdHome extends CommandLM
@@ -16,34 +17,28 @@ public class CmdHome extends CommandLM
 	
 	public String[] getTabStrings(ICommandSender ics, String[] args, int i)
 	{
-		if(i == 0)
-		{
-			LMPlayer p = LMPlayer.getPlayer(getCommandSenderAsPlayer(ics));
-			EnkiData.Data h = EnkiData.getData(p);
-			return h.listHomesNoDef();
-		}
-		
+		if(i == 0) return EnkiData.Homes.listHomesNoDef(getLMPlayer(ics));
 		return super.getTabStrings(ics, args, i);
 	}
 	
 	public String onCommand(ICommandSender ics, String[] args)
 	{
-		EntityPlayerMP ep = getCommandSenderAsPlayer(ics);
-		LMPlayer p = LMPlayer.getPlayer(ep);
-		EnkiData.Data h = EnkiData.getData(p);
+		LMPlayerServer p = getLMPlayer(ics);
+		EntityPlayerMP ep = p.getPlayerMP();
+		if(ep == null) throw new PlayerNotFoundException();
 		
-		String name = args.length == 1 ? args[0] : "Default";
+		String name = args.length == 1 ? args[0] : EnkiData.Homes.DEF;
 		
-		EntityPos pos = h.getHome(name);
+		EntityPos pos = EnkiData.Homes.getHome(p, name);
 		
 		if(pos == null) return "Home '" + name + "' not set!";
 		
-		if(ep.worldObj.provider.dimensionId != pos.dim && !EnkiToolsConfig.get().general.crossDimHomes)
+		if(ep.dimension != pos.dim && !EnkiToolsConfig.general.crossDimHomes)
 			return "You can't teleport to another dimension!";
 		
 		Teleporter.teleportPlayer(ep, pos);
 		
-		if(name.equals("Default")) return FINE + "Teleported to home";
+		if(name.equals(EnkiData.Homes.DEF)) return FINE + "Teleported to home";
 		else return FINE + "Teleported to '" + name + "'";
 	}
 }

@@ -1,8 +1,9 @@
 package latmod.enkitools.cmd;
 
 import latmod.enkitools.EnkiData;
-import latmod.ftbu.core.*;
+import latmod.ftbu.core.LatCoreMC;
 import latmod.ftbu.core.cmd.*;
+import latmod.ftbu.core.world.*;
 import net.minecraft.command.ICommandSender;
 
 public class CmdDelhome extends CommandLM
@@ -15,26 +16,18 @@ public class CmdDelhome extends CommandLM
 	
 	public String[] getTabStrings(ICommandSender ics, String[] args, int i)
 	{
-		if(i == 0)
-		{
-			LMPlayer p = LMPlayer.getPlayer(getCommandSenderAsPlayer(ics));
-			EnkiData.Data h = EnkiData.getData(p);
-			return h.listHomesNoDef();
-		}
-		
+		if(i == 0) return EnkiData.Homes.listHomesNoDef(getLMPlayer(ics));
 		return super.getTabStrings(ics, args, i);
 	}
 	
 	public String onCommand(ICommandSender ics, String[] args)
 	{
-		LMPlayer p = LMPlayer.getPlayer(getCommandSenderAsPlayer(ics));
-		EnkiData.Data h = EnkiData.getData(p);
+		LMPlayerServer p = getLMPlayer(ics);
+		String name = args.length == 1 ? args[0] : EnkiData.Homes.DEF;
 		
-		String name = args.length == 1 ? args[0] : "Default";
-		
-		if(h.remHome(name))
+		if(EnkiData.Homes.remHome(p, name))
 		{
-			if(name.equals("Default"))
+			if(name.equals(EnkiData.Homes.DEF))
 				return FINE + "Home deleted!";
 			else
 				return FINE + "Deleted '" + name + "'";

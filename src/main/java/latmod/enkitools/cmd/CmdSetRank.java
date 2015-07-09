@@ -1,8 +1,9 @@
 package latmod.enkitools.cmd;
 
 import latmod.enkitools.rank.Rank;
-import latmod.ftbu.core.*;
+import latmod.ftbu.core.LatCoreMC;
 import latmod.ftbu.core.cmd.*;
+import latmod.ftbu.core.world.LMPlayerServer;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -28,9 +29,9 @@ public class CmdSetRank extends CommandLM
 		if(args.length >= 2)
 		{
 			Rank r = Rank.getRank(args[1]);
-			LMPlayer p = getLMPlayer(args[0]);
+			LMPlayerServer p = getLMPlayer(args[0]);
 			
-			Rank.setPlayerRank(p.getName(), r);
+			Rank.setPlayerRank(p, r);
 			EntityPlayer ep = p.getPlayerMP();
 			
 			if(ep != null)

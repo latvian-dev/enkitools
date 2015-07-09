@@ -1,36 +1,23 @@
 package latmod.enkitools;
 
 import java.io.File;
-import java.util.UUID;
 
-import latmod.enkitools.rank.*;
 import latmod.ftbu.core.*;
 import latmod.ftbu.core.util.*;
-import net.minecraft.entity.player.*;
-import net.minecraft.nbt.*;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
-
-import com.mojang.authlib.GameProfile;
+import latmod.ftbu.core.world.LMPlayerServer;
 
 public class EnkiData
 {
-	public static final String TAG_MAIL = "Mail";
-	
-	public static final FastMap<Integer, Data> data = new FastMap<Integer, Data>();
-	public static final Data fakePlayerData = new Data(new LMPlayer(-1, new GameProfile(new UUID(0L, 0L), "FakePlayer")));
-	
-	public static File config;
+	public static File folder;
 	public static File ranks;
 	public static File players;
 	
 	public static void init()
 	{
-		config = new File(LatCoreMC.latmodFolder, "enkitools/config.txt");
+		folder = new File(LatCoreMC.latmodFolder, "enkitools/");
 		
-		ranks = new File(LatCoreMC.latmodFolder, "enkitools/ranks.txt");
-		players = new File(LatCoreMC.latmodFolder, "enkitools/players.txt");
+		ranks = LatCore.newFile(new File(folder, "ranks.txt"));
+		players = LatCore.newFile(new File(folder, "players.txt"));
 		
 		File oldDir = new File(LatCoreMC.latmodFolder, "EnkiMods/");
 		
@@ -49,142 +36,58 @@ public class EnkiData
 		}
 	}
 	
-	public static Data getData(EntityPlayer ep)
-	{ return getData(LMPlayer.getPlayer(ep)); }
-	
-	public static Data getData(LMPlayer p)
+	public static class Homes
 	{
-		if(p == null) return fakePlayerData;
-		Data h = data.get(p.playerID);
-		if(h == null) { h = new Data(p); data.put(p.playerID, h); }
-		return h;
-	}
-	
-	public static void clearData()
-	{
-	}
-	
-	public static void load(LMPlayer p, NBTTagCompound tag)
-	{
-		Data d = getData(p);
+		public static final String DEF = "home";
 		
+		//FIXME
+		private static FastMap<String, EntityPos> getHomesMap(LMPlayerServer p)
 		{
-			d.homes.clear();
-			
-			NBTTagCompound tag1 = (NBTTagCompound)tag.getTag("Homes");
-			
-			if(tag1 != null && !tag1.hasNoTags())
-			{
-				FastList<String> l = NBTHelper.getMapKeys(tag1);
-				
-				for(int i = 0; i < l.size(); i++)
-				{
-					int[] a = tag1.getIntArray(l.get(i));
-					d.setHome(l.get(i), a[0], a[1], a[2], a[3]);
-				}
-			}
+			FastMap<String, EntityPos> map = new FastMap<String, EntityPos>();
+			return map;
 		}
 		
+		//FIXME
+		private static void setHomesMap(LMPlayerServer p, FastMap<String, EntityPos> map)
 		{
-			d.claims.claims.clear();
-			
-			NBTTagCompound tag1 = tag.getCompoundTag("Claims");
-			
-			NBTTagList c = (NBTTagList)tag1.getTag("Claims");
-			if(c != null) for(int i = 0; i < c.tagCount(); i++)
-			{
-				int[] pos = c.func_150306_c(i);
-				d.claims.claims.add(new Claim(d.claims, pos[0], pos[1], pos[2]));
-			}
-			
-			d.claims.desc = tag1.getString("Desc");
-			
-			if(!tag1.hasKey("Explode")) d.claims.canExplode = true;
-			else d.claims.canExplode = tag1.getBoolean("Explode");
 		}
 		
-		d.lastDeath = null;
-		
-		if(tag.hasKey("LastDeath"))
+		public static String[] listHomes(LMPlayerServer p)
 		{
-			d.lastDeath = new EntityPos();
-			d.lastDeath.readFromNBT(tag.getCompoundTag("LastDeath"));
-		}
-	}
-	
-	public static void save(LMPlayer p, NBTTagCompound tag)
-	{
-		Data d = data.get(p.playerID);
-		if(d == null) return;
-		
-		{
-			NBTTagCompound tag1 = new NBTTagCompound();
-			
-			for(int i = 0; i < d.homes.size(); i++)
-				tag1.setIntArray(d.homes.keys.get(i), d.homes.values.get(i).toIntArray());
-			
-			tag.setTag("Homes", tag1);
+			return getHomesMap(p).keys.toArray(new String[0]);
 		}
 		
+		public static String[] listHomesNoDef(LMPlayerServer p)
 		{
-			NBTTagCompound tag1 = new NBTTagCompound();
-			
-			NBTTagList c = new NBTTagList();
-			
-			for(int i = 0; i < d.claims.claims.size(); i++)
-			{
-				Claim c1 = d.claims.claims.get(i);
-				c.appendTag(new NBTTagIntArray(new int[] { c1.posX, c1.posZ, c1.dim }));
-			}
-			
-			if(c.tagCount() > 0) tag1.setTag("Claims", c);
-			
-			tag1.setString("Desc", d.claims.desc);
-			tag1.setBoolean("Explode", d.claims.canExplode);
-			
-			tag.setTag("Claims", tag1);
-		}
-		
-		if(d.lastDeath != null)
-		{
-			NBTTagCompound tag1 = new NBTTagCompound();
-			d.lastDeath.writeToNBT(tag1);
-			tag.setTag("LastDeath", tag1);
-		}
-	}
-	
-	public static class Data
-	{
-		public final LMPlayer player;
-		private final FastMap<String, EntityPos> homes;
-		
-		private Data(LMPlayer p)
-		{
-			player = p;
-			homes = new FastMap<String, EntityPos>();
-		}
-		
-		public String[] listHomes()
-		{ return homes.keys.toArray(new String[0]); }
-		
-		public String[] listHomesNoDef()
-		{
-			FastList<String> list = homes.keys.clone();
-			list.remove("Default");
+			FastList<String> list = getHomesMap(p).keys;
+			list.remove(DEF);
 			return list.toArray(new String[0]);
 		}
 		
-		public EntityPos getHome(String s)
-		{ return homes.get(s); }
+		public static EntityPos getHome(LMPlayerServer p, String s)
+		{ return getHomesMap(p).get(s); }
 		
-		public boolean setHome(String s, int x, int y, int z, int dim)
-		{ return homes.put(s, new EntityPos(x + 0.5D, y + 0.5D, z + 0.5D, dim)); }
+		public static boolean setHome(LMPlayerServer p, String s, int x, int y, int z, int dim)
+		{
+			FastMap<String, EntityPos> map = getHomesMap(p);
+			boolean b = map.put(s, new EntityPos(x + 0.5D, y + 0.5D, z + 0.5D, dim));
+			setHomesMap(p, map);
+			return b;
+		}
 		
-		public boolean remHome(String s)
-		{ return homes.remove(s); }
+		public static boolean setHome(LMPlayerServer p, String s, EntityPos ep)
+		{ return setHome(p, s, ep.intX(), ep.intY(), ep.intZ(), ep.dim); }
 		
-		public int homesSize()
-		{ return homes.size(); }
+		public static boolean remHome(LMPlayerServer p, String s)
+		{
+			FastMap<String, EntityPos> map = getHomesMap(p);
+			boolean b = map.remove(s);
+			setHomesMap(p, map);
+			return b;
+		}
+		
+		public static int homesSize(LMPlayerServer p)
+		{ return getHomesMap(p).size(); }
 	}
 	
 	public static enum ClaimResult

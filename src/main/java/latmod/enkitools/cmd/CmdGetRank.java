@@ -1,8 +1,9 @@
 package latmod.enkitools.cmd;
 
 import latmod.enkitools.rank.Rank;
-import latmod.ftbu.core.*;
+import latmod.ftbu.core.LatCoreMC;
 import latmod.ftbu.core.cmd.*;
+import latmod.ftbu.core.world.*;
 import net.minecraft.command.ICommandSender;
 
 public class CmdGetRank extends CommandLM
@@ -12,19 +13,22 @@ public class CmdGetRank extends CommandLM
 	
 	public String onCommand(ICommandSender ics, String[] args)
 	{
-		LMPlayer ep = null;
+		LMPlayerServer ep = null;
 		
 		if(args.length == 1)
 		{
 			if(args[0].equals("list"))
 			{
-				for(int i = 0; i < LMPlayer.map.size(); i++)
+				boolean all = args.length == 2 && args[1].equals("all");
+				Rank def = Rank.getDefaultRank();
+				
+				for(int i = 0; i < LMWorld.server.players.size(); i++)
 				{
-					ep = LMPlayer.map.values.get(i);
+					ep = LMWorld.server.players.values.get(i);
 					Rank r = Rank.getPlayerRank(ep);
 					
-					if(r != Rank.getDefaultRank())
-						LatCoreMC.printChat(ics, ep.getName() + ": " + r.rankID);
+					if(all || r != def)
+						LatCoreMC.printChat(ics, ep.getName() + ": " + r.getColor() + r.rankID);
 				}
 				
 				return null;
