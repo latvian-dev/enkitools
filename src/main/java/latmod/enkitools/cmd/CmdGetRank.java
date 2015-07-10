@@ -24,7 +24,7 @@ public class CmdGetRank extends CommandLM
 				
 				for(int i = 0; i < LMWorld.server.players.size(); i++)
 				{
-					ep = LMWorld.server.players.values.get(i);
+					ep = LMWorld.server.players.get(i);
 					Rank r = Rank.getPlayerRank(ep);
 					
 					if(all || r != def)

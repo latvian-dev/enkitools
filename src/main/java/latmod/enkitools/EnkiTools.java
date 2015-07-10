@@ -1,12 +1,14 @@
 package latmod.enkitools;
 
-import java.lang.reflect.Field;
+import java.util.*;
 
 import latmod.enkitools.cmd.*;
 import latmod.ftbu.core.*;
-import net.minecraft.server.management.ServerConfigurationManager;
+import latmod.ftbu.core.util.FastList;
+import net.minecraft.command.*;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.*;
+import cpw.mods.fml.relauncher.ReflectionHelper;
 
 @Mod(modid = EnkiTools.MOD_ID, name = "EnkiTools", version = "@VERSION@", acceptableRemoteVersions = "*", dependencies = "required-after:FTBU")
 public class EnkiTools
@@ -39,14 +41,42 @@ public class EnkiTools
 		e.registerServerCommand(new CmdSetRank());
 		e.registerServerCommand(new CmdGetRank());
 		e.registerServerCommand(new CmdHead());
-		
+	}
+	
+	@SuppressWarnings("all")
+	@Mod.EventHandler
+	public void serverStarting(FMLServerStartedEvent event)
+	{
 		if(EnkiToolsConfig.general.overrideCommands)
-		try
 		{
-			Field f = ServerConfigurationManager.class.getField("field_72407_n"); // commandsAllowedForAll
-			f.set(LatCoreMC.getServer().getConfigurationManager(), true);
+			ICommandManager icm = LatCoreMC.getServer().getCommandManager();
+			
+			if(icm != null && icm instanceof CommandHandler)
+			try
+			{
+				CommandHandler ch = (CommandHandler)icm;
+				
+				Map map = ReflectionHelper.getPrivateValue(CommandHandler.class, ch, "commandMap", "field_71562_a");
+				Set set = ReflectionHelper.getPrivateValue(CommandHandler.class, ch, "commandSet", "field_71561_b");
+				
+				FastList<CmdOverride> commands = new FastList<CmdOverride>();
+				
+				for(Object o : map.values())
+					commands.add(new CmdOverride((ICommand)o));
+				
+				map.clear();
+				set.clear();
+				
+				ReflectionHelper.setPrivateValue(CommandHandler.class, ch, map, "commandMap", "field_71562_a");
+				ReflectionHelper.setPrivateValue(CommandHandler.class, ch, set, "commandSet", "field_71561_b");
+				
+				for(CmdOverride c : commands)
+					ch.registerCommand(c);
+				
+				mod.logger.info("Loaded " + commands.size() + " command overrides");
+			}
+			catch(Exception e)
+			{ e.printStackTrace(); }
 		}
-		catch(Exception ex)
-		{ ex.printStackTrace(); }
 	}
 }
