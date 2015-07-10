@@ -5,6 +5,7 @@ import java.io.File;
 import latmod.ftbu.core.*;
 import latmod.ftbu.core.util.*;
 import latmod.ftbu.core.world.LMPlayerServer;
+import net.minecraft.nbt.*;
 
 public class EnkiData
 {
@@ -44,12 +45,25 @@ public class EnkiData
 		private static FastMap<String, EntityPos> getHomesMap(LMPlayerServer p)
 		{
 			FastMap<String, EntityPos> map = new FastMap<String, EntityPos>();
+			
+			NBTTagCompound tag = (NBTTagCompound)p.serverData.getTag("Homes");
+			if(tag == null) return map;
+			
+			FastMap<String, NBTTagIntArray> map1 = NBTHelper.toFastMapWithType(tag);
+			
+			for(int i = 0; i < map1.size(); i++)
+				map.put(map1.keys.get(i), EntityPos.fromIntArray(map1.values.get(i).func_150302_c()));
+			
 			return map;
 		}
 		
 		//FIXME
 		private static void setHomesMap(LMPlayerServer p, FastMap<String, EntityPos> map)
 		{
+			NBTTagCompound tag = p.serverData.getCompoundTag("Homes");
+			for(int i = 0; i < map.size(); i++)
+				tag.setIntArray(map.keys.get(i), map.values.get(i).toIntArray());
+			p.serverData.setTag("Homes", tag);
 		}
 		
 		public static String[] listHomes(LMPlayerServer p)

@@ -1,6 +1,6 @@
 package latmod.enkitools;
 
-import latmod.enkitools.rank.Rank;
+import latmod.enkitools.rank.*;
 import latmod.ftbu.core.LatCoreMC;
 import latmod.ftbu.core.event.*;
 import latmod.ftbu.core.world.*;
@@ -16,9 +16,13 @@ public class EnkiToolsEventHandler
 	public static final EnkiToolsEventHandler instance = new EnkiToolsEventHandler();
 	
 	@SubscribeEvent
-	public void playerLoggedIn(LMPlayerEvent.LoggedIn e)
+	public void saveReadme(FTBUReadmeEvent e)
+	{ EnkiToolsConfig.saveReadme(e); }
+	
+	@SubscribeEvent
+	public void playerLoggedIn(LMPlayerServerEvent.LoggedIn e)
 	{
-		Rank.getPlayerRank(e.player.toPlayerMP());
+		Rank.getPlayerRank(e.player);
 	}
 	
 	@SubscribeEvent
@@ -73,7 +77,7 @@ public class EnkiToolsEventHandler
 	{
 		if(!EnkiToolsConfig.general.overrideChat) return;
 		
-		LMPlayerServer p = LMWorld.server.getPlayer(e.player);
+		LMPlayerServer p = LMWorldServer.inst.getPlayer(e.player);
 		if(p == null) return;
 		
 		Rank r = Rank.getPlayerRank(p);
@@ -95,12 +99,14 @@ public class EnkiToolsEventHandler
 	{
 		if(e.sender instanceof EntityPlayerMP)
 		{
-			LMPlayerServer p = LMWorld.server.getPlayer(e.sender);
+			LMPlayerServer p = LMWorldServer.inst.getPlayer(e.sender);
 			Rank r = Rank.getPlayerRank(p);
 			
 			if(!r.allowCommand(e.command.getCommandName(), e.parameters))
 			{
-				LatCoreMC.printChat(e.sender, EnumChatFormatting.RED + "You don't have permissions to use this command!");
+				ChatComponentTranslation c = new ChatComponentTranslation("commands.generic.permission", new Object[0]);
+                c.getChatStyle().setColor(EnumChatFormatting.RED);
+                LatCoreMC.printChat(e.sender, c);
 				e.setCanceled(true);
 			}
 		}
@@ -116,11 +122,20 @@ public class EnkiToolsEventHandler
 	}
 	
 	@SubscribeEvent
-	public void customInfo(LMPlayerEvent.CustomInfo e)
+	public void customInfo(LMPlayerServerEvent.CustomInfo e)
 	{
-		if(e.side.isClient()) return;
-		
-		Rank r = Rank.getPlayerRank(e.player.toPlayerMP());
+		Rank r = Rank.getPlayerRank(e.player);
 		if(r != null) e.info.add("Rank: " + r.getColor() + r.rankID);
+	}
+	
+	@SubscribeEvent
+	public void getMaxClaimPower(LMPlayerServerEvent.GetMaxClaimPower e)
+	{
+		Rank r = Rank.getPlayerRank(e.player);
+		if(r != null)
+		{
+			e.result = r.getConfig(RankConfig.MAX_CLAIM_POWER).getInt();
+			e.setCanceled(true);
+		}
 	}
 }

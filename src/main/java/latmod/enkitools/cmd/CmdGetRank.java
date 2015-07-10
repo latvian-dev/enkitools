@@ -22,9 +22,9 @@ public class CmdGetRank extends CommandLM
 				boolean all = args.length == 2 && args[1].equals("all");
 				Rank def = Rank.getDefaultRank();
 				
-				for(int i = 0; i < LMWorld.server.players.size(); i++)
+				for(int i = 0; i < LMWorldServer.inst.players.size(); i++)
 				{
-					ep = LMWorld.server.players.get(i);
+					ep = LMWorldServer.inst.players.get(i);
 					Rank r = Rank.getPlayerRank(ep);
 					
 					if(all || r != def)

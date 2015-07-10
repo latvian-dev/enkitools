@@ -160,7 +160,10 @@ public class Rank
 					String[] s = al.get(i).split(": ");
 					
 					if(s != null && s.length >= 2)
-						setRawRank(LMWorld.server.getPlayer(s[0]), Rank.getRank(s[1]));
+					{
+						String k = s[0]; if(k.indexOf(',') != -1) k = k.split(",")[0];
+						setRawRank(LMWorldServer.inst.getPlayer(k), Rank.getRank(s[1]));
+					}
 				}
 			}
 		}
@@ -180,7 +183,12 @@ public class Rank
 	{
 		setRawRank(p, r);
 		saveRanks();
-		if(p != null) MessageLM.sendTo(null, p.getInfo());
+		if(p != null)
+		{
+			p.updateMaxClaimPower();
+			p.sendUpdate(null, true);
+			MessageLM.sendTo(null, p.getInfo());
+		}
 	}
 	
 	public static void saveRanks()
@@ -188,7 +196,7 @@ public class Rank
 		FastList<String> al = new FastList<String>();
 		
 		for(int i = 0; i < playerRanks.size(); i++)
-			al.add(playerRanks.keys.get(i).uuidString + ": " + playerRanks.values.get(i));
+			al.add(playerRanks.keys.get(i).uuidString + "," + playerRanks.keys.get(i).getName() + ": " + playerRanks.values.get(i));
 		
 		al.sort(null);
 		
@@ -226,7 +234,7 @@ public class Rank
 	}
 	
 	public static RankConfig.Inst getConfig(Object o, RankConfig c)
-	{ return getPlayerRank(LMWorld.server.getPlayer(o)).getConfig(c); }
+	{ return getPlayerRank(LMWorldServer.inst.getPlayer(o)).getConfig(c); }
 	
 	public void setConfig(RankConfig c, String val)
 	{

@@ -3,7 +3,7 @@ package latmod.enkitools.cmd;
 import latmod.enkitools.EnkiData;
 import latmod.ftbu.core.LatCoreMC;
 import latmod.ftbu.core.cmd.*;
-import latmod.ftbu.core.world.*;
+import latmod.ftbu.core.world.LMPlayerServer;
 import net.minecraft.command.ICommandSender;
 
 public class CmdDelhome extends CommandLM

@@ -2,6 +2,7 @@ package latmod.enkitools;
 
 import java.io.File;
 
+import latmod.ftbu.core.event.FTBUReadmeEvent;
 import latmod.ftbu.core.util.LatCore;
 
 import com.google.gson.annotations.Expose;
@@ -18,6 +19,11 @@ public class EnkiToolsConfig
 	public static void saveAll()
 	{
 		General.save();
+	}
+	
+	public static void saveReadme(FTBUReadmeEvent e)
+	{
+		General.saveReadme(e);
 	}
 	
 	public static class General
@@ -51,6 +57,16 @@ public class EnkiToolsConfig
 		public static void save()
 		{
 			LatCore.toJsonFile(saveFile, general);
+		}
+		
+		public static void saveReadme(FTBUReadmeEvent e)
+		{
+			FTBUReadmeEvent.ReadmeFile.Category c = e.file.get("latmod/enkitools/general.txt");
+			c.add("crossDimHomes", "Allow players use /home to teleport to other dimensions", true);
+			c.add("overrideCommands", "Override vanilla commands, so you can allow non-op players to use op commands", true);
+			c.add("overrideChat", "Enable rank colors", true);
+			c.add("enableWarpSigns", "Enable right-clicking on '[warp]' signs", true);
+			c.add("enableHomeSigns", "Enable right-clicking on '[home]' signs", true);
 		}
 	}
 }
