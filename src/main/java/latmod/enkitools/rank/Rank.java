@@ -4,7 +4,7 @@ import java.util.*;
 
 import latmod.enkitools.*;
 import latmod.ftbu.core.LatCoreMC;
-import latmod.ftbu.core.net.MessageLM;
+import latmod.ftbu.core.net.LMNetHelper;
 import latmod.ftbu.core.util.*;
 import latmod.ftbu.core.world.*;
 import net.minecraft.util.EnumChatFormatting;
@@ -102,7 +102,7 @@ public class Rank
 	
 	private static Rank defRank = null;
 	private static final FastMap<String, Rank> ranks = new FastMap<String, Rank>();
-	private static final FastMap<LMPlayerServer, Rank> playerRanks = new FastMap<LMPlayerServer, Rank>();
+	private static final FastMap<UUID, Rank> playerRanks = new FastMap<UUID, Rank>();
 	
 	public static void reload()
 	{
@@ -110,7 +110,7 @@ public class Rank
 		
 		if(!EnkiData.ranks.exists())
 		{
-			EnkiData.ranks = LatCore.newFile(EnkiData.ranks);
+			EnkiData.ranks = LMFileUtils.newFile(EnkiData.ranks);
 			
 			ranksFile = new RanksFile();
 			ranksFile.ranks = new HashMap<String, Rank>();
@@ -151,7 +151,7 @@ public class Rank
 		
 		try
 		{
-			FastList<String> al = LatCore.loadFile(EnkiData.players);
+			FastList<String> al = LMFileUtils.load(EnkiData.players);
 			
 			if(al != null && al.size() > 0)
 			{
@@ -176,7 +176,7 @@ public class Rank
 	private static void setRawRank(LMPlayerServer p, Rank r)
 	{
 		if(p == null) return;
-		playerRanks.put(p, (r == null) ? defRank : r);
+		playerRanks.put(p.getUUID(), (r == null) ? defRank : r);
 	}
 	
 	public static void setPlayerRank(LMPlayerServer p, Rank r)
@@ -187,7 +187,7 @@ public class Rank
 		{
 			p.updateMaxClaimPower();
 			p.sendUpdate(null, true);
-			MessageLM.sendTo(null, p.getInfo());
+			LMNetHelper.sendTo(null, p.getInfo());
 		}
 	}
 	
@@ -196,11 +196,16 @@ public class Rank
 		FastList<String> al = new FastList<String>();
 		
 		for(int i = 0; i < playerRanks.size(); i++)
-			al.add(playerRanks.keys.get(i).uuidString + "," + playerRanks.keys.get(i).getName() + ": " + playerRanks.values.get(i));
+		{
+			UUID id = playerRanks.keys.get(i);
+			LMPlayerServer p = LMWorldServer.inst.getPlayer(id);
+			if(p != null) al.add(p.uuidString + "," + p.getName() + ": " + playerRanks.values.get(i));
+			else al.add(LatCoreMC.toShortUUID(id) + ": " + playerRanks.values.get(i));
+		}
 		
 		al.sort(null);
 		
-		try { LatCore.saveFile(EnkiData.players, al); }
+		try { LMFileUtils.save(EnkiData.players, al); }
 		catch(Exception e) { e.printStackTrace(); }
 	}
 	
@@ -215,7 +220,7 @@ public class Rank
 		if(r == null)
 		{
 			r = defRank;
-			playerRanks.put(p, r);
+			playerRanks.put(p.getUUID(), r);
 			saveRanks();
 			return r;
 		}

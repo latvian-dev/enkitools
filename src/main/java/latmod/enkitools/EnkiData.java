@@ -17,23 +17,23 @@ public class EnkiData
 	{
 		folder = new File(LatCoreMC.latmodFolder, "enkitools/");
 		
-		ranks = LatCore.newFile(new File(folder, "ranks.txt"));
-		players = LatCore.newFile(new File(folder, "players.txt"));
+		ranks = LMFileUtils.newFile(new File(folder, "ranks.txt"));
+		players = LMFileUtils.newFile(new File(folder, "players.txt"));
 		
 		File oldDir = new File(LatCoreMC.latmodFolder, "EnkiMods/");
 		
 		if(oldDir.exists())
 		{
 			File oldRanks = new File(oldDir, "Ranks.txt");
-			if(oldRanks.exists()) LatCore.copyFile(oldRanks, ranks);
+			if(oldRanks.exists()) LMFileUtils.copyFile(oldRanks, ranks);
 			
 			File oldPlayers = new File(oldDir, "Players.txt");
-			if(oldPlayers.exists()) LatCore.copyFile(oldPlayers, players);
+			if(oldPlayers.exists()) LMFileUtils.copyFile(oldPlayers, players);
 			
 			File oldConfig = new File(oldDir, "Config.cfg");
-			if(oldConfig.exists()) LatCore.copyFile(oldConfig, new File(LatCoreMC.latmodFolder, "enkitools/old_config_backup.cfg"));
+			if(oldConfig.exists()) LMFileUtils.copyFile(oldConfig, new File(LatCoreMC.latmodFolder, "enkitools/old_config_backup.cfg"));
 			
-			LatCore.deleteFile(oldDir);
+			LMFileUtils.delete(oldDir);
 		}
 	}
 	
