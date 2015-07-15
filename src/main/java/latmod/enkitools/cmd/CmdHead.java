@@ -1,7 +1,7 @@
 package latmod.enkitools.cmd;
 
-import latmod.ftbu.core.InvUtils;
 import latmod.ftbu.core.cmd.*;
+import latmod.ftbu.core.inv.InvUtils;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.*;
