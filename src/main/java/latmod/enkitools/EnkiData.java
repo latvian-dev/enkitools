@@ -49,7 +49,7 @@ public class EnkiData
 			NBTTagCompound tag = (NBTTagCompound)p.serverData.getTag("Homes");
 			if(tag == null) return map;
 			
-			FastMap<String, NBTTagIntArray> map1 = NBTHelper.toFastMapWithType(tag);
+			FastMap<String, NBTTagIntArray> map1 = LMNBTUtils.toFastMapWithType(tag);
 			
 			for(int i = 0; i < map1.size(); i++)
 				map.put(map1.keys.get(i), EntityPos.fromIntArray(map1.values.get(i).func_150302_c()));

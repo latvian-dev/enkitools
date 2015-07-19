@@ -36,7 +36,7 @@ public class CmdHome extends CommandLM
 		if(ep.dimension != pos.dim && !EnkiToolsConfig.general.crossDimHomes)
 			return "You can't teleport to another dimension!";
 		
-		LMDimHelper.teleportPlayer(ep, pos);
+		LMDimUtils.teleportPlayer(ep, pos);
 		
 		if(name.equals(EnkiData.Homes.DEF)) return FINE + "Teleported to home";
 		else return FINE + "Teleported to '" + name + "'";

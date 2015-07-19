@@ -1,7 +1,7 @@
 package latmod.enkitools.cmd;
 
 import latmod.ftbu.core.cmd.*;
-import latmod.ftbu.core.inv.InvUtils;
+import latmod.ftbu.core.inv.LMInvUtils;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.*;
@@ -24,13 +24,13 @@ public class CmdHead extends CommandLM
 			{
 				if(player.inventory.armorInventory[3] != null)
 				{
-					InvUtils.dropItem(player, player.inventory.armorInventory[3].copy());
+					LMInvUtils.dropItem(player, player.inventory.armorInventory[3].copy());
 					player.inventory.armorInventory[3] = null;
 				}
 				
-				player.inventory.armorInventory[3] = InvUtils.singleCopy(player.getHeldItem());
+				player.inventory.armorInventory[3] = LMInvUtils.singleCopy(player.getHeldItem());
 				
-				player.inventory.mainInventory[player.inventory.currentItem] = InvUtils.reduceItem(player.inventory.mainInventory[player.inventory.currentItem]);
+				player.inventory.mainInventory[player.inventory.currentItem] = LMInvUtils.reduceItem(player.inventory.mainInventory[player.inventory.currentItem]);
 				player.inventory.markDirty();
 			}
 			else if(is.getItem() instanceof ItemSkull && is.getItemDamage() == 3)
