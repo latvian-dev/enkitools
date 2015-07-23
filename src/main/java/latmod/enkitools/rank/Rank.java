@@ -17,79 +17,83 @@ public class Rank
 	@Expose public String color;
 	@Expose public String prefix;
 	@Expose public String parentRank;
-	@Expose public List<String> commands;
-	@Expose private Map<String, String> config;
-	public final FastMap<RankConfig, RankConfig.Inst> configMap = new FastMap<RankConfig, RankConfig.Inst>();
+	@Expose public List<RankCommand> allowedCmds;
+	@Expose public List<RankCommand> bannedCmds;
+	@Expose public RankConfig.ConfigList config;
 	
 	public void setDefaults()
 	{
 		if(color == null) color = EnumChatFormatting.YELLOW.getFormattingCode() + "";
 		if(prefix == null) prefix = "";
+		if(parentRank == null) parentRank = "";
+		if(allowedCmds == null) allowedCmds = new ArrayList<RankCommand>();
+		if(bannedCmds == null) bannedCmds = new ArrayList<RankCommand>();
+		if(config == null) config = new RankConfig.ConfigList();
 	}
+	
+	public Rank getParentRank()
+	{ return parentRank.isEmpty() ? null : Rank.getRank(parentRank); }
 	
 	public String getColor()
 	{
-		if(color == null || color.isEmpty()) return "";
-		String s = "";
+		if(color == null || color.isEmpty())
+		{
+			Rank pr = getParentRank();
+			return (pr == null) ? "" : pr.getColor();
+		}
+		
+		StringBuilder sb = new StringBuilder();
 		for(int i = 0; i < color.length(); i++)
-			s += LatCoreMC.FORMATTING + color.charAt(i);
-		return s;
+		{ sb.append('\u00a7'); sb.append(color.charAt(i)); }
+		return sb.toString();
 	}
 	
 	public String getUsername(String s)
-	{ return getColor() + prefix + s + EnumChatFormatting.RESET; }
+	{
+		String c = getColor();
+		StringBuilder sb = new StringBuilder();
+		if(!c.isEmpty()) sb.append(c);
+		sb.append(prefix);
+		sb.append(s);
+		if(!c.isEmpty() && c.contains(LatCoreMC.FORMATTING))
+			sb.append(EnumChatFormatting.RESET);
+		return sb.toString();
+	}
 	
 	public String toString()
 	{ return rankID; }
 	
-	public boolean allowCommand(String cmd, String[] args)
+	public int hashCode()
+	{ return rankID.hashCode(); }
+	
+	public boolean equals(Object o)
+	{ return o != null && (o == this || o.toString().equals(toString())); }
+	
+	public boolean allowCommand(RankCommand cmd)
 	{
-		for(int i = 0; i < commands.size(); i++)
-		{
-			String orig = commands.get(i);
-			if(orig.equals("*")) return true;
-			
-			String s = orig.substring(1);
-			boolean add = orig.startsWith("+");
-			
-			if(cmdsEquals(s, cmd))
-				return add;
-		}
+		for(RankCommand c : allowedCmds)
+		{ if(c.equalsCommand(cmd)) return true; }
+		
+		for(RankCommand c : bannedCmds)
+		{ if(c.equalsCommand(cmd)) return false; }
 		
 		if(parentRank == null || parentRank.length() == 0)
 			return false;
-		Rank r = Rank.getRank(parentRank);
-		if(r == null) return false;
-		return r.allowCommand(cmd, args);
+		
+		Rank pr = getParentRank();
+		return (pr == null) ? false : pr.allowCommand(cmd);
 	}
 	
 	public RankConfig.Inst getConfig(RankConfig c)
 	{
-		RankConfig.Inst o = configMap.get(c);
+		RankConfig.Inst o = config.get(c);
+		if(o != null) return o;
 		
-		if(o == null)
-		{
-			if(parentRank == null || parentRank.isEmpty())
-			{
-				o = new RankConfig.Inst(c, c.defaultValue);
-				configMap.put(c, o);
-			}
-			else
-			{
-				Rank r = Rank.getRank(parentRank);
-				if(r != null) return r.getConfig(c);
-			}
-		}
-		
+		Rank pr = getParentRank();
+		if(pr != null) return pr.getConfig(c);
+		o = new RankConfig.Inst(c, c.defaultValue);
+		config.config.put(c, o);
 		return o;
-	}
-	
-	private boolean cmdsEquals(String cmd, String perm)
-	{
-		if(cmd.equals(perm))
-			return true;
-		
-		return false;
 	}
 	
 	// Static //
@@ -100,15 +104,15 @@ public class Rank
 		@Expose public Map<String, Rank> ranks;
 	}
 	
-	private static Rank defRank = null;
 	private static final FastMap<String, Rank> ranks = new FastMap<String, Rank>();
 	private static final FastMap<UUID, Rank> playerRanks = new FastMap<UUID, Rank>();
+	private static RanksFile ranksFile = null;
 	
 	public static void reload()
 	{
-		RanksFile ranksFile;
+		ranksFile = LatCore.fromJsonFile(EnkiData.ranks, RanksFile.class);
 		
-		if(!EnkiData.ranks.exists())
+		if(ranksFile == null)
 		{
 			EnkiData.ranks = LMFileUtils.newFile(EnkiData.ranks);
 			
@@ -118,34 +122,24 @@ public class Rank
 			
 			LatCore.toJsonFile(EnkiData.ranks, ranksFile);
 		}
-		else ranksFile = LatCore.fromJsonFile(EnkiData.ranks, RanksFile.class);
+		
+		if(!ranksFile.ranks.isEmpty() && (ranksFile.defaultRank == null || ranksFile.defaultRank.isEmpty()))
+			ranksFile.defaultRank = ranksFile.ranks.keySet().iterator().next();
 		
 		ranks.clear();
 		
-		for(String k : ranksFile.ranks.keySet())
+		if(!ranksFile.ranks.isEmpty())
 		{
-			Rank v = ranksFile.ranks.get(k);
-			v.rankID = k;
-			v.configMap.clear();
-			v.setDefaults();
-			
-			if(v.config != null && v.config.size() > 0)
+			for(String k : ranksFile.ranks.keySet())
 			{
-				for(String cfgK : v.config.keySet())
-				{
-					String cfgV = v.config.get(cfgK);
-					
-					RankConfig c = RankConfig.registry.get(cfgK);
-					if(c != null) v.configMap.put(c, new RankConfig.Inst(c, cfgV));
-				}
+				Rank v = ranksFile.ranks.get(k);
+				v.rankID = k;
+				v.setDefaults();
+				ranks.put(k, v);
 			}
-			
-			ranks.put(k, v);
 		}
 		
-		defRank = ranks.get(ranksFile.defaultRank);
-		
-		EnkiTools.mod.logger.info("Loaded ranks [Def: " + defRank + "]: " + ranks.values);
+		EnkiTools.mod.logger.info("Loaded ranks [Def: " + getDefaultRank() + "]: " + ranks.values);
 		
 		playerRanks.clear();
 		
@@ -176,7 +170,7 @@ public class Rank
 	private static void setRawRank(LMPlayerServer p, Rank r)
 	{
 		if(p == null) return;
-		playerRanks.put(p.getUUID(), (r == null) ? defRank : r);
+		playerRanks.put(p.getUUID(), (r == null) ? getDefaultRank() : r);
 	}
 	
 	public static void setPlayerRank(LMPlayerServer p, Rank r)
@@ -214,12 +208,12 @@ public class Rank
 	{
 		if(!hasLoaded) { reload(); hasLoaded = true; }
 		
-		if(p == null) return defRank;
+		if(p == null) return getDefaultRank();
 		Rank r = playerRanks.get(p.getUUID());
 		
 		if(r == null)
 		{
-			r = defRank;
+			r = getDefaultRank();
 			playerRanks.put(p.getUUID(), r);
 			saveRanks();
 			return r;
@@ -229,23 +223,17 @@ public class Rank
 	}
 	
 	public static Rank getDefaultRank()
-	{ return defRank; }
+	{ return ranks.get(ranksFile.defaultRank); }
 	
 	public static Rank getRank(String s)
 	{
 		Rank r = ranks.get(s);
 		if(r != null) return r;
-		return defRank;
+		return getDefaultRank();
 	}
 	
 	public static RankConfig.Inst getConfig(Object o, RankConfig c)
 	{ return getPlayerRank(LMWorldServer.inst.getPlayer(o)).getConfig(c); }
-	
-	public void setConfig(RankConfig c, String val)
-	{
-		config.put(c.key, val);
-		configMap.put(c, new RankConfig.Inst(c, val));
-	}
 	
 	public static final String[] getAllRanks()
 	{ return ranks.keys.toArray(new String[0]); }

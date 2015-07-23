@@ -20,29 +20,17 @@ public class EnkiToolsEventHandler
 	{ EnkiToolsConfig.saveReadme(e); }
 	
 	@SubscribeEvent
+	public void onLMGsonEvent(LMGsonEvent e)
+	{
+		LatCoreMC.logger.info("Added Json Serializers for EnkiTools");
+		e.builder.registerTypeHierarchyAdapter(RankCommand.class, new RankCommand.Serializer());
+		e.builder.registerTypeHierarchyAdapter(RankConfig.ConfigList.class, new RankConfig.ConfigList.Serializer());
+	}
+	
+	@SubscribeEvent
 	public void playerLoggedIn(LMPlayerServerEvent.LoggedIn e)
 	{
 		Rank.getPlayerRank(e.player);
-	}
-	
-	@SubscribeEvent
-	public void loadLMData(LoadLMDataEvent e)
-	{
-		if(e.phase.isPre())
-		{
-		}
-		
-		if(e.phase.isPost())
-		{
-			Rank.reload();
-		}
-	}
-	
-	@SubscribeEvent
-	public void saveLMData(SaveLMDataEvent e)
-	{
-		//NBTTagCompound tag = new NBTTagCompound();
-		//NBTHelper.writeMap(e.getFile("EnkiMods.dat"), tag);
 	}
 	
 	@SubscribeEvent
@@ -90,7 +78,7 @@ public class EnkiToolsEventHandler
 		
 		e.component.appendSibling(new ChatComponentText("<"));
 		e.component.appendSibling(nameC);
-		e.component.appendSibling(new ChatComponentText(">"));
+		e.component.appendSibling(new ChatComponentText("> "));
 		e.component.appendSibling(new ChatComponentText(e.message));
 	}
 	
@@ -102,7 +90,7 @@ public class EnkiToolsEventHandler
 			LMPlayerServer p = LMWorldServer.inst.getPlayer(e.sender);
 			Rank r = Rank.getPlayerRank(p);
 			
-			if(!r.allowCommand(e.command.getCommandName(), e.parameters))
+			if(!r.allowCommand(new RankCommand(e.command.getCommandName(), e.parameters)))
 			{
 				ChatComponentTranslation c = new ChatComponentTranslation("commands.generic.permission", new Object[0]);
                 c.getChatStyle().setColor(EnumChatFormatting.RED);

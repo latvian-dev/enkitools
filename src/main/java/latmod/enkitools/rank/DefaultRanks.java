@@ -9,55 +9,30 @@ public class DefaultRanks
 		{
 			Rank r = new Rank();
 			r.setDefaults();
-			r.color = "7";
-			r.prefix = "";
-			r.commands.add("+help");
-			r.commands.add("+motd");
-			r.commands.add("+rules");
-			r.commands.add("+afk");
-			r.commands.add("+list");
-			r.commands.add("+tell");
-			r.commands.add("+kill");
-			r.commands.add("+shutdownTimer");
-			r.commands.add("+f");
-			r.commands.add("+getrank");
-			r.commands.add("+latcore");
-			r.commands.add("+friendsLM");
-			r.commands.add("+realnick");
-			r.commands.add("+cofh");
-			r.commands.add("+near");
-			r.commands.add("+me");
-			r.setConfig(RankConfig.IGNORE_SPAWN, "false");
-			r.setConfig(RankConfig.MAX_CLAIM_POWER, "10");
-			r.setConfig(RankConfig.MAX_HOME_COUNT, "0");
-			ranks.put("Player", r);
-		}
-		
-		{
-			Rank r = new Rank();
-			r.setDefaults();
 			r.color = "e";
 			r.prefix = "";
-			r.parentRank = "Player";
-			r.commands.add("+irc");
-			r.setConfig(RankConfig.MAX_CLAIM_POWER, "15");
-			ranks.put("Member", r);
-		}
-		
-		{
-			Rank r = new Rank();
-			r.setDefaults();
-			r.color = "b";
-			r.prefix = "[Donator] ";
-			r.parentRank = "Member";
-			r.commands.add("+sethome");
-			r.commands.add("+home");
-			r.commands.add("+delhome");
-			r.commands.add("+head");
-			r.commands.add("+spawn");
-			r.setConfig(RankConfig.MAX_CLAIM_POWER, "25");
-			r.setConfig(RankConfig.MAX_HOME_COUNT, "1");
-			ranks.put("Donator", r);
+			r.allowedCmds.add(new RankCommand("help"));
+			r.allowedCmds.add(new RankCommand("motd"));
+			r.allowedCmds.add(new RankCommand("rules"));
+			r.allowedCmds.add(new RankCommand("afk"));
+			r.allowedCmds.add(new RankCommand("list"));
+			r.allowedCmds.add(new RankCommand("tell"));
+			r.allowedCmds.add(new RankCommand("kill"));
+			r.allowedCmds.add(new RankCommand("getrank"));
+			r.allowedCmds.add(new RankCommand("ftbu"));
+			r.allowedCmds.add(new RankCommand("cofh"));
+			r.allowedCmds.add(new RankCommand("near"));
+			r.allowedCmds.add(new RankCommand("me"));
+			r.allowedCmds.add(new RankCommand("irc"));
+			r.allowedCmds.add(new RankCommand("sethome"));
+			r.allowedCmds.add(new RankCommand("home"));
+			r.allowedCmds.add(new RankCommand("delhome"));
+			r.allowedCmds.add(new RankCommand("head"));
+			r.allowedCmds.add(new RankCommand("spawn"));
+			r.config.set(RankConfig.IGNORE_SPAWN, "false");
+			r.config.set(RankConfig.MAX_CLAIM_POWER, "16");
+			r.config.set(RankConfig.MAX_HOME_COUNT, "3");
+			ranks.put("Player", r);
 		}
 		
 		{
@@ -65,11 +40,10 @@ public class DefaultRanks
 			r.setDefaults();
 			r.color = "b";
 			r.prefix = "[VIP] ";
-			r.parentRank = "Donator";
-			r.commands.add("+back");
-			r.commands.add("+top");
-			r.setConfig(RankConfig.MAX_CLAIM_POWER, "40");
-			r.setConfig(RankConfig.MAX_HOME_COUNT, "5");
+			r.parentRank = "Player";
+			r.allowedCmds.add(new RankCommand("some_vip_command"));
+			r.config.set(RankConfig.MAX_CLAIM_POWER, "40");
+			r.config.set(RankConfig.MAX_HOME_COUNT, "10");
 			ranks.put("VIP", r);
 		}
 		
@@ -79,32 +53,27 @@ public class DefaultRanks
 			r.color = "2";
 			r.prefix = "";
 			r.parentRank = "VIP";
-			r.commands.add("+kick");
-			r.commands.add("+whitelist");
-			r.commands.add("+ban");
-			r.commands.add("+ban-ip");
-			r.commands.add("+pardon");
-			r.commands.add("+pardon-ip");
-			r.commands.add("+seed");
-			r.commands.add("+worldedit");
-			r.commands.add("+setrank");
-			r.commands.add("+gamerule");
-			r.commands.add("+gamemode");
-			r.commands.add("+scoreboard");
-			r.commands.add("+servirc");
-			r.commands.add("+xu_killitems");
-			r.commands.add("+xu_killmobs");
-			r.commands.add("+clear");
-			r.commands.add("+setnick");
-			r.commands.add("+setskin");
-			r.commands.add("+weather");
-			r.commands.add("+admin");
-			r.commands.add("+latcoreadmin");
-			r.commands.add("+tpl");
-			r.commands.add("+worldedit");
-			r.setConfig(RankConfig.IGNORE_SPAWN, "true");
-			r.setConfig(RankConfig.MAX_CLAIM_POWER, "5000");
-			r.setConfig(RankConfig.MAX_HOME_COUNT, "500");
+			r.allowedCmds.add(new RankCommand("kick"));
+			r.allowedCmds.add(new RankCommand("whitelist"));
+			r.allowedCmds.add(new RankCommand("ban"));
+			r.allowedCmds.add(new RankCommand("ban-ip"));
+			r.allowedCmds.add(new RankCommand("pardon"));
+			r.allowedCmds.add(new RankCommand("pardon-ip"));
+			r.allowedCmds.add(new RankCommand("seed"));
+			r.allowedCmds.add(new RankCommand("setrank"));
+			r.allowedCmds.add(new RankCommand("gamerule"));
+			r.allowedCmds.add(new RankCommand("gamemode"));
+			r.allowedCmds.add(new RankCommand("scoreboard"));
+			r.allowedCmds.add(new RankCommand("servirc"));
+			r.allowedCmds.add(new RankCommand("xu_killitems"));
+			r.allowedCmds.add(new RankCommand("xu_killmobs"));
+			r.allowedCmds.add(new RankCommand("clear"));
+			r.allowedCmds.add(new RankCommand("weather"));
+			r.allowedCmds.add(new RankCommand("admin"));
+			r.allowedCmds.add(new RankCommand("tpl"));
+			r.config.set(RankConfig.IGNORE_SPAWN, "true");
+			r.config.set(RankConfig.MAX_CLAIM_POWER, "5000");
+			r.config.set(RankConfig.MAX_HOME_COUNT, "500");
 			ranks.put("Mod", r);
 		}
 		
@@ -114,7 +83,7 @@ public class DefaultRanks
 			r.color = "2";
 			r.prefix = "[*] ";
 			r.parentRank = "Mod";
-			r.commands.add("*");
+			r.allowedCmds.add(new RankCommand("*"));
 			ranks.put("Admin", r);
 		}
 		
