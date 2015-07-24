@@ -4,7 +4,7 @@ import java.util.*;
 
 import latmod.enkitools.*;
 import latmod.ftbu.core.LatCoreMC;
-import latmod.ftbu.core.net.LMNetHelper;
+import latmod.ftbu.core.net.*;
 import latmod.ftbu.core.util.*;
 import latmod.ftbu.core.world.*;
 import net.minecraft.util.EnumChatFormatting;
@@ -181,7 +181,7 @@ public class Rank
 		{
 			p.updateMaxClaimPower();
 			p.sendUpdate(null, true);
-			LMNetHelper.sendTo(null, p.getInfo());
+			LMNetHelper.sendTo(null, new MessageLMPlayerInfo(p));
 		}
 	}
 	
