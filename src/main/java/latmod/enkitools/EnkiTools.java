@@ -4,6 +4,7 @@ import java.util.*;
 
 import latmod.enkitools.cmd.*;
 import latmod.ftbu.core.*;
+import latmod.ftbu.core.api.FTBUReloadableRegistry;
 import latmod.ftbu.core.util.*;
 import net.minecraft.command.*;
 import cpw.mods.fml.common.Mod;
@@ -31,6 +32,7 @@ public class EnkiTools
 		LatCoreMC.BusType.FORGE.register(EnkiToolsEventHandler.instance);
 		LatCoreMC.BusType.LATMOD.register(EnkiToolsEventHandler.instance);
 		LatCore.updateGson();
+		FTBUReloadableRegistry.add(EnkiToolsEventHandler.instance);
 	}
 	
 	@Mod.EventHandler

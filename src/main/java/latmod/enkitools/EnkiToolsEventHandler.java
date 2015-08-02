@@ -2,16 +2,19 @@ package latmod.enkitools;
 
 import latmod.enkitools.rank.*;
 import latmod.ftbu.core.LatCoreMC;
+import latmod.ftbu.core.api.IFTBUReloadable;
 import latmod.ftbu.core.event.*;
 import latmod.ftbu.core.world.*;
+import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.*;
 import net.minecraft.util.*;
 import net.minecraftforge.event.*;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import cpw.mods.fml.common.eventhandler.*;
+import cpw.mods.fml.relauncher.Side;
 
-public class EnkiToolsEventHandler
+public class EnkiToolsEventHandler implements IFTBUReloadable
 {
 	public static final EnkiToolsEventHandler instance = new EnkiToolsEventHandler();
 	
@@ -100,10 +103,9 @@ public class EnkiToolsEventHandler
 		}
 	}
 	
-	@SubscribeEvent
-	public void onReload(ReloadEvent e)
+	public void onReloaded(Side s, ICommandSender sender) throws Exception
 	{
-		if(e.side.isClient()) return;
+		if(s.isClient()) return;
 		
 		EnkiToolsConfig.loadConfig();
 		Rank.reload();
