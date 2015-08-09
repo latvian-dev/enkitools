@@ -38,9 +38,7 @@ public class EnkiTools
 	@Mod.EventHandler
 	public void serverStarting(FMLServerStartingEvent e)
 	{
-		e.registerServerCommand(new CmdSethome());
 		e.registerServerCommand(new CmdHome());
-		e.registerServerCommand(new CmdDelhome());
 		e.registerServerCommand(new CmdSetRank());
 		e.registerServerCommand(new CmdGetRank());
 		e.registerServerCommand(new CmdHead());

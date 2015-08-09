@@ -5,7 +5,6 @@ import latmod.ftbu.core.inv.LMInvUtils;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.*;
-import net.minecraft.nbt.*;
 
 public class CmdHead extends CommandLM
 {
@@ -18,33 +17,21 @@ public class CmdHead extends CommandLM
 		
 		ItemStack is = player.getHeldItem();
 		
-		if(is != null)
+		if(is != null && is.getItem() instanceof ItemBlock)
 		{
-			if(is.getItem() instanceof ItemBlock)
+			if(player.inventory.armorInventory[3] != null)
 			{
-				if(player.inventory.armorInventory[3] != null)
-				{
-					LMInvUtils.dropItem(player, player.inventory.armorInventory[3].copy());
-					player.inventory.armorInventory[3] = null;
-				}
-				
-				player.inventory.armorInventory[3] = LMInvUtils.singleCopy(player.getHeldItem());
-				
-				player.inventory.mainInventory[player.inventory.currentItem] = LMInvUtils.reduceItem(player.inventory.mainInventory[player.inventory.currentItem]);
-				player.inventory.markDirty();
+				LMInvUtils.giveItem(player, player.inventory.armorInventory[3].copy());
+				player.inventory.armorInventory[3] = null;
 			}
-			else if(is.getItem() instanceof ItemSkull && is.getItemDamage() == 3)
-			{
-				if(is.stackTagCompound == null) is.stackTagCompound = new NBTTagCompound();
-				
-				NBTTagCompound nbt = new NBTTagCompound();
-				NBTUtil.func_152460_a(nbt, player.getGameProfile());
-				is.stackTagCompound.setTag("SkullOwner", nbt);
-				
-				player.inventory.markDirty();
-			}
+			
+			player.inventory.armorInventory[3] = LMInvUtils.singleCopy(player.getHeldItem());
+			
+			player.inventory.mainInventory[player.inventory.currentItem] = LMInvUtils.reduceItem(player.inventory.mainInventory[player.inventory.currentItem]);
+			player.inventory.markDirty();
+			return null;
 		}
 		
-		return null;
+		return "Invalid block!";
 	}
 }

@@ -24,9 +24,7 @@ public class DefaultRanks
 			r.allowedCmds.add(new RankCommand("near"));
 			r.allowedCmds.add(new RankCommand("me"));
 			r.allowedCmds.add(new RankCommand("irc"));
-			r.allowedCmds.add(new RankCommand("sethome"));
 			r.allowedCmds.add(new RankCommand("home"));
-			r.allowedCmds.add(new RankCommand("delhome"));
 			r.allowedCmds.add(new RankCommand("head"));
 			r.allowedCmds.add(new RankCommand("spawn"));
 			r.config.set(RankConfig.IGNORE_SPAWN, "false");

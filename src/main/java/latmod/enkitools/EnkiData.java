@@ -3,9 +3,9 @@ package latmod.enkitools;
 import java.io.File;
 
 import latmod.ftbu.core.*;
-import latmod.ftbu.core.util.*;
+import latmod.ftbu.core.util.LMFileUtils;
 import latmod.ftbu.core.world.LMPlayerServer;
-import net.minecraft.nbt.*;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class EnkiData
 {
@@ -39,69 +39,43 @@ public class EnkiData
 	
 	public static class Homes
 	{
-		public static final String DEF = "home";
+		public static String[] listHomes(LMPlayerServer p)
+		{ return LMNBTUtils.getMapKeysA((NBTTagCompound)p.serverData.getTag("Homes")); }
 		
-		//FIXME
-		private static FastMap<String, EntityPos> getHomesMap(LMPlayerServer p)
+		public static EntityPos getHome(LMPlayerServer p, String s)
 		{
-			FastMap<String, EntityPos> map = new FastMap<String, EntityPos>();
-			
 			NBTTagCompound tag = (NBTTagCompound)p.serverData.getTag("Homes");
-			if(tag == null) return map;
-			
-			FastMap<String, NBTTagIntArray> map1 = LMNBTUtils.toFastMapWithType(tag);
-			
-			for(int i = 0; i < map1.size(); i++)
-				map.put(map1.keys.get(i), EntityPos.fromIntArray(map1.values.get(i).func_150302_c()));
-			
-			return map;
+			if(tag == null || !tag.hasKey(s)) return null;
+			return EntityPos.fromIntArray(tag.getIntArray(s));
 		}
 		
-		//FIXME
-		private static void setHomesMap(LMPlayerServer p, FastMap<String, EntityPos> map)
+		public static void setHome(LMPlayerServer p, String s, int x, int y, int z, int dim)
 		{
 			NBTTagCompound tag = p.serverData.getCompoundTag("Homes");
-			for(int i = 0; i < map.size(); i++)
-				tag.setIntArray(map.keys.get(i), map.values.get(i).toIntArray());
+			tag.setIntArray(s, new int[] { x, y, z, dim });
 			p.serverData.setTag("Homes", tag);
 		}
 		
-		public static String[] listHomes(LMPlayerServer p)
-		{
-			return getHomesMap(p).keys.toArray(new String[0]);
-		}
-		
-		public static String[] listHomesNoDef(LMPlayerServer p)
-		{
-			FastList<String> list = getHomesMap(p).keys;
-			list.remove(DEF);
-			return list.toArray(new String[0]);
-		}
-		
-		public static EntityPos getHome(LMPlayerServer p, String s)
-		{ return getHomesMap(p).get(s); }
-		
-		public static boolean setHome(LMPlayerServer p, String s, int x, int y, int z, int dim)
-		{
-			FastMap<String, EntityPos> map = getHomesMap(p);
-			boolean b = map.put(s, new EntityPos(x + 0.5D, y + 0.5D, z + 0.5D, dim));
-			setHomesMap(p, map);
-			return b;
-		}
-		
-		public static boolean setHome(LMPlayerServer p, String s, EntityPos ep)
-		{ return setHome(p, s, ep.intX(), ep.intY(), ep.intZ(), ep.dim); }
+		public static void setHome(LMPlayerServer p, String s, EntityPos ep)
+		{ setHome(p, s, ep.intX(), ep.intY(), ep.intZ(), ep.dim); }
 		
 		public static boolean remHome(LMPlayerServer p, String s)
 		{
-			FastMap<String, EntityPos> map = getHomesMap(p);
-			boolean b = map.remove(s);
-			setHomesMap(p, map);
+			NBTTagCompound tag = (NBTTagCompound)p.serverData.getTag("Homes");
+			if(tag == null || tag.hasNoTags()) return false;
+			boolean b = tag.hasKey(s);
+			
+			if(b)
+			{
+				tag.removeTag(s);
+				p.serverData.setTag("Homes", tag);
+			}
+			
 			return b;
 		}
 		
 		public static int homesSize(LMPlayerServer p)
-		{ return getHomesMap(p).size(); }
+		{ return listHomes(p).length; }
 	}
 	
 	public static enum ClaimResult
