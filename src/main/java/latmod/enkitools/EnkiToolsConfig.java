@@ -3,7 +3,7 @@ package latmod.enkitools;
 import java.io.File;
 
 import latmod.ftbu.core.event.FTBUReadmeEvent;
-import latmod.ftbu.core.util.LatCore;
+import latmod.ftbu.core.util.LMJsonUtils;
 
 import com.google.gson.annotations.Expose;
 
@@ -39,7 +39,7 @@ public class EnkiToolsConfig
 		public static void load()
 		{
 			saveFile = new File(EnkiData.folder, "general.txt");
-			general = LatCore.fromJsonFile(saveFile, General.class);
+			general = LMJsonUtils.fromJsonFile(saveFile, General.class);
 			if(general == null) general = new General();
 			general.loadDefaults();
 			save();
@@ -56,7 +56,7 @@ public class EnkiToolsConfig
 		
 		public static void save()
 		{
-			LatCore.toJsonFile(saveFile, general);
+			LMJsonUtils.toJsonFile(saveFile, general);
 		}
 		
 		public static void saveReadme(FTBUReadmeEvent e)

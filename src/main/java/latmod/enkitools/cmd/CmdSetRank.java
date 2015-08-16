@@ -32,7 +32,7 @@ public class CmdSetRank extends CommandLM
 			LMPlayerServer p = getLMPlayer(args[0]);
 			
 			Rank.setPlayerRank(p, r);
-			EntityPlayer ep = p.getPlayerMP();
+			EntityPlayer ep = p.getPlayer();
 			
 			if(ep != null)
 			{

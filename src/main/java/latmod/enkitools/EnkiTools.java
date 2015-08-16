@@ -29,9 +29,9 @@ public class EnkiTools
 		LMMod.init(this, null, null);
 		EnkiToolsConfig.loadConfig();
 		
-		LatCoreMC.BusType.FORGE.register(EnkiToolsEventHandler.instance);
-		LatCoreMC.BusType.LATMOD.register(EnkiToolsEventHandler.instance);
-		LatCore.updateGson();
+		EnumBusType.FORGE.register(EnkiToolsEventHandler.instance);
+		EnumBusType.LATMOD.register(EnkiToolsEventHandler.instance);
+		LMJsonUtils.updateGson();
 		FTBUReloadableRegistry.add(EnkiToolsEventHandler.instance);
 	}
 	

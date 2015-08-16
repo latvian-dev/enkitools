@@ -49,13 +49,13 @@ public class EnkiToolsEventHandler implements IFTBUReloadable
 				
 				if(EnkiToolsConfig.general.enableHomeSigns && t.signText[1].equals("[home]"))
 				{
-					LatCoreMC.executeCommand(e.entityPlayer, "home " + t.signText[2]);
+					LatCoreMC.runCommand(e.entityPlayer, "home " + t.signText[2]);
 					e.setCanceled(true);
 					return;
 				}
 				else if(EnkiToolsConfig.general.enableWarpSigns && !t.signText[2].isEmpty() && t.signText[1].equals("[warp]"))
 				{
-					LatCoreMC.executeCommand(e.entityPlayer, "warp " + t.signText[2]);
+					LatCoreMC.runCommand(e.entityPlayer, "warp " + t.signText[2]);
 					e.setCanceled(true);
 					return;
 				}

@@ -110,7 +110,7 @@ public class Rank
 	
 	public static void reload()
 	{
-		ranksFile = LatCore.fromJsonFile(EnkiData.ranks, RanksFile.class);
+		ranksFile = LMJsonUtils.fromJsonFile(EnkiData.ranks, RanksFile.class);
 		
 		if(ranksFile == null)
 		{
@@ -120,7 +120,7 @@ public class Rank
 			ranksFile.ranks = new HashMap<String, Rank>();
 			ranksFile.defaultRank = DefaultRanks.loadDefaultRanks(ranksFile.ranks);
 			
-			LatCore.toJsonFile(EnkiData.ranks, ranksFile);
+			LMJsonUtils.toJsonFile(EnkiData.ranks, ranksFile);
 		}
 		
 		if(!ranksFile.ranks.isEmpty() && (ranksFile.defaultRank == null || ranksFile.defaultRank.isEmpty()))
@@ -180,7 +180,7 @@ public class Rank
 		if(p != null)
 		{
 			p.updateMaxClaimPower();
-			p.sendUpdate(null, true);
+			p.sendUpdate(true);
 			LMNetHelper.sendTo(null, new MessageLMPlayerInfo(p));
 		}
 	}
@@ -236,5 +236,5 @@ public class Rank
 	{ return getPlayerRank(LMWorldServer.inst.getPlayer(o)).getConfig(c); }
 	
 	public static final String[] getAllRanks()
-	{ return ranks.keys.toArray(new String[0]); }
+	{ return ranks.keys.toArray(new String[ranks.keys.size()]); }
 }
