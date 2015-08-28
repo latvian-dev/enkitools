@@ -6,14 +6,12 @@ import latmod.ftbu.core.cmd.*;
 import latmod.ftbu.core.world.LMPlayerServer;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.*;
 
 public class CmdSetRank extends CommandLM
 {
 	public CmdSetRank()
 	{ super("setrank", CommandLevel.ALL); }
-	
-	public void printHelp(ICommandSender ics)
-	{ LatCoreMC.printChat(ics, "/setrank <player> <rank>"); }
 	
 	public NameType getUsername(String[] args, int i)
 	{ return (i == 0) ? NameType.OFF : NameType.NONE; }
@@ -24,7 +22,7 @@ public class CmdSetRank extends CommandLM
 		return super.getTabStrings(ics, args, i);
 	}
 	
-	public String onCommand(ICommandSender ics, String[] args)
+	public IChatComponent onCommand(ICommandSender ics, String[] args)
 	{
 		if(args.length >= 2)
 		{
@@ -40,9 +38,9 @@ public class CmdSetRank extends CommandLM
 					LatCoreMC.printChat(ep, "Your rank is set to " + r.rankID);
 			}
 			
-			return FINE + p.getName() + " now is " + r.rankID;
+			return new ChatComponentText(p.getName() + " now is " + r.rankID);
 		}
-		else printHelp(ics);
-		return null;
+		
+		return new ChatComponentText("/setrank <player> <rank>");
 	}
 }

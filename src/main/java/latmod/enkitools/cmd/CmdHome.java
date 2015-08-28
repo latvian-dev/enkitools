@@ -7,6 +7,7 @@ import latmod.ftbu.core.cmd.*;
 import latmod.ftbu.core.world.LMPlayerServer;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.*;
 
 public class CmdHome extends CommandLM
 {
@@ -19,7 +20,7 @@ public class CmdHome extends CommandLM
 		return super.getTabStrings(ics, args, i);
 	}
 	
-	public String onCommand(ICommandSender ics, String[] args)
+	public IChatComponent onCommand(ICommandSender ics, String[] args)
 	{
 		EntityPlayerMP ep = getCommandSenderAsPlayer(ics);
 		
@@ -39,10 +40,10 @@ public class CmdHome extends CommandLM
 			
 			int maxHomes = Rank.getConfig(p, RankConfig.MAX_HOME_COUNT).getInt();
 			if(maxHomes <= 0 || EnkiData.Homes.homesSize(p) >= maxHomes)
-				return "You can't set any more home locations!";
+				return error(new ChatComponentText("You can't set any more home locations!"));
 			
 			EnkiData.Homes.setHome(p, args[1], p.getLastPos());
-			return FINE + "Home '" + args[1] + "' set!";
+			return new ChatComponentText("Home '" + args[1] + "' set!");
 		}
 		
 		if(args[0].equals("del"))
@@ -50,18 +51,18 @@ public class CmdHome extends CommandLM
 			checkArgs(args, 2);
 			
 			if(EnkiData.Homes.remHome(p, args[1]))
-				return FINE + "Deleted '" + args[1] + "'";
-			return "Home '" + args[1] + "' not set!";
+				return new ChatComponentText("Deleted '" + args[1] + "'");
+			return error(new ChatComponentText("Home '" + args[1] + "' not set!"));
 		}
 		
 		EntityPos pos = EnkiData.Homes.getHome(p, args[0]);
 		
-		if(pos == null) return "Home '" + args[0] + "' not set!";
+		if(pos == null) return error(new ChatComponentText("Home '" + args[0] + "' not set!"));
 		
 		if(ep.dimension != pos.dim && !EnkiToolsConfig.general.crossDimHomes)
-			return "You can't teleport to another dimension!";
+			return error(new ChatComponentText("You can't teleport to another dimension!"));
 		
 		LMDimUtils.teleportPlayer(ep, pos);
-		return FINE + "Teleported to '" + args[0] + "'";
+		return new ChatComponentText("Teleported to '" + args[0] + "'");
 	}
 }

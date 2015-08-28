@@ -5,13 +5,14 @@ import latmod.ftbu.core.LatCoreMC;
 import latmod.ftbu.core.cmd.*;
 import latmod.ftbu.core.world.*;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.util.*;
 
 public class CmdGetRank extends CommandLM
 {
 	public CmdGetRank()
 	{ super("getrank", CommandLevel.ALL); }
 	
-	public String onCommand(ICommandSender ics, String[] args)
+	public IChatComponent onCommand(ICommandSender ics, String[] args)
 	{
 		LMPlayerServer ep = null;
 		
@@ -38,7 +39,7 @@ public class CmdGetRank extends CommandLM
 		else
 			ep = getLMPlayer(ics);
 		
-		return FINE + ep.getName() + " is " + Rank.getPlayerRank(ep).rankID;
+		return new ChatComponentText(ep.getName() + " is " + Rank.getPlayerRank(ep).rankID);
 	}
 	
 	public NameType getUsername(String[] args, int i)

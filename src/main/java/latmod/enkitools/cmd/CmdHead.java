@@ -5,13 +5,14 @@ import latmod.ftbu.core.inv.LMInvUtils;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.*;
+import net.minecraft.util.*;
 
 public class CmdHead extends CommandLM
 {
 	public CmdHead()
 	{ super("head", CommandLevel.ALL); }
 	
-	public String onCommand(ICommandSender ics, String[] args)
+	public IChatComponent onCommand(ICommandSender ics, String[] args)
 	{
 		EntityPlayerMP player = getCommandSenderAsPlayer(ics);
 		
@@ -32,6 +33,6 @@ public class CmdHead extends CommandLM
 			return null;
 		}
 		
-		return "Invalid block!";
+		return error(new ChatComponentText("Invalid block!")); //TODO: Remove
 	}
 }

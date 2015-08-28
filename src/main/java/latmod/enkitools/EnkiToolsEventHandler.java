@@ -2,8 +2,8 @@ package latmod.enkitools;
 
 import latmod.enkitools.rank.*;
 import latmod.ftbu.core.LatCoreMC;
-import latmod.ftbu.core.api.IFTBUReloadable;
-import latmod.ftbu.core.event.*;
+import latmod.ftbu.core.api.*;
+import latmod.ftbu.core.event.LMPlayerServerEvent;
 import latmod.ftbu.core.world.*;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -11,23 +11,28 @@ import net.minecraft.tileentity.*;
 import net.minecraft.util.*;
 import net.minecraftforge.event.*;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+
+import com.google.gson.GsonBuilder;
+
 import cpw.mods.fml.common.eventhandler.*;
 import cpw.mods.fml.relauncher.Side;
 
-public class EnkiToolsEventHandler implements IFTBUReloadable
+public class EnkiToolsEventHandler implements IFTBUReloadable, IReadmeProvider, IFTBUGsonProvider // EnkiTools
 {
 	public static final EnkiToolsEventHandler instance = new EnkiToolsEventHandler();
 	
-	@SubscribeEvent
-	public void saveReadme(FTBUReadmeEvent e)
-	{ EnkiToolsConfig.saveReadme(e); }
-	
-	@SubscribeEvent
-	public void onLMGsonEvent(LMGsonEvent e)
+	public void saveReadme(ReadmeFile file)
 	{
-		LatCoreMC.logger.info("Added Json Serializers for EnkiTools");
-		e.builder.registerTypeHierarchyAdapter(RankCommand.class, new RankCommand.Serializer());
-		e.builder.registerTypeHierarchyAdapter(RankConfig.ConfigList.class, new RankConfig.ConfigList.Serializer());
+		EnkiToolsConfig.saveReadme(file);
+	}
+	
+	public void addGsonHandlers(GsonBuilder builder)
+	{
+		//LatCoreMC.logger.info("Added Json Serializers for EnkiTools");
+		builder.registerTypeHierarchyAdapter(RankCommand.class, new RankCommand.Serializer());
+		builder.registerTypeHierarchyAdapter(RankConfig.ConfigList.class, new RankConfig.ConfigList.Serializer());
+		
+		
 	}
 	
 	@SubscribeEvent
