@@ -3,36 +3,41 @@ package latmod.enkitools;
 import latmod.enkitools.rank.*;
 import latmod.ftbu.core.LatCoreMC;
 import latmod.ftbu.core.api.*;
-import latmod.ftbu.core.event.LMPlayerServerEvent;
+import latmod.ftbu.core.api.readme.EventSaveReadme;
 import latmod.ftbu.core.world.*;
-import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.*;
 import net.minecraft.util.*;
 import net.minecraftforge.event.*;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-
-import com.google.gson.GsonBuilder;
-
 import cpw.mods.fml.common.eventhandler.*;
-import cpw.mods.fml.relauncher.Side;
 
-public class EnkiToolsEventHandler implements IFTBUReloadable, IReadmeProvider, IFTBUGsonProvider // EnkiTools
+public class EnkiToolsEventHandler // EnkiTools
 {
 	public static final EnkiToolsEventHandler instance = new EnkiToolsEventHandler();
 	
-	public void saveReadme(ReadmeFile file)
+	@SubscribeEvent
+	public void saveReadme(EventSaveReadme e)
 	{
-		EnkiToolsConfig.saveReadme(file);
+		EnkiToolsConfig.saveReadme(e.file);
 	}
 	
-	public void addGsonHandlers(GsonBuilder builder)
+	@SubscribeEvent
+	public void addGsonHandlers(EventFTBUGson e)
 	{
 		//LatCoreMC.logger.info("Added Json Serializers for EnkiTools");
-		builder.registerTypeHierarchyAdapter(RankCommand.class, new RankCommand.Serializer());
-		builder.registerTypeHierarchyAdapter(RankConfig.ConfigList.class, new RankConfig.ConfigList.Serializer());
-		
-		
+		e.builder.registerTypeHierarchyAdapter(RankCommand.class, new RankCommand.Serializer());
+		e.builder.registerTypeHierarchyAdapter(RankConfig.ConfigList.class, new RankConfig.ConfigList.Serializer());
+	}
+	
+	@SubscribeEvent
+	public void onReloaded(EventFTBUReload e)
+	{
+		if(e.side.isServer())
+		{
+			EnkiToolsConfig.loadConfig();
+			Rank.reload();
+		}
 	}
 	
 	@SubscribeEvent
@@ -106,14 +111,6 @@ public class EnkiToolsEventHandler implements IFTBUReloadable, IReadmeProvider, 
 				e.setCanceled(true);
 			}
 		}
-	}
-	
-	public void onReloaded(Side s, ICommandSender sender) throws Exception
-	{
-		if(s.isClient()) return;
-		
-		EnkiToolsConfig.loadConfig();
-		Rank.reload();
 	}
 	
 	@SubscribeEvent

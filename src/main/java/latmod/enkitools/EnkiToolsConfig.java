@@ -2,7 +2,7 @@ package latmod.enkitools;
 
 import java.io.File;
 
-import latmod.ftbu.core.api.*;
+import latmod.ftbu.core.api.readme.*;
 import latmod.ftbu.core.util.LMJsonUtils;
 
 import com.google.gson.annotations.Expose;
