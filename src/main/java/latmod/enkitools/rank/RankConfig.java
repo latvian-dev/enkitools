@@ -3,9 +3,9 @@ package latmod.enkitools.rank;
 import java.lang.reflect.Type;
 import java.util.Map;
 
-import latmod.ftbu.core.util.FastMap;
-
 import com.google.gson.*;
+
+import latmod.ftbu.core.util.FastMap;
 
 public class RankConfig
 {

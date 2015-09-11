@@ -2,14 +2,14 @@ package latmod.enkitools.rank;
 
 import java.util.*;
 
+import com.google.gson.annotations.Expose;
+
 import latmod.enkitools.*;
 import latmod.ftbu.core.LatCoreMC;
 import latmod.ftbu.core.net.*;
 import latmod.ftbu.core.util.*;
 import latmod.ftbu.core.world.*;
 import net.minecraft.util.EnumChatFormatting;
-
-import com.google.gson.annotations.Expose;
 
 public class Rank
 {

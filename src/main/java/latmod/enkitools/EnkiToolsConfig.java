@@ -2,10 +2,10 @@ package latmod.enkitools;
 
 import java.io.File;
 
+import com.google.gson.annotations.Expose;
+
 import latmod.ftbu.core.api.readme.*;
 import latmod.ftbu.core.util.LMJsonUtils;
-
-import com.google.gson.annotations.Expose;
 
 public class EnkiToolsConfig
 {

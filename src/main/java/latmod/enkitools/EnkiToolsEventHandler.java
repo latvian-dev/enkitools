@@ -1,5 +1,6 @@
 package latmod.enkitools;
 
+import cpw.mods.fml.common.eventhandler.*;
 import latmod.enkitools.rank.*;
 import latmod.ftbu.core.LatCoreMC;
 import latmod.ftbu.core.api.*;
@@ -10,7 +11,6 @@ import net.minecraft.tileentity.*;
 import net.minecraft.util.*;
 import net.minecraftforge.event.*;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import cpw.mods.fml.common.eventhandler.*;
 
 public class EnkiToolsEventHandler // EnkiTools
 {
