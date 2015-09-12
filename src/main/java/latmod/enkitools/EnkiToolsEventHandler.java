@@ -117,7 +117,7 @@ public class EnkiToolsEventHandler // EnkiTools
 	public void customInfo(LMPlayerServerEvent.CustomInfo e)
 	{
 		Rank r = Rank.getPlayerRank(e.player);
-		if(r != null) e.info.add(r.getColor() + '[' + r.rankID + ']');
+		if(r != null) e.info.add(new ChatComponentText(r.getColor() + '[' + r.rankID + ']'));
 	}
 	
 	@SubscribeEvent
