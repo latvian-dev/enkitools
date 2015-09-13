@@ -2,8 +2,6 @@ package latmod.enkitools;
 
 import java.io.File;
 
-import com.google.gson.annotations.Expose;
-
 import latmod.ftbu.core.api.readme.*;
 import latmod.ftbu.core.util.LMJsonUtils;
 
@@ -28,13 +26,13 @@ public class EnkiToolsConfig
 	
 	public static class General
 	{
-		private static File saveFile;
+		private static transient File saveFile;
 		
-		@Expose public Boolean crossDimHomes;
-		@Expose public Boolean overrideCommands;
-		@Expose public Boolean overrideChat;
-		@Expose public Boolean enableWarpSigns;
-		@Expose public Boolean enableHomeSigns;
+		public Boolean crossDimHomes;
+		public Boolean overrideCommands;
+		public Boolean overrideChat;
+		public Boolean enableWarpSigns;
+		public Boolean enableHomeSigns;
 		
 		public static void load()
 		{

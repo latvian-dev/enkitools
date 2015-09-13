@@ -100,8 +100,8 @@ public class Rank
 	
 	private static class RanksFile
 	{
-		@Expose public String defaultRank;
-		@Expose public Map<String, Rank> ranks;
+		public String defaultRank;
+		public Map<String, Rank> ranks;
 	}
 	
 	private static final FastMap<String, Rank> ranks = new FastMap<String, Rank>();
