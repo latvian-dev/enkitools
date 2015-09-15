@@ -21,17 +21,26 @@ public class EnkiToolsConfig
 	
 	public static void saveReadme(ReadmeFile file)
 	{
-		General.saveReadme(file);
+		file.add(new ReadmeCategory("latmod/enkitools/general.txt").addFromClass(General.class));
 	}
 	
 	public static class General
 	{
 		private static transient File saveFile;
 		
+		@ReadmeInfo(info = "Allow players use /home to teleport to other dimensions", def = "true")
 		public Boolean crossDimHomes;
+		
+		@ReadmeInfo(info = "Override vanilla commands, so you can allow non-op players to use op commands", def = "true")
 		public Boolean overrideCommands;
+		
+		@ReadmeInfo(info = "Enable rank colors", def = "true")
 		public Boolean overrideChat;
+		
+		@ReadmeInfo(info = "Enable right-clicking on '[warp]' signs", def = "true")
 		public Boolean enableWarpSigns;
+		
+		@ReadmeInfo(info = "Enable right-clicking on '[home]' signs", def = "true")
 		public Boolean enableHomeSigns;
 		
 		public static void load()
@@ -55,16 +64,6 @@ public class EnkiToolsConfig
 		public static void save()
 		{
 			LMJsonUtils.toJsonFile(saveFile, general);
-		}
-		
-		public static void saveReadme(ReadmeFile file)
-		{
-			ReadmeCategory c = file.get("latmod/enkitools/general.txt");
-			c.add("crossDimHomes", "Allow players use /home to teleport to other dimensions", true);
-			c.add("overrideCommands", "Override vanilla commands, so you can allow non-op players to use op commands", true);
-			c.add("overrideChat", "Enable rank colors", true);
-			c.add("enableWarpSigns", "Enable right-clicking on '[warp]' signs", true);
-			c.add("enableHomeSigns", "Enable right-clicking on '[home]' signs", true);
 		}
 	}
 }

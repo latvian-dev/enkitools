@@ -27,7 +27,7 @@ public class EnkiTools
 		EnkiData.init();
 		LMMod.init(this, null, null);
 		EnkiToolsConfig.loadConfig();
-		EnumBusType.register(EnkiToolsEventHandler.instance);
+		EventBusHelper.register(EnkiToolsEventHandler.instance);
 		LMJsonUtils.updateGson();
 	}
 	
