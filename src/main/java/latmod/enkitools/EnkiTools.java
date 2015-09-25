@@ -5,9 +5,9 @@ import java.util.*;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.relauncher.ReflectionHelper;
+import latmod.core.util.*;
 import latmod.enkitools.cmd.*;
-import latmod.ftbu.core.*;
-import latmod.ftbu.core.util.*;
+import latmod.ftbu.util.*;
 import net.minecraft.command.*;
 
 @Mod(modid = EnkiTools.MOD_ID, name = "EnkiTools", version = "@VERSION@", acceptableRemoteVersions = "*", dependencies = "required-after:FTBU")

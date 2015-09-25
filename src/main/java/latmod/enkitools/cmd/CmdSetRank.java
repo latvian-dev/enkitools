@@ -1,9 +1,9 @@
 package latmod.enkitools.cmd;
 
 import latmod.enkitools.rank.Rank;
-import latmod.ftbu.core.LatCoreMC;
-import latmod.ftbu.core.cmd.*;
-import latmod.ftbu.core.world.LMPlayerServer;
+import latmod.ftbu.cmd.*;
+import latmod.ftbu.util.LatCoreMC;
+import latmod.ftbu.world.LMPlayerServer;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.*;

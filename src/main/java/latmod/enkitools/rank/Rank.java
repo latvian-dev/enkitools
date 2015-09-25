@@ -4,11 +4,11 @@ import java.util.*;
 
 import com.google.gson.annotations.Expose;
 
+import latmod.core.util.*;
 import latmod.enkitools.*;
-import latmod.ftbu.core.LatCoreMC;
-import latmod.ftbu.core.net.*;
-import latmod.ftbu.core.util.*;
-import latmod.ftbu.core.world.*;
+import latmod.ftbu.net.*;
+import latmod.ftbu.util.LatCoreMC;
+import latmod.ftbu.world.*;
 import net.minecraft.util.EnumChatFormatting;
 
 public class Rank
@@ -194,7 +194,7 @@ public class Rank
 			UUID id = playerRanks.keys.get(i);
 			LMPlayerServer p = LMWorldServer.inst.getPlayer(id);
 			if(p != null) al.add(p.uuidString + "," + p.getName() + ": " + playerRanks.values.get(i));
-			else al.add(LatCoreMC.toShortUUID(id) + ": " + playerRanks.values.get(i));
+			else al.add(LMStringUtils.fromUUID(id) + ": " + playerRanks.values.get(i));
 		}
 		
 		al.sort(null);

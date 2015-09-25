@@ -2,10 +2,10 @@ package latmod.enkitools;
 
 import cpw.mods.fml.common.eventhandler.*;
 import latmod.enkitools.rank.*;
-import latmod.ftbu.core.LatCoreMC;
-import latmod.ftbu.core.api.*;
-import latmod.ftbu.core.api.readme.EventSaveReadme;
-import latmod.ftbu.core.world.*;
+import latmod.ftbu.api.*;
+import latmod.ftbu.api.readme.EventSaveReadme;
+import latmod.ftbu.util.LatCoreMC;
+import latmod.ftbu.world.*;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.*;
 import net.minecraft.util.*;
@@ -41,7 +41,7 @@ public class EnkiToolsEventHandler // EnkiTools
 	}
 	
 	@SubscribeEvent
-	public void playerLoggedIn(LMPlayerServerEvent.LoggedIn e)
+	public void playerLoggedIn(EventLMPlayerServer.LoggedIn e)
 	{
 		Rank.getPlayerRank(e.player);
 	}
@@ -114,14 +114,14 @@ public class EnkiToolsEventHandler // EnkiTools
 	}
 	
 	@SubscribeEvent
-	public void customInfo(LMPlayerServerEvent.CustomInfo e)
+	public void customInfo(EventLMPlayerServer.CustomInfo e)
 	{
 		Rank r = Rank.getPlayerRank(e.player);
 		if(r != null) e.info.add(new ChatComponentText(r.getColor() + '[' + r.rankID + ']'));
 	}
 	
 	@SubscribeEvent
-	public void getMaxClaimPower(LMPlayerServerEvent.GetMaxClaimPower e)
+	public void getMaxClaimPower(EventLMPlayerServer.GetMaxClaimPower e)
 	{
 		Rank r = Rank.getPlayerRank(e.player);
 		if(r != null)

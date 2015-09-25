@@ -2,8 +2,8 @@ package latmod.enkitools;
 
 import java.io.File;
 
-import latmod.ftbu.core.api.readme.*;
-import latmod.ftbu.core.util.LMJsonUtils;
+import latmod.core.util.LMJsonUtils;
+import latmod.ftbu.api.readme.*;
 
 public class EnkiToolsConfig
 {
