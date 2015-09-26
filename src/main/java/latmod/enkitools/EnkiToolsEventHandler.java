@@ -23,14 +23,6 @@ public class EnkiToolsEventHandler // EnkiTools
 	}
 	
 	@SubscribeEvent
-	public void addGsonHandlers(EventFTBUGson e)
-	{
-		//LatCoreMC.logger.info("Added Json Serializers for EnkiTools");
-		e.builder.registerTypeHierarchyAdapter(RankCommand.class, new RankCommand.Serializer());
-		e.builder.registerTypeHierarchyAdapter(RankConfig.ConfigList.class, new RankConfig.ConfigList.Serializer());
-	}
-	
-	@SubscribeEvent
 	public void onReloaded(EventFTBUReload e)
 	{
 		if(e.side.isServer())

@@ -7,6 +7,7 @@ import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import latmod.core.util.*;
 import latmod.enkitools.cmd.*;
+import latmod.enkitools.rank.*;
 import latmod.ftbu.util.*;
 import net.minecraft.command.*;
 
@@ -27,8 +28,9 @@ public class EnkiTools
 		EnkiData.init();
 		LMMod.init(this, null, null);
 		EnkiToolsConfig.loadConfig();
+		LMJsonUtils.register(RankCommand.class, new RankCommand.Serializer());
+		LMJsonUtils.register(RankConfig.ConfigList.class, new RankConfig.ConfigList.Serializer());
 		EventBusHelper.register(EnkiToolsEventHandler.instance);
-		LMJsonUtils.updateGson();
 	}
 	
 	@Mod.EventHandler
