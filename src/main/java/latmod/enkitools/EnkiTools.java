@@ -5,10 +5,10 @@ import java.util.*;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.relauncher.ReflectionHelper;
-import latmod.core.util.*;
 import latmod.enkitools.cmd.*;
 import latmod.enkitools.rank.*;
 import latmod.ftbu.util.*;
+import latmod.lib.*;
 import net.minecraft.command.*;
 
 @Mod(modid = EnkiTools.MOD_ID, name = "EnkiTools", version = "@VERSION@", acceptableRemoteVersions = "*", dependencies = "required-after:FTBU")
@@ -26,7 +26,7 @@ public class EnkiTools
 	public void preInit(FMLPreInitializationEvent e)
 	{
 		EnkiData.init();
-		LMMod.init(this, null, null);
+		LMMod.init(this);
 		EnkiToolsConfig.loadConfig();
 		LMJsonUtils.register(RankCommand.class, new RankCommand.Serializer());
 		LMJsonUtils.register(RankConfig.ConfigList.class, new RankConfig.ConfigList.Serializer());

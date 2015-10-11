@@ -2,9 +2,9 @@ package latmod.enkitools;
 
 import java.io.File;
 
-import latmod.core.util.LMFileUtils;
 import latmod.ftbu.util.*;
 import latmod.ftbu.world.LMPlayerServer;
+import latmod.lib.LMFileUtils;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class EnkiData

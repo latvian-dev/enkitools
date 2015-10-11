@@ -2,24 +2,22 @@ package latmod.enkitools.rank;
 
 import java.util.*;
 
-import com.google.gson.annotations.Expose;
-
-import latmod.core.util.*;
 import latmod.enkitools.*;
-import latmod.ftbu.net.*;
+import latmod.ftbu.net.MessageLMPlayerInfo;
 import latmod.ftbu.util.LatCoreMC;
 import latmod.ftbu.world.*;
+import latmod.lib.*;
 import net.minecraft.util.EnumChatFormatting;
 
 public class Rank
 {
-	public String rankID;
-	@Expose public String color;
-	@Expose public String prefix;
-	@Expose public String parentRank;
-	@Expose public List<RankCommand> allowedCmds;
-	@Expose public List<RankCommand> bannedCmds;
-	@Expose public RankConfig.ConfigList config;
+	public transient String rankID;
+	public String color;
+	public String prefix;
+	public String parentRank;
+	public List<RankCommand> allowedCmds;
+	public List<RankCommand> bannedCmds;
+	public RankConfig.ConfigList config;
 	
 	public void setDefaults()
 	{
@@ -180,8 +178,8 @@ public class Rank
 		if(p != null)
 		{
 			p.updateMaxClaimPower();
-			p.sendUpdate(true);
-			LMNetHelper.sendTo(null, new MessageLMPlayerInfo(p));
+			p.sendUpdate();
+			new MessageLMPlayerInfo(p.playerID).sendTo(null);
 		}
 	}
 	

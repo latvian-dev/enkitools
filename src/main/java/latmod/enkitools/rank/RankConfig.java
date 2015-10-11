@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.google.gson.*;
 
-import latmod.core.util.FastMap;
+import latmod.lib.FastMap;
 
 public class RankConfig
 {

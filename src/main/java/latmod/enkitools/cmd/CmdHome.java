@@ -42,7 +42,7 @@ public class CmdHome extends CommandLM
 			if(maxHomes <= 0 || EnkiData.Homes.homesSize(p) >= maxHomes)
 				return error(new ChatComponentText("You can't set any more home locations!"));
 			
-			EnkiData.Homes.setHome(p, args[1], p.getLastPos());
+			EnkiData.Homes.setHome(p, args[1], p.getPos());
 			return new ChatComponentText("Home '" + args[1] + "' set!");
 		}
 		
