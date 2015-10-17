@@ -6,6 +6,7 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import latmod.enkitools.cmd.*;
+import latmod.enkitools.config.*;
 import latmod.enkitools.rank.*;
 import latmod.ftbu.util.*;
 import latmod.lib.*;
@@ -27,7 +28,7 @@ public class EnkiTools
 	{
 		EnkiData.init();
 		LMMod.init(this);
-		EnkiToolsConfig.loadConfig();
+		EnkiToolsConfig.load();
 		LMJsonUtils.register(RankCommand.class, new RankCommand.Serializer());
 		LMJsonUtils.register(RankConfig.ConfigList.class, new RankConfig.ConfigList.Serializer());
 		EventBusHelper.register(EnkiToolsEventHandler.instance);
@@ -46,7 +47,7 @@ public class EnkiTools
 	@Mod.EventHandler
 	public void serverStarting(FMLServerStartedEvent event)
 	{
-		if(EnkiToolsConfig.general.overrideCommands)
+		if(EnkiToolsConfigGeneral.overrideCommands.get())
 		{
 			ICommandManager icm = LatCoreMC.getServer().getCommandManager();
 			

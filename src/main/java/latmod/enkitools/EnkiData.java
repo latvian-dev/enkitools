@@ -15,26 +15,9 @@ public class EnkiData
 	
 	public static void init()
 	{
-		folder = new File(LatCoreMC.latmodFolder, "enkitools/");
-		
-		ranks = LMFileUtils.newFile(new File(folder, "ranks.txt"));
-		players = LMFileUtils.newFile(new File(folder, "players.txt"));
-		
-		File oldDir = new File(LatCoreMC.latmodFolder, "EnkiMods/");
-		
-		if(oldDir.exists())
-		{
-			File oldRanks = new File(oldDir, "Ranks.txt");
-			if(oldRanks.exists()) LMFileUtils.copyFile(oldRanks, ranks);
-			
-			File oldPlayers = new File(oldDir, "Players.txt");
-			if(oldPlayers.exists()) LMFileUtils.copyFile(oldPlayers, players);
-			
-			File oldConfig = new File(oldDir, "Config.cfg");
-			if(oldConfig.exists()) LMFileUtils.copyFile(oldConfig, new File(LatCoreMC.latmodFolder, "enkitools/old_config_backup.cfg"));
-			
-			LMFileUtils.delete(oldDir);
-		}
+		folder = new File(LatCoreMC.localFolder, "enkitools/");
+		ranks = LMFileUtils.newFile(new File(folder, "ranks.json"));
+		players = LMFileUtils.newFile(new File(folder, "players.json"));
 	}
 	
 	public static class Homes

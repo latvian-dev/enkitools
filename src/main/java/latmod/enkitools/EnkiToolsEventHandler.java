@@ -1,9 +1,10 @@
 package latmod.enkitools;
 
 import cpw.mods.fml.common.eventhandler.*;
+import latmod.enkitools.config.*;
 import latmod.enkitools.rank.*;
 import latmod.ftbu.api.*;
-import latmod.ftbu.api.readme.EventSaveReadme;
+import latmod.ftbu.api.guide.EventFTBUGuide;
 import latmod.ftbu.util.LatCoreMC;
 import latmod.ftbu.world.*;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -17,26 +18,16 @@ public class EnkiToolsEventHandler // EnkiTools
 	public static final EnkiToolsEventHandler instance = new EnkiToolsEventHandler();
 	
 	@SubscribeEvent
-	public void saveReadme(EventSaveReadme e)
-	{
-		EnkiToolsConfig.saveReadme(e.file);
-	}
+	public void saveReadme(EventFTBUGuide e)
+	{ EnkiToolsConfig.onGuideEvent(e.file); }
 	
 	@SubscribeEvent
 	public void onReloaded(EventFTBUReload e)
-	{
-		if(e.side.isServer())
-		{
-			EnkiToolsConfig.loadConfig();
-			Rank.reload();
-		}
-	}
+	{ if(e.side.isServer()) Rank.reload(); }
 	
 	@SubscribeEvent
 	public void playerLoggedIn(EventLMPlayerServer.LoggedIn e)
-	{
-		Rank.getPlayerRank(e.player);
-	}
+	{ Rank.getPlayerRank(e.player); }
 	
 	@SubscribeEvent
 	public void onBlockClick(net.minecraftforge.event.entity.player.PlayerInteractEvent e)
@@ -49,13 +40,13 @@ public class EnkiToolsEventHandler // EnkiTools
 			{
 				TileEntitySign t = (TileEntitySign)te;
 				
-				if(EnkiToolsConfig.general.enableHomeSigns && t.signText[1].equals("[home]"))
+				if(EnkiToolsConfigSigns.home.get() && t.signText[1].equals("[home]"))
 				{
 					LatCoreMC.runCommand(e.entityPlayer, "home " + t.signText[2]);
 					e.setCanceled(true);
 					return;
 				}
-				else if(EnkiToolsConfig.general.enableWarpSigns && !t.signText[2].isEmpty() && t.signText[1].equals("[warp]"))
+				else if(EnkiToolsConfigSigns.warp.get() && !t.signText[2].isEmpty() && t.signText[1].equals("[warp]"))
 				{
 					LatCoreMC.runCommand(e.entityPlayer, "warp " + t.signText[2]);
 					e.setCanceled(true);
@@ -68,7 +59,7 @@ public class EnkiToolsEventHandler // EnkiTools
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onChatEvent(ServerChatEvent e)
 	{
-		if(!EnkiToolsConfig.general.overrideChat) return;
+		if(!EnkiToolsConfigGeneral.overrideChat.get()) return;
 		
 		LMPlayerServer p = LMWorldServer.inst.getPlayer(e.player);
 		if(p == null) return;

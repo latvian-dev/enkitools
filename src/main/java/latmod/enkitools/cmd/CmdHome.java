@@ -1,6 +1,7 @@
 package latmod.enkitools.cmd;
 
-import latmod.enkitools.*;
+import latmod.enkitools.EnkiData;
+import latmod.enkitools.config.EnkiToolsConfigGeneral;
 import latmod.enkitools.rank.*;
 import latmod.ftbu.cmd.*;
 import latmod.ftbu.util.*;
@@ -59,7 +60,7 @@ public class CmdHome extends CommandLM
 		
 		if(pos == null) return error(new ChatComponentText("Home '" + args[0] + "' not set!"));
 		
-		if(ep.dimension != pos.dim && !EnkiToolsConfig.general.crossDimHomes)
+		if(ep.dimension != pos.dim && !EnkiToolsConfigGeneral.crossDimHomes.get())
 			return error(new ChatComponentText("You can't teleport to another dimension!"));
 		
 		LMDimUtils.teleportPlayer(ep, pos);
