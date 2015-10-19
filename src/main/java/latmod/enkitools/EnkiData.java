@@ -2,6 +2,7 @@ package latmod.enkitools;
 
 import java.io.File;
 
+import ftb.lib.mod.FTBLib;
 import latmod.ftbu.util.*;
 import latmod.ftbu.world.LMPlayerServer;
 import latmod.lib.LMFileUtils;
@@ -15,7 +16,7 @@ public class EnkiData
 	
 	public static void init()
 	{
-		folder = new File(LatCoreMC.localFolder, "enkitools/");
+		folder = new File(FTBLib.folderLocal, "enkitools/");
 		ranks = LMFileUtils.newFile(new File(folder, "ranks.json"));
 		players = LMFileUtils.newFile(new File(folder, "players.json"));
 	}

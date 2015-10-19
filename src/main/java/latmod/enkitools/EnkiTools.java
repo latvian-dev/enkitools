@@ -5,6 +5,7 @@ import java.util.*;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.relauncher.ReflectionHelper;
+import ftb.lib.EventBusHelper;
 import latmod.enkitools.cmd.*;
 import latmod.enkitools.config.*;
 import latmod.enkitools.rank.*;
