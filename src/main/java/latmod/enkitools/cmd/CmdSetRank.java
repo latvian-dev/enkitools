@@ -1,8 +1,8 @@
 package latmod.enkitools.cmd;
 
+import ftb.lib.FTBLib;
 import latmod.enkitools.rank.Rank;
 import latmod.ftbu.cmd.*;
-import latmod.ftbu.util.LatCoreMC;
 import latmod.ftbu.world.LMPlayerServer;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
@@ -35,7 +35,7 @@ public class CmdSetRank extends CommandLM
 			if(ep != null)
 			{
 				if(!(ics instanceof EntityPlayer) || !((EntityPlayer)ics).getUniqueID().equals(ep.getUniqueID()))
-					LatCoreMC.printChat(ep, "Your rank is set to " + r.rankID);
+					FTBLib.printChat(ep, "Your rank is set to " + r.rankID);
 			}
 			
 			return new ChatComponentText(p.getName() + " now is " + r.rankID);

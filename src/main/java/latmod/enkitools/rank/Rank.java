@@ -2,9 +2,9 @@ package latmod.enkitools.rank;
 
 import java.util.*;
 
+import ftb.lib.FTBLib;
 import latmod.enkitools.*;
 import latmod.ftbu.net.MessageLMPlayerInfo;
-import latmod.ftbu.util.LatCoreMC;
 import latmod.ftbu.world.*;
 import latmod.lib.*;
 import net.minecraft.util.EnumChatFormatting;
@@ -53,7 +53,7 @@ public class Rank
 		if(!c.isEmpty()) sb.append(c);
 		sb.append(prefix);
 		sb.append(s);
-		if(!c.isEmpty() && c.contains(LatCoreMC.FORMATTING))
+		if(!c.isEmpty() && c.contains(FTBLib.FORMATTING))
 			sb.append(EnumChatFormatting.RESET);
 		return sb.toString();
 	}

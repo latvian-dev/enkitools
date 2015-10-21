@@ -1,11 +1,12 @@
 package latmod.enkitools;
 
 import cpw.mods.fml.common.eventhandler.*;
+import ftb.lib.FTBLib;
+import ftb.lib.api.EventFTBReload;
 import latmod.enkitools.config.*;
 import latmod.enkitools.rank.*;
-import latmod.ftbu.api.*;
+import latmod.ftbu.api.EventLMPlayerServer;
 import latmod.ftbu.api.guide.EventFTBUGuide;
-import latmod.ftbu.util.LatCoreMC;
 import latmod.ftbu.world.*;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.*;
@@ -22,7 +23,7 @@ public class EnkiToolsEventHandler // EnkiTools
 	{ EnkiToolsConfig.onGuideEvent(e.file); }
 	
 	@SubscribeEvent
-	public void onReloaded(EventFTBUReload e)
+	public void onReloaded(EventFTBReload e)
 	{ if(e.side.isServer()) Rank.reload(); }
 	
 	@SubscribeEvent
@@ -42,13 +43,13 @@ public class EnkiToolsEventHandler // EnkiTools
 				
 				if(EnkiToolsConfigSigns.home.get() && t.signText[1].equals("[home]"))
 				{
-					LatCoreMC.runCommand(e.entityPlayer, "home " + t.signText[2]);
+					FTBLib.runCommand(e.entityPlayer, "home " + t.signText[2]);
 					e.setCanceled(true);
 					return;
 				}
 				else if(EnkiToolsConfigSigns.warp.get() && !t.signText[2].isEmpty() && t.signText[1].equals("[warp]"))
 				{
-					LatCoreMC.runCommand(e.entityPlayer, "warp " + t.signText[2]);
+					FTBLib.runCommand(e.entityPlayer, "warp " + t.signText[2]);
 					e.setCanceled(true);
 					return;
 				}
@@ -90,7 +91,7 @@ public class EnkiToolsEventHandler // EnkiTools
 			{
 				ChatComponentTranslation c = new ChatComponentTranslation("commands.generic.permission", new Object[0]);
                 c.getChatStyle().setColor(EnumChatFormatting.RED);
-                LatCoreMC.printChat(e.sender, c);
+                FTBLib.printChat(e.sender, c);
 				e.setCanceled(true);
 			}
 		}

@@ -1,8 +1,8 @@
 package latmod.enkitools.cmd;
 
+import ftb.lib.FTBLib;
 import latmod.enkitools.rank.Rank;
 import latmod.ftbu.cmd.*;
-import latmod.ftbu.util.LatCoreMC;
 import latmod.ftbu.world.*;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.*;
@@ -29,7 +29,7 @@ public class CmdGetRank extends CommandLM
 					Rank r = Rank.getPlayerRank(ep);
 					
 					if(all || r != def)
-						LatCoreMC.printChat(ics, ep.getName() + ": " + r.getColor() + r.rankID);
+						FTBLib.printChat(ics, ep.getName() + ": " + r.getColor() + r.rankID);
 				}
 				
 				return null;

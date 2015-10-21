@@ -1,10 +1,10 @@
 package latmod.enkitools.cmd;
 
+import ftb.lib.*;
 import latmod.enkitools.EnkiData;
 import latmod.enkitools.config.EnkiToolsConfigGeneral;
 import latmod.enkitools.rank.*;
 import latmod.ftbu.cmd.*;
-import latmod.ftbu.util.*;
 import latmod.ftbu.world.LMPlayerServer;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -27,9 +27,9 @@ public class CmdHome extends CommandLM
 		
 		if(args.length == 0)
 		{
-			LatCoreMC.printChat(ics, "/home <name>");
-			LatCoreMC.printChat(ics, "/home set <name>");
-			LatCoreMC.printChat(ics, "/home del <name>");
+			FTBLib.printChat(ics, "/home <name>");
+			FTBLib.printChat(ics, "/home set <name>");
+			FTBLib.printChat(ics, "/home del <name>");
 			return null;
 		}
 		

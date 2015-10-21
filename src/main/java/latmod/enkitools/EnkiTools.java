@@ -5,11 +5,11 @@ import java.util.*;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.relauncher.ReflectionHelper;
-import ftb.lib.EventBusHelper;
+import ftb.lib.*;
 import latmod.enkitools.cmd.*;
 import latmod.enkitools.config.*;
 import latmod.enkitools.rank.*;
-import latmod.ftbu.util.*;
+import latmod.ftbu.util.LMMod;
 import latmod.lib.*;
 import net.minecraft.command.*;
 
@@ -50,7 +50,7 @@ public class EnkiTools
 	{
 		if(EnkiToolsConfigGeneral.overrideCommands.get())
 		{
-			ICommandManager icm = LatCoreMC.getServer().getCommandManager();
+			ICommandManager icm = FTBLib.getServer().getCommandManager();
 			
 			if(icm != null && icm instanceof CommandHandler)
 			try
