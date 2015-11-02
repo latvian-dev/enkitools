@@ -6,7 +6,7 @@ import ftb.lib.api.EventFTBReload;
 import latmod.enkitools.config.*;
 import latmod.enkitools.rank.*;
 import latmod.ftbu.api.EventLMPlayerServer;
-import latmod.ftbu.api.guide.EventFTBUGuide;
+import latmod.ftbu.api.guide.EventFTBUServerGuide;
 import latmod.ftbu.world.*;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.*;
@@ -19,7 +19,7 @@ public class EnkiToolsEventHandler // EnkiTools
 	public static final EnkiToolsEventHandler instance = new EnkiToolsEventHandler();
 	
 	@SubscribeEvent
-	public void saveReadme(EventFTBUGuide e)
+	public void saveReadme(EventFTBUServerGuide e)
 	{ EnkiToolsConfig.onGuideEvent(e.file); }
 	
 	@SubscribeEvent
