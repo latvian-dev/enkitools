@@ -24,7 +24,7 @@ public class EnkiToolsEventHandler // EnkiTools
 	
 	@SubscribeEvent
 	public void onReloaded(EventFTBReload e)
-	{ if(e.side.isServer()) Rank.reload(); }
+	{ if(e.side.isServer() && e.sender != null) Rank.reload(); }
 	
 	@SubscribeEvent
 	public void playerLoggedIn(EventLMPlayerServer.LoggedIn e)
@@ -102,16 +102,5 @@ public class EnkiToolsEventHandler // EnkiTools
 	{
 		Rank r = Rank.getPlayerRank(e.player);
 		if(r != null) e.info.add(new ChatComponentText(r.getColor() + '[' + r.rankID + ']'));
-	}
-	
-	@SubscribeEvent
-	public void getMaxClaimPower(EventLMPlayerServer.GetMaxClaimPower e)
-	{
-		Rank r = Rank.getPlayerRank(e.player);
-		if(r != null)
-		{
-			e.result = r.getConfig(RankConfig.MAX_CLAIM_POWER).getInt();
-			e.setCanceled(true);
-		}
 	}
 }

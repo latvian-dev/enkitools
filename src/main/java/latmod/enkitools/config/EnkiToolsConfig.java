@@ -16,7 +16,7 @@ public class EnkiToolsConfig
 		file = new ConfigFile("enkitools", new File(EnkiData.folder, "config.json"), true);
 		EnkiToolsConfigGeneral.load(file);
 		EnkiToolsConfigSigns.load(file);
-		ConfigListRegistry.add(file);
+		ConfigListRegistry.instance.add(file);
 		file.load();
 	}
 	

@@ -108,6 +108,8 @@ public class Rank
 	
 	public static void reload()
 	{
+		if(LMWorldServer.inst == null) return;
+		
 		ranksFile = LMJsonUtils.fromJsonFile(EnkiData.ranks, RanksFile.class);
 		
 		if(ranksFile == null)
@@ -177,7 +179,6 @@ public class Rank
 		saveRanks();
 		if(p != null)
 		{
-			p.updateMaxClaimPower();
 			p.sendUpdate();
 			new MessageLMPlayerInfo(p.playerID).sendTo(null);
 		}

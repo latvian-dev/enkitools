@@ -1,20 +1,21 @@
 package latmod.enkitools.cmd;
 
 import ftb.lib.FTBLib;
+import ftb.lib.cmd.CommandLevel;
 import latmod.enkitools.rank.Rank;
-import latmod.ftbu.cmd.*;
+import latmod.ftbu.util.CommandFTBU;
 import latmod.ftbu.world.LMPlayerServer;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.*;
 
-public class CmdSetRank extends CommandLM
+public class CmdSetRank extends CommandFTBU
 {
 	public CmdSetRank()
 	{ super("setrank", CommandLevel.ALL); }
 	
-	public NameType getUsername(String[] args, int i)
-	{ return (i == 0) ? NameType.OFF : NameType.NONE; }
+	public Boolean getUsername(String[] args, int i)
+	{ return (i == 0) ? Boolean.FALSE : null; }
 	
 	public String[] getTabStrings(ICommandSender ics, String args[], int i)
 	{

@@ -1,13 +1,14 @@
 package latmod.enkitools.cmd;
 
 import ftb.lib.FTBLib;
+import ftb.lib.cmd.CommandLevel;
 import latmod.enkitools.rank.Rank;
-import latmod.ftbu.cmd.*;
+import latmod.ftbu.util.CommandFTBU;
 import latmod.ftbu.world.*;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.*;
 
-public class CmdGetRank extends CommandLM
+public class CmdGetRank extends CommandFTBU
 {
 	public CmdGetRank()
 	{ super("getrank", CommandLevel.ALL); }
@@ -42,6 +43,6 @@ public class CmdGetRank extends CommandLM
 		return new ChatComponentText(ep.getName() + " is " + Rank.getPlayerRank(ep).rankID);
 	}
 	
-	public NameType getUsername(String[] args, int i)
-	{ return (i == 0) ? NameType.OFF : NameType.NONE; }
+	public Boolean getUsername(String[] args, int i)
+	{ return (i == 0) ? Boolean.FALSE : null; }
 }

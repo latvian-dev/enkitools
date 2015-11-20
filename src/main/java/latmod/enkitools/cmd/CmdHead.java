@@ -1,13 +1,14 @@
 package latmod.enkitools.cmd;
 
+import ftb.lib.cmd.CommandLevel;
 import ftb.lib.item.LMInvUtils;
-import latmod.ftbu.cmd.*;
+import latmod.ftbu.util.CommandFTBU;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.*;
 import net.minecraft.util.*;
 
-public class CmdHead extends CommandLM
+public class CmdHead extends CommandFTBU
 {
 	public CmdHead()
 	{ super("head", CommandLevel.ALL); }
