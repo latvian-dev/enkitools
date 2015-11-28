@@ -4,7 +4,6 @@ import java.io.File;
 
 import ftb.lib.api.config.ConfigListRegistry;
 import latmod.enkitools.EnkiData;
-import latmod.ftbu.api.guide.ServerGuideFile;
 import latmod.lib.config.ConfigFile;
 
 public class EnkiToolsConfig
@@ -13,16 +12,10 @@ public class EnkiToolsConfig
 	
 	public static void load()
 	{
-		file = new ConfigFile("enkitools", new File(EnkiData.folder, "config.json"), true);
-		EnkiToolsConfigGeneral.load(file);
-		EnkiToolsConfigSigns.load(file);
+		file = new ConfigFile("enkitools", new File(EnkiData.folder, "config.json"));
+		file.add(EnkiToolsConfigGeneral.group.addAll(EnkiToolsConfigGeneral.class));
+		file.add(EnkiToolsConfigSigns.group.addAll(EnkiToolsConfigSigns.class));
 		ConfigListRegistry.instance.add(file);
 		file.load();
-	}
-	
-	public static void onGuideEvent(ServerGuideFile file)
-	{
-		file.addConfigFromClass("EnkiTools", "General", EnkiToolsConfigGeneral.class);
-		file.addConfigFromClass("EnkiTools", "Signs", EnkiToolsConfigSigns.class);
 	}
 }
