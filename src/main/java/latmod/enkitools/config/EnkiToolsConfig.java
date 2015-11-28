@@ -8,14 +8,15 @@ import latmod.lib.config.ConfigFile;
 
 public class EnkiToolsConfig
 {
-	private static ConfigFile file;
+	private static ConfigFile configFile;
 	
 	public static void load()
 	{
-		file = new ConfigFile("enkitools", new File(EnkiData.folder, "config.json"));
-		file.add(EnkiToolsConfigGeneral.group.addAll(EnkiToolsConfigGeneral.class));
-		file.add(EnkiToolsConfigSigns.group.addAll(EnkiToolsConfigSigns.class));
-		ConfigListRegistry.instance.add(file);
-		file.load();
+		configFile = new ConfigFile("enkitools", new File(EnkiData.folder, "config.json"));
+		configFile.configList.setName("EnkiTools");
+		configFile.add(EnkiToolsConfigGeneral.group.addAll(EnkiToolsConfigGeneral.class));
+		configFile.add(EnkiToolsConfigSigns.group.addAll(EnkiToolsConfigSigns.class));
+		ConfigListRegistry.instance.add(configFile);
+		configFile.load();
 	}
 }
