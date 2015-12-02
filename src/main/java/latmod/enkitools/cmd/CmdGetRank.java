@@ -1,19 +1,18 @@
 package latmod.enkitools.cmd;
 
 import ftb.lib.FTBLib;
-import ftb.lib.cmd.CommandLevel;
+import ftb.lib.cmd.*;
 import latmod.enkitools.rank.Rank;
-import latmod.ftbu.util.CommandFTBU;
 import latmod.ftbu.world.*;
-import net.minecraft.command.ICommandSender;
+import net.minecraft.command.*;
 import net.minecraft.util.*;
 
-public class CmdGetRank extends CommandFTBU
+public class CmdGetRank extends CommandLM
 {
 	public CmdGetRank()
 	{ super("getrank", CommandLevel.ALL); }
 	
-	public IChatComponent onCommand(ICommandSender ics, String[] args)
+	public IChatComponent onCommand(ICommandSender ics, String[] args) throws CommandException
 	{
 		LMPlayerServer ep = null;
 		
@@ -35,10 +34,10 @@ public class CmdGetRank extends CommandFTBU
 				
 				return null;
 			}
-			else ep = getLMPlayer(args[0]);
+			else ep = LMPlayerServer.get(args[0]);
 		}
 		else
-			ep = getLMPlayer(ics);
+			ep = LMPlayerServer.get(ics);
 		
 		return new ChatComponentText(ep.getName() + " is " + Rank.getPlayerRank(ep).rankID);
 	}

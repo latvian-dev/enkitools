@@ -40,7 +40,6 @@ public class EnkiTools
 	{
 		e.registerServerCommand(new CmdSetRank());
 		e.registerServerCommand(new CmdGetRank());
-		e.registerServerCommand(new CmdHead());
 	}
 	
 	@SuppressWarnings("all")
