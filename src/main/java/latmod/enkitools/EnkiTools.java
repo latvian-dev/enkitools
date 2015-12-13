@@ -46,7 +46,7 @@ public class EnkiTools
 	@Mod.EventHandler
 	public void serverStarting(FMLServerStartedEvent event)
 	{
-		if(EnkiToolsConfigGeneral.overrideCommands.get())
+		if(EnkiToolsConfigGeneral.override_commands.get())
 		{
 			ICommandManager icm = FTBLib.getServer().getCommandManager();
 			
