@@ -139,7 +139,7 @@ public class Rank
 			}
 		}
 		
-		EnkiTools.mod.logger.info("Loaded ranks [Def: " + getDefaultRank() + "]: " + ranks.values);
+		EnkiTools.mod.logger.info("Loaded ranks [Def: " + getDefaultRank() + "]: " + ranks.values());
 		
 		playerRanks.clear();
 		
@@ -188,12 +188,11 @@ public class Rank
 	{
 		FastList<String> al = new FastList<String>();
 		
-		for(int i = 0; i < playerRanks.size(); i++)
+		for(Map.Entry<UUID, Rank> e : playerRanks.entrySet())
 		{
-			UUID id = playerRanks.keys.get(i);
-			LMPlayerServer p = LMWorldServer.inst.getPlayer(id);
-			if(p != null) al.add(p.uuidString + "," + p.getName() + ": " + playerRanks.values.get(i));
-			else al.add(LMStringUtils.fromUUID(id) + ": " + playerRanks.values.get(i));
+			LMPlayerServer p = LMWorldServer.inst.getPlayer(e.getKey());
+			if(p != null) al.add(p.uuidString + "," + p.getName() + ": " + e.getValue());
+			else al.add(LMStringUtils.fromUUID(e.getKey()) + ": " + e.getValue());
 		}
 		
 		al.sort(null);
@@ -235,5 +234,5 @@ public class Rank
 	{ return getPlayerRank(LMWorldServer.inst.getPlayer(o)).getConfig(c); }
 	
 	public static final String[] getAllRanks()
-	{ return ranks.keys.toArray(new String[ranks.keys.size()]); }
+	{ return ranks.getKeyStringArray(); }
 }

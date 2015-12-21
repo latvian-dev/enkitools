@@ -23,7 +23,7 @@ public class RankConfig
 	public static RankConfig create(String k, String v)
 	{
 		RankConfig c = new RankConfig(k, v);
-		if(!registry.keys.contains(k)) registry.put(k, c);
+		if(!registry.containsKey(k)) registry.put(k, c);
 		return c;
 	}
 	
