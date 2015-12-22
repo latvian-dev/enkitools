@@ -191,7 +191,7 @@ public class Rank
 		for(Map.Entry<UUID, Rank> e : playerRanks.entrySet())
 		{
 			LMPlayerServer p = LMWorldServer.inst.getPlayer(e.getKey());
-			if(p != null) al.add(p.uuidString + "," + p.getName() + ": " + e.getValue());
+			if(p != null) al.add(p.getStringUUID() + "," + p.getName() + ": " + e.getValue());
 			else al.add(LMStringUtils.fromUUID(e.getKey()) + ": " + e.getValue());
 		}
 		
