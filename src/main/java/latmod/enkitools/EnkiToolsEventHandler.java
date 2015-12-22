@@ -3,7 +3,6 @@ package latmod.enkitools;
 import cpw.mods.fml.common.eventhandler.*;
 import ftb.lib.FTBLib;
 import ftb.lib.api.EventFTBReload;
-import latmod.enkitools.config.EnkiToolsConfigGeneral;
 import latmod.enkitools.rank.*;
 import latmod.ftbu.api.EventLMPlayerServer;
 import latmod.ftbu.world.*;
@@ -26,7 +25,7 @@ public class EnkiToolsEventHandler // EnkiTools
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onChatEvent(ServerChatEvent e)
 	{
-		if(!EnkiToolsConfigGeneral.override_chat.get()) return;
+		if(!EnkiToolsConfig.override_chat.get()) return;
 		
 		LMPlayerServer p = LMWorldServer.inst.getPlayer(e.player);
 		if(p == null) return;

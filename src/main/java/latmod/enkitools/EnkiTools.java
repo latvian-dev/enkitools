@@ -7,7 +7,6 @@ import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import ftb.lib.*;
 import latmod.enkitools.cmd.*;
-import latmod.enkitools.config.*;
 import latmod.enkitools.rank.*;
 import latmod.ftbu.util.LMMod;
 import latmod.lib.*;
@@ -46,7 +45,7 @@ public class EnkiTools
 	@Mod.EventHandler
 	public void serverStarting(FMLServerStartedEvent event)
 	{
-		if(EnkiToolsConfigGeneral.override_commands.get())
+		if(EnkiToolsConfig.override_commands.get())
 		{
 			ICommandManager icm = FTBLib.getServer().getCommandManager();
 			
