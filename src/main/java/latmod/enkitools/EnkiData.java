@@ -1,9 +1,9 @@
 package latmod.enkitools;
 
-import java.io.File;
-
 import ftb.lib.FTBLib;
 import latmod.lib.LMFileUtils;
+
+import java.io.File;
 
 public class EnkiData
 {

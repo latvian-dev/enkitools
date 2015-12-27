@@ -1,13 +1,13 @@
 package latmod.enkitools.rank;
 
-import java.util.*;
-
 import ftb.lib.FTBLib;
 import latmod.enkitools.*;
 import latmod.ftbu.net.MessageLMPlayerInfo;
 import latmod.ftbu.world.*;
 import latmod.lib.*;
 import net.minecraft.util.EnumChatFormatting;
+
+import java.util.*;
 
 public class Rank
 {

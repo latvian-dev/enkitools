@@ -1,7 +1,5 @@
 package latmod.enkitools;
 
-import java.util.*;
-
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.relauncher.ReflectionHelper;
@@ -11,6 +9,8 @@ import latmod.enkitools.rank.*;
 import latmod.ftbu.util.LMMod;
 import latmod.lib.*;
 import net.minecraft.command.*;
+
+import java.util.*;
 
 @Mod(modid = EnkiTools.MOD_ID, name = "EnkiTools", version = "@VERSION@", acceptableRemoteVersions = "*", dependencies = "required-after:FTBU")
 public class EnkiTools

@@ -1,9 +1,9 @@
 package latmod.enkitools;
 
-import java.io.File;
-
 import ftb.lib.api.config.ConfigRegistry;
 import latmod.lib.config.*;
+
+import java.io.File;
 
 public class EnkiToolsConfig
 {

@@ -1,11 +1,10 @@
 package latmod.enkitools.rank;
 
+import com.google.gson.*;
+import latmod.lib.FastMap;
+
 import java.lang.reflect.Type;
 import java.util.Map;
-
-import com.google.gson.*;
-
-import latmod.lib.FastMap;
 
 public class RankConfig
 {
