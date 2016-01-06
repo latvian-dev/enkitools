@@ -102,8 +102,8 @@ public class Rank
 		public Map<String, Rank> ranks;
 	}
 	
-	private static final FastMap<String, Rank> ranks = new FastMap<String, Rank>();
-	private static final FastMap<UUID, Rank> playerRanks = new FastMap<UUID, Rank>();
+	private static final HashMap<String, Rank> ranks = new HashMap<>();
+	private static final HashMap<UUID, Rank> playerRanks = new HashMap<>();
 	private static RanksFile ranksFile = null;
 	
 	public static void reload()
@@ -145,7 +145,7 @@ public class Rank
 		
 		try
 		{
-			FastList<String> al = LMFileUtils.load(EnkiData.players);
+			List<String> al = LMFileUtils.load(EnkiData.players);
 			
 			if(al != null && al.size() > 0)
 			{
@@ -180,13 +180,13 @@ public class Rank
 		if(p != null)
 		{
 			p.sendUpdate();
-			new MessageLMPlayerInfo(p.playerID).sendTo(null);
+			new MessageLMPlayerInfo(p, p.playerID).sendTo(null);
 		}
 	}
 	
 	public static void saveRanks()
 	{
-		FastList<String> al = new FastList<String>();
+		ArrayList<String> al = new ArrayList<>();
 		
 		for(Map.Entry<UUID, Rank> e : playerRanks.entrySet())
 		{
@@ -234,5 +234,5 @@ public class Rank
 	{ return getPlayerRank(LMWorldServer.inst.getPlayer(o)).getConfig(c); }
 	
 	public static final String[] getAllRanks()
-	{ return ranks.getKeyStringArray(); }
+	{ return LMMapUtils.toKeyStringArray(ranks); }
 }

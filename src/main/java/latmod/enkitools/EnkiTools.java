@@ -7,7 +7,7 @@ import ftb.lib.*;
 import latmod.enkitools.cmd.*;
 import latmod.enkitools.rank.*;
 import latmod.ftbu.util.LMMod;
-import latmod.lib.*;
+import latmod.lib.LMJsonUtils;
 import net.minecraft.command.*;
 
 import java.util.*;
@@ -56,8 +56,8 @@ public class EnkiTools
 				
 				Map map = ReflectionHelper.getPrivateValue(CommandHandler.class, ch, "commandMap", "field_71562_a");
 				Set set = ReflectionHelper.getPrivateValue(CommandHandler.class, ch, "commandSet", "field_71561_b");
-				
-				FastList<CmdOverride> commands = new FastList<CmdOverride>();
+
+				ArrayList<CmdOverride> commands = new ArrayList<CmdOverride>();
 				
 				for(Object o : map.values())
 					commands.add(new CmdOverride((ICommand)o));

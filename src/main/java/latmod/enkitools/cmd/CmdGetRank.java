@@ -23,13 +23,12 @@ public class CmdGetRank extends CommandLM
 				boolean all = args.length == 2 && args[1].equals("all");
 				Rank def = Rank.getDefaultRank();
 				
-				for(int i = 0; i < LMWorldServer.inst.players.size(); i++)
+				for(LMPlayerServer p : LMWorldServer.inst.playerMap.values())
 				{
-					ep = LMWorldServer.inst.players.get(i).toPlayerMP();
-					Rank r = Rank.getPlayerRank(ep);
+					Rank r = Rank.getPlayerRank(p);
 					
 					if(all || r != def)
-						FTBLib.printChat(ics, ep.getName() + ": " + r.getColor() + r.rankID);
+						FTBLib.printChat(ics, p.getName() + ": " + r.getColor() + r.rankID);
 				}
 				
 				return null;

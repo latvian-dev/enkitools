@@ -1,14 +1,13 @@
 package latmod.enkitools.rank;
 
 import com.google.gson.*;
-import latmod.lib.FastMap;
 
 import java.lang.reflect.Type;
-import java.util.Map;
+import java.util.*;
 
 public class RankConfig
 {
-	public static final FastMap<String, RankConfig> registry = new FastMap<String, RankConfig>();
+	public static final HashMap<String, RankConfig> registry = new HashMap<>();
 	public static final RankConfig MAX_CLAIM_POWER = create("maxClaimPower", "10");
 	public static final RankConfig IGNORE_SPAWN = create("ignoreSpawnProtection", "false");
 	public static final RankConfig MAX_HOME_COUNT = create("maxHomeCount", "0");
@@ -73,7 +72,7 @@ public class RankConfig
 	
 	public static class ConfigList
 	{
-		public final FastMap<RankConfig, Inst> config = new FastMap<RankConfig, Inst>();
+		public final HashMap<RankConfig, Inst> config = new HashMap<>();
 		
 		public void set(RankConfig c, String v)
 		{ config.put(c, new Inst(c, v)); }
@@ -86,7 +85,7 @@ public class RankConfig
 			public JsonElement serialize(ConfigList src, Type typeOfSrc, JsonSerializationContext context)
 			{
 				JsonObject o = new JsonObject();
-				for(Inst i : src.config)
+				for(Inst i : src.config.values())
 					o.add(i.cfg.key, new JsonPrimitive(i.value));
 				return o;
 			}
