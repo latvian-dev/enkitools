@@ -16,7 +16,7 @@ public class EnkiToolsEventHandler // EnkiTools
 	
 	@SubscribeEvent
 	public void onReloaded(EventFTBReload e)
-	{ if(e.side.isServer() && e.sender != null) Rank.reload(); }
+	{ /*if(e.side.isServer() && e.sender != null) Rank.reload(); */ }
 	
 	@SubscribeEvent
 	public void playerLoggedIn(EventLMPlayerServer.LoggedIn e)
