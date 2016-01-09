@@ -34,7 +34,7 @@ public class CmdSetRank extends CommandLM
 			
 			if(ep != null)
 			{
-				if(!(ics instanceof EntityPlayer) || !((EntityPlayer)ics).getUniqueID().equals(ep.getUniqueID()))
+				if(!(ics instanceof EntityPlayer) || !((EntityPlayer) ics).getUniqueID().equals(ep.getUniqueID()))
 					FTBLib.printChat(ep, "Your rank is set to " + r.rankID);
 			}
 			

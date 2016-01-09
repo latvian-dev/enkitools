@@ -10,7 +10,10 @@ public class RankCommand
 	public final String[] args;
 	
 	public RankCommand(String s, String... a)
-	{ cmd = s; args = a; }
+	{
+		cmd = s;
+		args = a;
+	}
 	
 	public boolean equalsCommand(RankCommand r)
 	{ return cmd.equals("*") || cmd.equals(r.cmd); }

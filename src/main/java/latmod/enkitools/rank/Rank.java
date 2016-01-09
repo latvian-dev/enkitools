@@ -42,7 +42,10 @@ public class Rank
 		
 		StringBuilder sb = new StringBuilder();
 		for(int i = 0; i < color.length(); i++)
-		{ sb.append('\u00a7'); sb.append(color.charAt(i)); }
+		{
+			sb.append('\u00a7');
+			sb.append(color.charAt(i));
+		}
 		return sb.toString();
 	}
 	
@@ -53,8 +56,7 @@ public class Rank
 		if(!c.isEmpty()) sb.append(c);
 		sb.append(prefix);
 		sb.append(s);
-		if(!c.isEmpty() && c.contains(FTBLib.FORMATTING))
-			sb.append(EnumChatFormatting.RESET);
+		if(!c.isEmpty() && c.contains(FTBLib.FORMATTING)) sb.append(EnumChatFormatting.RESET);
 		return sb.toString();
 	}
 	
@@ -75,8 +77,7 @@ public class Rank
 		for(RankCommand c : bannedCmds)
 		{ if(c.equalsCommand(cmd)) return false; }
 		
-		if(parentRank == null || parentRank.length() == 0)
-			return false;
+		if(parentRank == null || parentRank.length() == 0) return false;
 		
 		Rank pr = getParentRank();
 		return (pr == null) ? false : pr.allowCommand(cmd);
@@ -155,14 +156,17 @@ public class Rank
 					
 					if(s != null && s.length >= 2)
 					{
-						String k = s[0]; if(k.indexOf(',') != -1) k = k.split(",")[0];
+						String k = s[0];
+						if(k.indexOf(',') != -1) k = k.split(",")[0];
 						setRawRank(LMWorldServer.inst.getPlayer(k), Rank.getRank(s[1]));
 					}
 				}
 			}
 		}
 		catch(Exception e)
-		{ e.printStackTrace(); }
+		{
+			e.printStackTrace();
+		}
 		
 		saveRanks();
 	}
@@ -202,9 +206,14 @@ public class Rank
 	}
 	
 	private static boolean hasLoaded = false;
+
 	public static Rank getPlayerRank(LMPlayerServer p)
 	{
-		if(!hasLoaded) { reload(); hasLoaded = true; }
+		if(!hasLoaded)
+		{
+			reload();
+			hasLoaded = true;
+		}
 		
 		if(p == null) return getDefaultRank();
 		Rank r = playerRanks.get(p.getUUID());

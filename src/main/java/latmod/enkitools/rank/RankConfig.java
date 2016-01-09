@@ -16,7 +16,10 @@ public class RankConfig
 	public final String defaultValue;
 	
 	private RankConfig(String k, String v)
-	{ key = k; defaultValue = v; }
+	{
+		key = k;
+		defaultValue = v;
+	}
 	
 	public static RankConfig create(String k, String v)
 	{
@@ -43,31 +46,31 @@ public class RankConfig
 		private Float float_value = null;
 		
 		public Inst(RankConfig rc, String s)
-		{ cfg = rc; value = s; }
+		{
+			cfg = rc;
+			value = s;
+		}
 		
 		public boolean getBool()
 		{
-			if(bool_value == null)
-				bool_value = value.equals("true");
+			if(bool_value == null) bool_value = value.equals("true");
 			return bool_value;
 		}
 		
 		public int getInt()
 		{
-			if(int_value == null)
-				int_value = Integer.parseInt(value);
+			if(int_value == null) int_value = Integer.parseInt(value);
 			return int_value;
 		}
 		
 		public float getFloat()
 		{
-			if(float_value == null)
-				float_value = Float.parseFloat(value);
+			if(float_value == null) float_value = Float.parseFloat(value);
 			return float_value;
 		}
 		
 		public boolean equals(Object o)
-		{ return o != null && (o == this || ((Inst)o).cfg == cfg); }
+		{ return o != null && (o == this || ((Inst) o).cfg == cfg); }
 	}
 	
 	public static class ConfigList

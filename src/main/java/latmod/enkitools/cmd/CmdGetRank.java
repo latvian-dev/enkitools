@@ -27,16 +27,14 @@ public class CmdGetRank extends CommandLM
 				{
 					Rank r = Rank.getPlayerRank(p);
 					
-					if(all || r != def)
-						FTBLib.printChat(ics, p.getName() + ": " + r.getColor() + r.rankID);
+					if(all || r != def) FTBLib.printChat(ics, p.getName() + ": " + r.getColor() + r.rankID);
 				}
 				
 				return null;
 			}
 			else ep = LMPlayerServer.get(args[0]);
 		}
-		else
-			ep = LMPlayerServer.get(ics);
+		else ep = LMPlayerServer.get(ics);
 		
 		return new ChatComponentText(ep.getName() + " is " + Rank.getPlayerRank(ep).rankID);
 	}

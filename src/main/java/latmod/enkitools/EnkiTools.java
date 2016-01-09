@@ -49,10 +49,9 @@ public class EnkiTools
 		{
 			ICommandManager icm = FTBLib.getServer().getCommandManager();
 			
-			if(icm != null && icm instanceof CommandHandler)
-			try
+			if(icm != null && icm instanceof CommandHandler) try
 			{
-				CommandHandler ch = (CommandHandler)icm;
+				CommandHandler ch = (CommandHandler) icm;
 				
 				Map map = ReflectionHelper.getPrivateValue(CommandHandler.class, ch, "commandMap", "field_71562_a");
 				Set set = ReflectionHelper.getPrivateValue(CommandHandler.class, ch, "commandSet", "field_71561_b");
@@ -60,7 +59,7 @@ public class EnkiTools
 				ArrayList<CmdOverride> commands = new ArrayList<CmdOverride>();
 				
 				for(Object o : map.values())
-					commands.add(new CmdOverride((ICommand)o));
+					commands.add(new CmdOverride((ICommand) o));
 				
 				map.clear();
 				set.clear();
@@ -74,7 +73,9 @@ public class EnkiTools
 				mod.logger.info("Loaded " + commands.size() + " command overrides");
 			}
 			catch(Exception e)
-			{ e.printStackTrace(); }
+			{
+				e.printStackTrace();
+			}
 		}
 	}
 }

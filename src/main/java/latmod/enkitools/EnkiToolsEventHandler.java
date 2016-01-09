@@ -55,8 +55,8 @@ public class EnkiToolsEventHandler // EnkiTools
 			if(!r.allowCommand(new RankCommand(e.command.getCommandName(), e.parameters)))
 			{
 				ChatComponentTranslation c = new ChatComponentTranslation("commands.generic.permission", new Object[0]);
-                c.getChatStyle().setColor(EnumChatFormatting.RED);
-                FTBLib.printChat(e.sender, c);
+				c.getChatStyle().setColor(EnumChatFormatting.RED);
+				FTBLib.printChat(e.sender, c);
 				e.setCanceled(true);
 			}
 		}
