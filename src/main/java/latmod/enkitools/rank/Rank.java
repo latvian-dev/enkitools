@@ -5,6 +5,7 @@ import latmod.enkitools.*;
 import latmod.ftbu.net.MessageLMPlayerInfo;
 import latmod.ftbu.world.*;
 import latmod.lib.*;
+import latmod.lib.json.UUIDTypeAdapterLM;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.util.*;
@@ -196,7 +197,7 @@ public class Rank
 		{
 			LMPlayerServer p = LMWorldServer.inst.getPlayer(e.getKey());
 			if(p != null) al.add(p.getStringUUID() + "," + p.getName() + ": " + e.getValue());
-			else al.add(LMStringUtils.fromUUID(e.getKey()) + ": " + e.getValue());
+			else al.add(UUIDTypeAdapterLM.getString(e.getKey()) + ": " + e.getValue());
 		}
 		
 		al.sort(null);
@@ -206,7 +207,7 @@ public class Rank
 	}
 	
 	private static boolean hasLoaded = false;
-
+	
 	public static Rank getPlayerRank(LMPlayerServer p)
 	{
 		if(!hasLoaded)

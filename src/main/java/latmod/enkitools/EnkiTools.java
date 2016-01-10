@@ -55,7 +55,7 @@ public class EnkiTools
 				
 				Map map = ReflectionHelper.getPrivateValue(CommandHandler.class, ch, "commandMap", "field_71562_a");
 				Set set = ReflectionHelper.getPrivateValue(CommandHandler.class, ch, "commandSet", "field_71561_b");
-
+				
 				ArrayList<CmdOverride> commands = new ArrayList<CmdOverride>();
 				
 				for(Object o : map.values())
